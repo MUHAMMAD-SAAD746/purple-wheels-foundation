@@ -1,0 +1,193 @@
+.auth-page {
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f5f5f5;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.auth-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+
+    width: 100%;
+    padding: 40px 30px;
+
+    background-color: #fff;
+    border-radius: 20px;
+}
+
+.auth-form-page .auth-form-container {
+    justify-content: start;
+    gap: 40px;
+}
+
+.auth-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.auth-input-group {
+    width: 100%;
+}
+
+.auth-input-wrapper {
+    width: 100%;
+}
+
+.auth-input-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    outline: none;
+    font-size: 14px;
+}
+
+.auth-form-header {
+    width: fit-content;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.auth-form-header h1 {
+    font-weight: 500;
+}
+
+.auth-form-header p {
+    color: #aaa;
+    font-size: 15px;
+}
+
+.forgot-password {
+    align-self: flex-end;
+
+    color: #1e90ff;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.remember-me label {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.submit-button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+
+    background-color: #1e90ff;
+    color: #fff;
+
+    width: 100%;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #187bcd;
+}
+
+.auth-switch-text {
+    width: 100%;
+    text-align: center;
+
+    font-size: 14px;
+    color: #666;
+    margin-top: 25px;
+}
+
+.auth-switch-text a {
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-switch-text a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================================= */
+/* below are the styles shared by forgot-password and verification
+/* ========================================================= */
+
+.auth-form-page .auth-form-header {
+    margin-bottom: 0;
+}
+
+.auth-form-page .auth-form-container {
+    justify-content: start;
+    gap: 40px;
+}
+
+/* ========================================================= */
+/* Verification page styles below
+/* ========================================================= */
+.verify .auth-form-header {
+    padding-top: 50px;
+    margin-bottom: 30px;
+}
+
+.otp-form {
+    align-items: center;
+}
+
+.otp-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.otp-inputs input {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    text-align: center;
+    font-size: 20px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+}
+
+.resend-code {
+    margin: 0;
+    font-size: 14px;
+    color: #aaa;
+    text-align: center;
+}
+
+.resend-code span {
+    margin-left: 5px;
+    color: #1e90ff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.resend-code span:hover {
+    text-decoration: underline;
+}

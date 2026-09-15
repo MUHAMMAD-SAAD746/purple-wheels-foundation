@@ -43,7 +43,6 @@ function ChooseAcc() {
 
 
                 <div className="choose-account-card">
-
                     <div className="choose-account-card-logo">
                         <img src={Hotandpepper} alt="Hot and Pepper logo" />
                     </div>
@@ -58,7 +57,6 @@ function ChooseAcc() {
                             Enter Entertainment
                         </button>
                     </div>
-
                 </div>
 
             </div>

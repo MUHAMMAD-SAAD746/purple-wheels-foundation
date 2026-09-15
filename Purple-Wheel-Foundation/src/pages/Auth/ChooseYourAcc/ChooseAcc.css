@@ -67,11 +67,6 @@
 /* Content */
 /* ========================= */
 
-.choose-account-content {
-    margin-top: 100px;
-    /* text-align: center; */
-}
-
 .choose-account-content h1 {
     margin: 0;
 
@@ -121,7 +116,7 @@
 /* ========================= */
 
 .choose-account-card-logo img {
-    width: 100px;
+    width: 110px;
     height: auto;
 }
 
@@ -135,7 +130,7 @@
 
 .choose-account-card-info p {
     margin: 0;
-    font-size: 18px;
+    font-size: 15px;
     color: #fff;
     font-weight: 500;
 }

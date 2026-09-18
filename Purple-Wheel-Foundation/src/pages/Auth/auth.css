@@ -89,10 +89,25 @@
     color: #666;
 }
 
+.auth-error {
+    width: 100%;
+    margin: 0;
+    padding: 10px 14px;
+
+    border-radius: 8px;
+
+    color: #dc2626;
+    background-color: #fef2f2;
+
+    font-size: 14px;
+    text-align: center;
+}
+
 .submit-button {
     padding: 12px;
     border: none;
     border-radius: 8px;
+    margin-bottom: 20px;
 
     background-color: #1e90ff;
     color: #fff;

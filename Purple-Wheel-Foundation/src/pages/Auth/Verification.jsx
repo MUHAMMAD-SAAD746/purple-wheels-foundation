@@ -1,9 +1,18 @@
 import { useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import AuthImagePanel from "../../components/Auth/AuthImagePanel/AuthImagePanel";
 
 import "./auth.css";
 
 function Verification() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const email = location.state?.email;
+    console.log(email);
+
+
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
     const input1 = useRef();
@@ -45,6 +54,32 @@ function Verification() {
     };
 
 
+    const handleVerify = async (e) => {
+        e.preventDefault();
+
+        const code = otp.join("");
+
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/api/auth/verify-reset-code",
+                {
+                    email,
+                    otp: code
+                }
+            );
+
+            console.log(response.data);
+
+            navigate("/create-password", {
+                state: { email }
+            });
+
+        } catch (error) {
+            console.log(error.response?.data?.message);
+        }
+    };
+
+
 
     return (
         <div className="auth-form-page auth-page verify">
@@ -58,7 +93,7 @@ function Verification() {
                     </p>
                 </div>
 
-                <form className="auth-form otp-form">
+                <form className="auth-form otp-form" onSubmit={handleVerify}>
 
                     <div className="otp-inputs">
                         <input

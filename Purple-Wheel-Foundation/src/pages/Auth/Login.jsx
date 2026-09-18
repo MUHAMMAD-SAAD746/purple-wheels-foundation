@@ -1,4 +1,9 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+
+import { useAuth } from "../../context/AuthContext";
 
 import AuthImagePanel from "../../components/Auth/AuthImagePanel/AuthImagePanel";
 import AuthInput from "../../components/Auth/AuthInput/AuthInput";
@@ -7,6 +12,65 @@ import GoogleButton from "../../components/Auth/GoogleButton/GoogleButton";
 import "./auth.css";
 
 function Login() {
+    const navigate = useNavigate();
+    const { setUser } = useAuth();
+
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+
+    const [error, setError] = useState("");
+
+
+    const validateForm = () => {
+        if (!formData.email || !formData.password) {
+            return "Email and password are required";
+        }
+
+        if (formData.password.length < 8) {
+            return "Password must be at least 8 characters";
+        }
+
+        return null;
+    };
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const validationError = validateForm();
+
+        if (validationError) {
+            setError(validationError);
+            return;
+        }
+
+        setError("");
+
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/api/auth/login",
+                {
+                    email: formData.email,
+                    password: formData.password
+                },
+                {
+                    withCredentials: true
+                }
+            );
+
+            setUser(response.data.user);
+            navigate("/choose-account");
+
+        } catch (error) {
+            setError(
+                error.response?.data?.message || "Something went wrong"
+            );
+        }
+    };
+
+
     return (
         <div className="auth-page">
 
@@ -19,7 +83,7 @@ function Login() {
                     <p>Enter your credentials to access your dashboard</p>
                 </div>
 
-                <form className="auth-form">
+                <form className="auth-form" onSubmit={handleSubmit}>
 
                     <AuthInput
                         label="Email Address"
@@ -28,6 +92,13 @@ function Login() {
                         name="email"
                         placeholder="johndoe@gmail.com"
                         icon={<FaEnvelope />}
+                        value={formData.email}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                email: e.target.value
+                            })
+                        }
                     />
 
                     <AuthInput
@@ -37,11 +108,18 @@ function Login() {
                         name="password"
                         placeholder="Password"
                         icon={<FaLock />}
+                        value={formData.password}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                password: e.target.value
+                            })
+                        }
                     />
 
-                    <a href="/forgot-password" className="forgot-password">
+                    <Link to="/forgot-password" className="forgot-password">
                         Forgot Password?
-                    </a>
+                    </Link>
 
                     <div className="remember-me">
                         <input
@@ -55,6 +133,8 @@ function Login() {
                         </label>
                     </div>
 
+                    {error && <p className="auth-error">{error}</p>}
+
                     <button type="submit" className="submit-button">
                         Login
                     </button>
@@ -64,7 +144,7 @@ function Login() {
 
                 <p className="auth-switch-text">
                     Don't have an account?{" "}
-                    <a href="/register">Sign Up</a>
+                    <Link to="/register">Sign Up</Link>
                 </p>
 
             </div>

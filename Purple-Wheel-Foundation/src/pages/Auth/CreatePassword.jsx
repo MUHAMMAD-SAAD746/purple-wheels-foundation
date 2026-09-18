@@ -1,3 +1,5 @@
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import AuthImagePanel from "../../components/Auth/AuthImagePanel/AuthImagePanel";
 import AuthInput from "../../components/Auth/AuthInput/AuthInput";
 
@@ -5,6 +7,20 @@ import "./auth.css";
 
 
 function CreatePassword() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const email = location.state?.email;
+
+    console.log(email)
+
+    useEffect(() => {
+        if (!email) {
+            navigate("/forgot-password");
+        }
+    }, [email, navigate]);
+
+
     return (
         <div className="auth-form-page auth-page">
             <AuthImagePanel />

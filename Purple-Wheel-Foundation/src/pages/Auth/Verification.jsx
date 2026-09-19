@@ -10,10 +10,10 @@ function Verification() {
     const navigate = useNavigate();
 
     const email = location.state?.email;
-    console.log(email);
 
-
-    const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+    const [otp, setOtp] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const input1 = useRef();
     const input2 = useRef();
@@ -23,13 +23,35 @@ function Verification() {
     const input6 = useRef();
 
     const handleChange = (e, index, nextInput) => {
-        const value = e.target.value;
+        const value = e.target.value.replace(/\D/g, "");
 
-        if (!/^\d$/.test(value)) return;
+        if (!value) return;
 
-        const newOtp = [...otp];
+        setError("");
+
+        if (value.length > 1) {
+            const pastedCode = value.slice(0, 6);
+
+            setOtp(pastedCode);
+
+            const inputs = [
+                input1,
+                input2,
+                input3,
+                input4,
+                input5,
+                input6,
+            ];
+
+            inputs[pastedCode.length - 1]?.current.focus();
+
+            return;
+        }
+
+        const newOtp = otp.split("");
         newOtp[index] = value;
-        setOtp(newOtp);
+
+        setOtp(newOtp.join(""));
 
         if (nextInput) {
             nextInput.current.focus();
@@ -39,32 +61,69 @@ function Verification() {
 
 
     const handleKeyDown = (e, index, previousInput) => {
-
         if (e.key === "Backspace") {
+            e.preventDefault();
 
             if (otp[index]) {
-                const newOtp = [...otp];
+                const newOtp = otp.split("");
                 newOtp[index] = "";
-                setOtp(newOtp);
-            }
-            else if (previousInput) {
+                setOtp(newOtp.join(""));
+            } else if (previousInput) {
                 previousInput.current.focus();
             }
         }
     };
 
 
+
+    const handlePaste = (e) => {
+        e.preventDefault();
+
+        const pastedCode = e.clipboardData
+            .getData("text")
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+        if (!pastedCode) return;
+
+        setError("");
+
+        setOtp(pastedCode);
+
+        const inputs = [
+            input1,
+            input2,
+            input3,
+            input4,
+            input5,
+            input6,
+        ];
+
+        inputs[pastedCode.length - 1]?.current.focus();
+    };
+
+
     const handleVerify = async (e) => {
         e.preventDefault();
 
-        const code = otp.join("");
+        setError("");
+
+        if (otp.length !== 6) {
+            setError("Please enter the 6-digit code.");
+            return;
+        }
 
         try {
+            setLoading(true);
+            
             const response = await axios.post(
                 "http://localhost:3000/api/auth/verify-reset-code",
                 {
                     email,
-                    otp: code
+                    otp
+                },
+                {
+                    withCredentials: true
                 }
             );
 
@@ -75,7 +134,11 @@ function Verification() {
             });
 
         } catch (error) {
-            console.log(error.response?.data?.message);
+            setError(
+                error.response?.data?.message || "Verification failed."
+            );
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -100,14 +163,22 @@ function Verification() {
                             ref={input1}
                             type="text"
                             maxLength={1}
+                            inputMode="numeric"
+                            autoComplete="one-time-code"
+                            name="otp-1"
+                            value={otp[0] || ""}
                             onChange={(e) => handleChange(e, 0, input2)}
                             onKeyDown={(e) => handleKeyDown(e, 0)}
+                            onPaste={handlePaste}
                         />
 
                         <input
                             ref={input2}
                             type="text"
                             maxLength={1}
+                            inputMode="numeric"
+                            name="otp-2"
+                            value={otp[1] || ""}
                             onChange={(e) => handleChange(e, 1, input3)}
                             onKeyDown={(e) => handleKeyDown(e, 1, input1)}
                         />
@@ -116,6 +187,9 @@ function Verification() {
                             ref={input3}
                             type="text"
                             maxLength={1}
+                            inputMode="numeric"
+                            name="otp-3"
+                            value={otp[2] || ""}
                             onChange={(e) => handleChange(e, 2, input4)}
                             onKeyDown={(e) => handleKeyDown(e, 2, input2)}
                         />
@@ -124,6 +198,9 @@ function Verification() {
                             ref={input4}
                             type="text"
                             maxLength={1}
+                            inputMode="numeric"
+                            name="otp-4"
+                            value={otp[3] || ""}
                             onChange={(e) => handleChange(e, 3, input5)}
                             onKeyDown={(e) => handleKeyDown(e, 3, input3)}
                         />
@@ -132,6 +209,9 @@ function Verification() {
                             ref={input5}
                             type="text"
                             maxLength={1}
+                            inputMode="numeric"
+                            name="otp-5"
+                            value={otp[4] || ""}
                             onChange={(e) => handleChange(e, 4, input6)}
                             onKeyDown={(e) => handleKeyDown(e, 4, input4)}
                         />
@@ -140,13 +220,22 @@ function Verification() {
                             ref={input6}
                             type="text"
                             maxLength={1}
+                            inputMode="numeric"
+                            name="otp-6"
+                            value={otp[5] || ""}
                             onChange={(e) => handleChange(e, 5)}
                             onKeyDown={(e) => handleKeyDown(e, 5, input5)}
                         />
                     </div>
 
-                    <button type="submit" className="submit-button">
-                        Verify
+                    {error && <p className="auth-error">{error}</p>}
+
+                    <button 
+                        type="submit" 
+                        className="submit-button"
+                        disabled={loading}
+                    >
+                        {loading ? "Verifying" : "Verify"}
                     </button>
 
                     <p className="resend-code">

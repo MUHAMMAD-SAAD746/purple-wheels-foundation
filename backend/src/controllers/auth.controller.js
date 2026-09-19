@@ -188,6 +188,7 @@ async function forgotPassword(req, res) {
 
 
 /**
+ * - verify otp and return a reset token in coookie
  * - POST /api/auth/verify-reset-code
  */
 
@@ -219,6 +220,16 @@ async function verifyResetCode(req, res) {
             return res.status(400).json({ message: "Invalid verification code" })
         }
 
+        const user = await userModel.findOne({
+            email
+        })
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
         await passwordResetModel.findOneAndUpdate(
             {
                 email: passwordReset.email,
@@ -228,6 +239,24 @@ async function verifyResetCode(req, res) {
             }
         )
 
+
+        const resetToken = jwt.sign(
+            {
+                userId: user._id,
+                purpose: "password-reset"
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "10m"
+            }
+        );
+
+        res.cookie("resetToken", resetToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 10 * 60 * 1000
+        })
 
         return res.status(200).json({
             message: "Verification code verified successfully"
@@ -240,10 +269,107 @@ async function verifyResetCode(req, res) {
     }
 }
 
-module.exports = { 
-    registerUser, 
-    loginUser, 
-    userProfile, 
-    forgotPassword, 
-    verifyResetCode 
+
+
+/**
+ * - Password update controller
+ * - required password & resetToken in cookies
+ * - POST /api/auth/update-password
+ */
+
+async function updatePassword(req, res) {
+    try {
+        const { password } = req.body;
+        const { resetToken } = req.cookies;
+
+        if (!password || !resetToken) {
+            return res.status(400).json({
+                message: "Password and reset token are required"
+            })
+        }
+
+        const decoded = jwt.verify(resetToken, process.env.JWT_SECRET)
+
+        if (decoded.purpose !== "password-reset") {
+            return res.status(403).json({
+                message: "Invalid reset token"
+            });
+        }
+
+        const user = await userModel.findById(decoded.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        const passwordResetRecord = await passwordResetModel.findOne({
+            email: user.email
+        })
+
+        if (!passwordResetRecord) {
+            return res.status(400).json({
+                message: "No password reset request found"
+            })
+        }
+
+        const verified = passwordResetRecord.verified;
+
+        if (!verified) {
+            return res.status(400).json({
+                message: "Please verify the OTP sent to your email"
+            })
+        }
+
+        if (password.length < 8) {
+            return res.status(400).json({
+                message: "Password must be at least 8 characters"
+            });
+        }
+
+        const hash = await bcrypt.hash(password, 10)
+
+        await userModel.findOneAndUpdate(
+            { _id: user._id },
+            { password: hash },
+            { new: true, }
+        )
+
+
+        await passwordResetModel.findOneAndDelete({
+            email: user.email
+        })
+
+        res.clearCookie("resetToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+        });
+
+        res.status(200).json({
+            message: "Password updated successfully",
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.username
+            }
+        })
+    }
+    catch (err) {
+        return res.status(500).json({
+            message: "something went wrong please try again."
+        })
+    }
+}
+
+
+
+module.exports = {
+    registerUser,
+    loginUser,
+    userProfile,
+    forgotPassword,
+    verifyResetCode,
+    updatePassword
 }

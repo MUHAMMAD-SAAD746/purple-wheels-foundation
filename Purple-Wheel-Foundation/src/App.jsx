@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Verification from "./pages/Auth/Verification";
 import CreatePassword from "./pages/Auth/CreatePassword";
 import ChooseAcc from "./pages/Auth/ChooseYourAcc/ChooseAcc";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/Verification" element={<Verification />} />
                 <Route path="/create-password" element={<CreatePassword />} />
+                <Route path="/landing-page" element={<LandingPage />} />
 
                 <Route
                     path="/choose-account"

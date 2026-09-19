@@ -37,15 +37,6 @@ function ChooseAcc() {
                         <IoSettingsOutline />
                     </button>
 
-                    {/* <div className="choose-account-selector">
-                        <img
-                            src={avatarUrl}
-                            alt="Profile"
-                        />
-
-                        <IoChevronDown />
-                    </div> */}
-
 
                     <div className="choose-account-selector-wrapper">
 

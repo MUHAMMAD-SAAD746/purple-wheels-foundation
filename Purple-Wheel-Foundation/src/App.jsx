@@ -13,14 +13,14 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/" element={<Navigate to="/Purple-Wheels" replace />} />
 
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/Verification" element={<Verification />} />
                 <Route path="/create-password" element={<CreatePassword />} />
-                <Route path="/landing-page" element={<LandingPage />} />
+                <Route path="/Purple-Wheels" element={<LandingPage />} />
 
                 <Route
                     path="/choose-account"

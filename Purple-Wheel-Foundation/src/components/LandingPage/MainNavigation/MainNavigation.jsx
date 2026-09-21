@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import { HiMenu } from "react-icons/hi";
 import NavigationBar from "../NavigationBar/NavigationBar";
 
 import PurpleWheel from "../../../assets/purplewheel.png";
@@ -6,6 +7,8 @@ import PurpleWheel from "../../../assets/purplewheel.png";
 import "./MainNavigation.css";
 
 const MainNavigation = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
     return (
         <header className="main-navigation">
 
@@ -15,10 +18,17 @@ const MainNavigation = () => {
                     <img src={PurpleWheel} alt="Purple Wheel" />
                 </a>
 
-                <NavigationBar />
+                <NavigationBar className={isMenuOpen ? "mobile-menu-open" : ""} />
 
                 <button className="get-started-button">
                     Get Started
+                </button>
+
+                <button 
+                    className="hamburger-button"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    <HiMenu />
                 </button>
 
             </div>

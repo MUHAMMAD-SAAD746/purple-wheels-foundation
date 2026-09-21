@@ -5,82 +5,10 @@
 }
 
 
-.landing-hero {
-    min-height: calc(100vh - 100px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0 60px;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.landing-hero h1 {
-    margin: 0;
-
-    color: #ffffff;
-    /* font-size: 56px; */
-    font-size: clamp(30px, 5.3vw, 70px);
-    white-space: nowrap;
-    font-weight: 700;
-    line-height: 1.5;
-}
-
-.landing-hero p {
-    max-width: 680px;
-    margin: 25px 0 35px;
-
-    color: #d6d0da;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.hero-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.hero-buttons button {
-    padding: 14px 24px;
-
-    border: none;
-    border-radius: 999px;
-
-    color: #ffffff;
-
-    font-size: 15px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.hero-buttons button img {
-    width: 20px;
-    height: 20px;
-
-    object-fit: contain;
-}
-
-
-.donate-button {
-    background: #542f6c;
-}
-
-.creator-button {
-    background: #1e90ff;
-}
-
-.pepper-button {
-    background: #fe3903;
+@media (max-width: 1060px) {
+    .main-navigation {
+        padding: 15px 30px;
+    }
 }
 
 @media (max-width: 768px) {

@@ -166,7 +166,7 @@ async function forgotPassword(req, res) {
             },
             {
                 upsert: true,
-                new: true
+                returnDocument: 'after'
             }
         );
 
@@ -333,7 +333,7 @@ async function updatePassword(req, res) {
         await userModel.findOneAndUpdate(
             { _id: user._id },
             { password: hash },
-            { new: true, }
+            { returnDocument: 'after', }
         )
 
 

@@ -80,10 +80,7 @@ const About = () => {
             </div>
 
 
-
-
             <div className="about-stats">
-
                 <StatCard
                     icon={CreatorOnboard}
                     heading="$120K +"

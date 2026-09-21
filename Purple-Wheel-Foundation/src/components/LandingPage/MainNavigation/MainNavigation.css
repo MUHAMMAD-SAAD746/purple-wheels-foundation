@@ -17,12 +17,10 @@
 
     height: 120px;
 
-    background: linear-gradient(
-        to bottom,
-        #3B214F 0%,
-        rgba(59, 33, 79, 0.96) 50%,
-        rgba(59, 33, 79, 0) 90%
-    );
+    background: linear-gradient(to bottom,
+            #3B214F 0%,
+            rgba(59, 33, 79, 0.96) 50%,
+            rgba(59, 33, 79, 0) 90%);
 
     z-index: -1;
     pointer-events: none;
@@ -35,10 +33,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    position: relative;
     padding: 0;
 
     border-radius: 16px;
+}
+
+.navigation-container .navigation-bar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .navigation-logo {

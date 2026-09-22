@@ -9,6 +9,13 @@
     .main-navigation {
         padding: 15px 30px;
     }
+
+    .landing-hero,
+    .about-section,
+    .our-business {
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+    }
 }
 
 @media (max-width: 768px) {

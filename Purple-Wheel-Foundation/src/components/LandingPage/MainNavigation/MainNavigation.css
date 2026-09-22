@@ -88,10 +88,6 @@
 
 
 @media (max-width: 1060px) {
-    .main-navigation {
-        padding: 15px 25px;
-    }
-
     .navigation-logo img {
         width: 180px;
     }
@@ -115,6 +111,12 @@
     .navigation-bar,
     .get-started-button {
         display: none;
+    }
+
+    .navigation-container .navigation-bar {
+        left: 0;
+        transform: none;
+        position: fixed;
     }
 
     .hamburger-button {

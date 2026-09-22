@@ -1,6 +1,6 @@
 .about-section {
     width: 100%;
-    padding: 10px 60px;
+    padding: 10px 60px 80px;
     box-sizing: border-box;
 
     color: #ffffff;
@@ -289,5 +289,34 @@
 
     .about-header p {
         font-size: 12px !important;
+    }
+}
+
+@media (max-width: 370px) {
+    .about-start-button {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+
+    .about-members {
+        gap: 6px;
+    }
+
+    .member-profiles img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .member-profiles img+img {
+        margin-left: -16px;
+    }
+
+    .member-rating h2 {
+        font-size: 10px;
+    }
+
+    .rating-stars {
+        font-size: 15px;
+        gap: 1px;
     }
 }

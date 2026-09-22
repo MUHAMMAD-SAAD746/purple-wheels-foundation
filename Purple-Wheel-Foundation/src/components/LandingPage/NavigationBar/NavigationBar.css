@@ -87,6 +87,7 @@
         position: fixed;
         top: 0;
         left: 0;
+        margin: 0;
 
         width: 250px;
         height: 100vh;
@@ -130,5 +131,11 @@
 
     .navigation-bar a:hover {
         background: rgba(255, 255, 255, 0.08);
+    }
+}
+
+@media (max-width: 390px) {
+    .navigation-bar {
+        width: 210px;
     }
 }

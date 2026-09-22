@@ -6,7 +6,6 @@
 /* Header */
 
 .our-business-header {
-    /* max-width: 750px; */
     margin: 0 auto 70px;
     text-align: center;
 }
@@ -38,21 +37,42 @@
     gap: 70px;
 }
 
+.business-arrow {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+
+    width: 50px;
+    height: 50px !important;
+
+    border-radius: 50%;
+    background: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.45);
+}
+
 
 /* Image */
 
 .our-business-image {
     width: 100%;
+    height: 600px;
     min-width: 0;
+    overflow: hidden;
 }
 
 .our-business-image img {
     width: 100%;
     max-width: 600px;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
     display: block;
 }
-
 
 /* Information */
 

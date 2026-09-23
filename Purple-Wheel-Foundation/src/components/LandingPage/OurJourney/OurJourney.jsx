@@ -1,9 +1,9 @@
 import "./OurJourney.css";
 
-const OurJourney = () => {
+const OurJourney = ({ id }) => {
 
     return (
-        <section className="our-journey">
+        <section id={id} className="our-journey">
 
             <div className="our-journey-header">
                 <h1>Our Journey</h1>

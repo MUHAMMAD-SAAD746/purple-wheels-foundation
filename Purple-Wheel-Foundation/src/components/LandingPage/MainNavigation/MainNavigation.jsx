@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HiMenu } from "react-icons/hi";
 import NavigationBar from "../NavigationBar/NavigationBar";
 
@@ -8,7 +9,8 @@ import "./MainNavigation.css";
 
 const MainNavigation = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
+    const navigate = useNavigate();
+
     return (
         <header className="main-navigation">
 
@@ -20,11 +22,14 @@ const MainNavigation = () => {
 
                 <NavigationBar className={isMenuOpen ? "mobile-menu-open" : ""} />
 
-                <button className="get-started-button">
+                <button 
+                    className="get-started-button"
+                    onClick={() => navigate("/login")}
+                >
                     Get Started
                 </button>
 
-                <button 
+                <button
                     className="hamburger-button"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >

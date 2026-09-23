@@ -13,11 +13,11 @@ const LandingPage = () => {
         <div className="landing-page">
             <MainNavigation />
 
-            <Home />
-            <About />
-            <OurBussiness />
-            <OurJourney />
-            <Gallery />
+            <Home id="home" />
+            <About id="about" />
+            <OurBussiness id="business" />
+            <OurJourney id="journey" />
+            <Gallery id="gallery" />
             <Footer />
         </div>
     );

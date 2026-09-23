@@ -14,9 +14,9 @@ import StatCard from "../StatCard/StatCard";
 
 import "./About.css";
 
-const About = () => {
+const About = ({ id }) => {
     return (
-        <section className="about-section">
+        <section id={id} className="about-section">
 
             <div className="about-header">
                 <h1>One Vision. Three Movements.</h1>

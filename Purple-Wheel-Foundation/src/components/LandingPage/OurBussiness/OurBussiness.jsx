@@ -8,7 +8,7 @@ import Bussiness3 from "../../../assets/business3.png";
 
 import "./OurBussiness.css";
 
-const OurBussiness = () => {
+const OurBussiness = ({ id }) => {
     const [currentBusiness, setCurrentBusiness] = useState(0);
 
 
@@ -41,7 +41,7 @@ const OurBussiness = () => {
 
 
     return (
-        <section className="our-business">
+        <section id={id} className="our-business">
 
             <div className="our-business-header">
                 <h1>Our Business</h1>

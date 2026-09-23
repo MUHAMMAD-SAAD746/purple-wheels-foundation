@@ -13,11 +13,11 @@ const NavigationBar = ({ className }) => {
             </a>
 
             <div className="navigation-links">
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/business">Our Business</a>
-                <a href="/journey">Our Journey</a>
-                <a href="/gallery">Gallery</a>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#business">Our Business</a>
+                <a href="#journey">Our Journey</a>
+                <a href="#gallery">Gallery</a>
             </div>
 
             <button className="mobile-get-started-button">

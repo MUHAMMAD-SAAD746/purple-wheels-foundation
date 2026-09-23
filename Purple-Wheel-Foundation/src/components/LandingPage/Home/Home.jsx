@@ -5,9 +5,9 @@ import Play from "../../../assets/icons/play.svg"
 
 import "./Home.css"
 
-const Home = () => {
+const Home = ({ id }) => {
     return (
-        <main className="landing-hero">
+        <main id={id} className="landing-hero">
             <h1>One Platform - Three Experiences.</h1>
             <h1>One Purpose</h1>
 

@@ -9,9 +9,9 @@ import Image8 from "../../../assets/grid8.jpg"
 
 import "./Gallery.css"
 
-const Gallery = () => {
+const Gallery = ({ id }) => {
     return (
-        <section className="gallery-section">
+        <section id={id} className="gallery-section">
             <div className="gallery-header">
                 <h1>Our Gallery</h1>
                 <p>

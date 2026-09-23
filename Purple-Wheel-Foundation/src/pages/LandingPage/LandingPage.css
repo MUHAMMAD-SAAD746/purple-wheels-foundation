@@ -19,6 +19,16 @@
     }
 }
 
+
+@media (max-width: 800px) {
+    .landing-hero h1,
+    .about-header h1,
+    .our-business-header h1,
+    .our-journey-header h1 {
+        font-size: clamp(20px, 5.0vw, 60px) !important;
+    }
+}
+
 @media (max-width: 768px) {
     .landing-hero {
         padding: 0 30px;
@@ -40,5 +50,28 @@
 
     .navigation-logo img {
         width: 180px;
+    }
+}
+
+@media (max-width: 390px) {
+    .landing-hero,
+    .about-section,
+    .our-business,
+    .our-journey {
+        padding: 60px 20px 40px !important;
+    }
+
+    .landing-hero h1,
+    .about-header h1,
+    .our-business-header h1,
+    .our-journey-header h1 {
+        font-size: clamp(15px, 4.9vw, 60px) !important;
+    }
+
+    .landing-hero p,
+    .about-header p,
+    .our-business-header p,
+    .our-journey-header p {
+        font-size: 12px !important;
     }
 }

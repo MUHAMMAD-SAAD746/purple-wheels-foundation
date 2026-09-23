@@ -83,10 +83,6 @@
         padding: 60px 30px 50px !important;
     }
 
-    .landing-hero h1 {
-        font-size: clamp(20px, 5.0vw, 60px) !important;
-    }
-
     .landing-hero p {
         font-size: 14px;
     }
@@ -111,16 +107,3 @@
     }
 }
 
-@media (max-width: 390px) {
-    .landing-hero {
-        padding: 60px 20px 40px !important;
-    }
-
-    .landing-hero h1 {
-        font-size: clamp(15px, 4.9vw, 60px) !important;
-    }
-
-    .landing-hero p {
-        font-size: 12px !important;
-    }
-}

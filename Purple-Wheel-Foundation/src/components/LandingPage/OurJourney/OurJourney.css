@@ -30,7 +30,7 @@
 .journey-curve-container {
     position: relative;
     width: 100%;
-    /* max-width: 1042px; */
+    max-width: 2042px;
     margin: 0;
 }
 
@@ -58,12 +58,163 @@
     pointer-events: none;
 }
 
+
+
+.journey-info {
+    position: absolute;
+    color: white;
+}
+
+.journey-year {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
 .journey-description {
+    width: 230px;
     margin: 0;
-    width: 180px !important;
 
     color: white;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1.3;
     text-align: left;
+}
+
+
+/* 2020 */
+.journey-info-2020 {
+    left: 0%;
+    top: 57.5%;
+}
+
+
+/* 2021 */
+.journey-info-2021 {
+    left: 21%;
+    top: 71.4%;
+}
+
+
+/* 2022 */
+.journey-info-2022 {
+    left: 41.5%;
+    top: 50.4%;
+}
+
+
+/* 2023 */
+.journey-info-2023 {
+    left: 63%;
+    top: 44.6%;
+}
+
+
+/* 2024 */
+.journey-info-2024 {
+    left: 87.1%;
+    top: 8.9%;
+    max-width: calc(100% - 87.1%);
+}
+
+.journey-info-2024 .journey-description {
+    width: 100%;
+}
+
+.journey-mobile-timeline {
+    display: none;
+}
+
+
+@media (max-width: 1400px) {
+    .journey-description {
+        width: 175px;
+        font-size: 13px;
+    }
+
+    .journey-info-2024 {
+        left: 86.5%;
+        top: 15%;
+    }
+}
+
+
+@media (max-width: 1200px) {
+    .journey-description {
+        width: 160px;
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width: 992px) {
+    .journey-description {
+        width: 140px;
+        font-size: 11px;
+    }
+}
+
+
+@media (max-width: 800px) {
+
+    .journey-curve-container {
+        display: none;
+    }
+
+    .journey-mobile-timeline {
+        display: block;
+        position: relative;
+        margin: 0;
+        padding: 20px 0;
+    }
+
+    .journey-mobile-timeline::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 20px;
+        bottom: 20px;
+        width: 3px;
+        background: #CB30E0;
+    }
+
+    .journey-mobile-item {
+        position: relative;
+        display: flex;
+        gap: 25px;
+        margin-bottom: 45px;
+    }
+
+    .journey-mobile-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .journey-mobile-dot {
+        flex: 0 0 19px;
+        width: 19px;
+        height: 19px;
+        margin-top: 2px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #CB30E0;
+        box-sizing: border-box;
+        z-index: 1;
+    }
+
+    .journey-mobile-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .journey-mobile-content .journey-year {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .journey-mobile-content .journey-description {
+        width: auto;
+        font-size: 14px;
+        line-height: 1.5;
+    }
 }

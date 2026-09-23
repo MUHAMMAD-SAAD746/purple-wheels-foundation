@@ -5,6 +5,7 @@ import "./LandingPage.css";
 import About from "../../components/LandingPage/About/About";
 import OurBussiness from "../../components/LandingPage/OurBussiness/OurBussiness";
 import OurJourney from "../../components/LandingPage/OurJourney/OurJourney";
+import Gallery from "../../components/LandingPage/Gallery/Gallery";
 
 const LandingPage = () => {
     return (
@@ -15,6 +16,7 @@ const LandingPage = () => {
             <About />
             <OurBussiness />
             <OurJourney />
+            <Gallery />
         </div>
     );
 };

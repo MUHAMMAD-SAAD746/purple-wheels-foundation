@@ -13,7 +13,8 @@
     .landing-hero,
     .about-section,
     .our-business,
-    .our-journey {
+    .our-journey,
+    .gallery-section {
         padding-left: 30px !important;
         padding-right: 30px !important;
     }
@@ -24,7 +25,8 @@
     .landing-hero h1,
     .about-header h1,
     .our-business-header h1,
-    .our-journey-header h1 {
+    .our-journey-header h1,
+    .gallery-header h1 {
         font-size: clamp(20px, 5.0vw, 60px) !important;
     }
 }
@@ -57,21 +59,24 @@
     .landing-hero,
     .about-section,
     .our-business,
-    .our-journey {
+    .our-journey,
+    .gallery-section {
         padding: 60px 20px 40px !important;
     }
 
     .landing-hero h1,
     .about-header h1,
     .our-business-header h1,
-    .our-journey-header h1 {
+    .our-journey-header h1,
+    .gallery-header h1 {
         font-size: clamp(15px, 4.9vw, 60px) !important;
     }
 
     .landing-hero p,
     .about-header p,
     .our-business-header p,
-    .our-journey-header p {
+    .our-journey-header p,
+    .gallery-header p {
         font-size: 12px !important;
     }
 }

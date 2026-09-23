@@ -1,0 +1,161 @@
+.footer {
+    width: 100%;
+    padding: 60px;
+    box-sizing: border-box;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-subscribe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+
+.footer-subscribe p {
+    margin: 0;
+
+    font-size: 45px;
+    font-weight: 600;
+}
+
+.footer-input-wrapper {
+    width: 350px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    background: white;
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+.footer-input-wrapper input {
+    flex: 1;
+    height: 100%;
+
+    padding: 0 15px;
+
+    border: none;
+    outline: none;
+    background: white;
+
+    color: #333;
+    font-size: 15px;
+}
+
+.footer-input-wrapper input::placeholder {
+    color: #777;
+}
+
+.footer-submit {
+    width: 50px;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: #ede7f3;
+
+    color: #6a0dad;
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.footer-logo {
+    margin-top: 50px;
+}
+
+.footer-logo img {
+    width: 280px;
+    height: auto;
+    display: block;
+}
+
+
+.footer-socials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+
+    margin-top: 30px;
+
+    color: white;
+    font-size: 30px;
+}
+
+.footer-socials svg {
+    cursor: pointer;
+}
+
+
+@media (max-width: 991px) {
+    .footer-subscribe p {
+        font-size: 34px;
+    }
+
+    .footer-input-wrapper {
+        width: 350px;
+        height: 35px;
+    }
+
+    .footer-input-wrapper input {
+        padding: 0 10px;
+    }
+
+    .footer-logo {
+        margin-top: 40px;
+    }
+
+    .footer-logo img {
+        width: 240px;
+    }
+
+    .footer-socials {
+        margin-top: 25px;
+        gap: 22px;
+        font-size: 28px;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .footer-input-wrapper {
+        width: 200px;
+        height: 32px;
+    }
+
+    .footer-subscribe p {
+        font-size: 25px;
+    }
+
+    .footer-logo img {
+        width: 200px;
+    }
+}
+
+@media (max-width: 390px) {
+    .footer-subscribe {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .footer-logo img {
+        width: 150px;
+    }
+
+    .footer-socials {
+        font-size: 22px;
+    }
+}

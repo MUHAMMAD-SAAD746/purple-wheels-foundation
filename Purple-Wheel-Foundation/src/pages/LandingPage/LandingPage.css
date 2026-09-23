@@ -14,7 +14,8 @@
     .about-section,
     .our-business,
     .our-journey,
-    .gallery-section {
+    .gallery-section,
+    .footer {
         padding-left: 30px !important;
         padding-right: 30px !important;
     }
@@ -60,8 +61,15 @@
     .about-section,
     .our-business,
     .our-journey,
-    .gallery-section {
-        padding: 60px 20px 40px !important;
+    .gallery-section,
+    .footer {
+        padding-left: 20px !important;
+        padding-right: 20px;
+        padding-bottom: 40px;
+    }
+
+    .landing-hero {
+        padding-top: 20px !important;
     }
 
     .landing-hero h1,
@@ -77,6 +85,12 @@
     .our-business-header p,
     .our-journey-header p,
     .gallery-header p {
+        font-size: 12px !important;
+    }
+
+    .about-info p,
+    .our-business-info p,
+    .journey-mobile-content .journey-description{
         font-size: 12px !important;
     }
 }

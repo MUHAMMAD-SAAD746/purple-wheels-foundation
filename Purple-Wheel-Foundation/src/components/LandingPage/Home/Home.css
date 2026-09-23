@@ -88,22 +88,42 @@
     }
 
     .hero-buttons {
-        flex-direction: column;
         width: 100%;
+        gap: 12px;
         margin-top: 30px;
     }
 
     .hero-buttons button {
-        width: 100%;
-        max-width: 300px;
+        padding: 13px 20px;
+        font-size: 14px;
     }
 }
 
 @media (max-width: 600px) {
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+
     .hero-buttons button {
         width: 100%;
-        max-width: 230px;
+        max-width: 260px;
+        padding: 13px 20px;
         font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero-buttons button {
+        max-width: 230px;
+        padding: 12px 18px;
+        font-size: 13px;
+    }
+
+    .hero-buttons button img {
+        width: 18px;
+        height: 18px;
     }
 }
 

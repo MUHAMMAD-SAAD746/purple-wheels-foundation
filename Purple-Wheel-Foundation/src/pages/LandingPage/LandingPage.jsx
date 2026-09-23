@@ -6,6 +6,7 @@ import About from "../../components/LandingPage/About/About";
 import OurBussiness from "../../components/LandingPage/OurBussiness/OurBussiness";
 import OurJourney from "../../components/LandingPage/OurJourney/OurJourney";
 import Gallery from "../../components/LandingPage/Gallery/Gallery";
+import Footer from "../../components/LandingPage/Footer/Footer";
 
 const LandingPage = () => {
     return (
@@ -17,6 +18,7 @@ const LandingPage = () => {
             <OurBussiness />
             <OurJourney />
             <Gallery />
+            <Footer />
         </div>
     );
 };

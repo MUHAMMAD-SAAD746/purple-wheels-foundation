@@ -8,6 +8,8 @@ import Verification from "./pages/Auth/Verification";
 import CreatePassword from "./pages/Auth/CreatePassword";
 import ChooseAcc from "./pages/Auth/ChooseYourAcc/ChooseAcc";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import MpLifeStyle from "./pages/MpLifeStyle/MpLifeStyle";
+import Home from "./pages/MpLifeStyle/Home/Home";
 
 function App() {
     return (
@@ -16,12 +18,15 @@ function App() {
                 <Route path="/" element={<Navigate to="/Purple-Wheels" replace />} />
 
                 <Route path="/login" element={<Login />} />
+                <Route path="/admin/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/Verification" element={<Verification />} />
+                <Route path="/verification" element={<Verification />} />
                 <Route path="/create-password" element={<CreatePassword />} />
                 <Route path="/Purple-Wheels" element={<LandingPage />} />
-
+                <Route path="/MP-LifeStyle" element={<MpLifeStyle />}>
+                    <Route index element={<Home />} />
+                </Route>
                 <Route
                     path="/choose-account"
                     element={

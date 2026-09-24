@@ -1,0 +1,79 @@
+.mp-home {
+    width: 100%;
+    min-height: 100%;
+    background-color: #f8fbff;
+    box-sizing: border-box;
+}
+
+.mp-home-content {
+    width: 100%;
+    padding: 35px;
+
+    box-sizing: border-box;
+}
+
+.mp-home-banner {
+    width: 100%;
+    min-height: 230px;
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-sizing: border-box;
+
+    position: relative;
+    overflow: hidden;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+/* Image */
+.mp-home-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: url("../../../assets/living-room-gathering.png");
+
+    background-size: 900px auto;
+    background-position: right 32%;
+    background-repeat: no-repeat;
+
+    z-index: 0;
+}
+
+/* Gradient */
+.mp-home-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(to right,
+            rgba(0, 0, 0, 1) 27%,
+            rgba(0, 0, 0, 0));
+
+    z-index: 1;
+}
+
+/* Your content */
+.mp-home-banner>* {
+    position: relative;
+    z-index: 2;
+}
+
+.mp-home-banner h1 {
+    margin: 0;
+    max-width: 380px;
+    line-height: 1.2;
+}
+
+.mp-home-banner p {
+    margin: 10px 0 0;
+    max-width: 360px;
+    font-size: 14px;
+    color: #828282;
+}

@@ -1,0 +1,125 @@
+/* Header */
+
+.mp-home-header {
+    width: 100%;
+    height: 100px;
+
+    padding: 24px 35px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eeeeee;
+    gap: 30px;
+}
+
+
+/* Welcome */
+
+.mp-home-welcome h1 {
+    margin: 0;
+
+    color: #111111;
+
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.mp-home-welcome p {
+    margin: 6px 0 0;
+
+    color: #717171;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* Actions */
+
+.mp-home-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+/* Action buttons */
+
+.mp-home-action {
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e8edf2;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: #555555;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.mp-home-action:hover {
+    background-color: #f5f8fb;
+    border-color: #dce3e9;
+    color: #111111;
+}
+
+
+/* Notification */
+
+.notification-button {
+    width: 42px;
+}
+
+.notification-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Profile */
+
+.profile-button {
+    padding: 5px 10px 5px 5px;
+    gap: 8px;
+}
+
+.profile-button img {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.action-chevron {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* Settings */
+
+.settings-button {
+    padding: 0 10px;
+    gap: 6px;
+}
+
+.settings-button > svg:first-child {
+    width: 19px;
+    height: 19px;
+}

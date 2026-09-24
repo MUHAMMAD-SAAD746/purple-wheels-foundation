@@ -63,7 +63,7 @@ async function registerUser(req, res) {
  */
 
 async function loginUser(req, res) {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({
@@ -83,6 +83,12 @@ async function loginUser(req, res) {
 
     if (!isPasswordValid) {
         return res.status(401).json({ message: "Invalid Credentials" })
+    }
+
+    if (user.role !== role) {
+        return res.status(403).json({
+            message: "Invalid login"
+        })
     }
 
     const token = await jwt.sign(

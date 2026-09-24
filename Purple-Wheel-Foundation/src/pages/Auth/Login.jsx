@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
@@ -14,6 +14,10 @@ import "./auth.css";
 function Login() {
     const navigate = useNavigate();
     const { setUser } = useAuth();
+    const location = useLocation();
+
+    const isAdminLogin = location.pathname === "/admin/login";
+
 
     const [formData, setFormData] = useState({
         email: "",
@@ -53,7 +57,8 @@ function Login() {
                 "http://localhost:3000/api/auth/login",
                 {
                     email: formData.email,
-                    password: formData.password
+                    password: formData.password,
+                    role: isAdminLogin ? "admin" : "user"
                 },
                 {
                     withCredentials: true

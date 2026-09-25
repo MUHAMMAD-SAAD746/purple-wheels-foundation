@@ -8,7 +8,8 @@ function AccountCard({
     buttonText,
     backgroundImage,
     gradient = false,
-    logoWidth = "110px"
+    logoWidth = "110px",
+    onClick
 }) {
     return (
         <div
@@ -28,7 +29,10 @@ function AccountCard({
                 <p>{category}</p>
             </div>
 
-            <div className="choose-account-card-action">
+            <div 
+                className="choose-account-card-action"
+                onClick={onClick}
+            >
                 <button>{buttonText}</button>
             </div>
         </div>

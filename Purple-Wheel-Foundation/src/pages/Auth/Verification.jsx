@@ -117,7 +117,7 @@ function Verification() {
             setLoading(true);
             
             const response = await axios.post(
-                "http://localhost:3000/api/auth/verify-reset-code",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/verify-reset-code`,
                 {
                     email,
                     otp

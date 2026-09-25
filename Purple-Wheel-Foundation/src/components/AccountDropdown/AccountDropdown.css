@@ -1,0 +1,178 @@
+/* ========================= */
+/* Account dropdown */
+/* ========================= */
+
+.account-dropdown-wrapper {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+
+    min-width: 180px;
+    width: 400px;
+    padding: 20px;
+
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+}
+
+.account-dropdown {
+    border: 1px solid #c5c5c58c;
+    border-radius: 15px;
+    padding: 10px 8px;
+}
+
+.account-dropdown-current {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 8px;
+}
+
+.account-dropdown-current img {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.account-dropdown-username {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.account-dropdown-check {
+    width: 20px;
+    height: 20px;
+
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #563073;
+    color: white;
+
+    font-size: 12px;
+}
+
+.account-dropdown-check-mp {
+    background-color: #1e90ff;
+}
+
+.account-dropdown-add {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 8px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #333;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.account-dropdown-add:hover {
+    background-color: #f5f5f5;
+}
+
+.account-dropdown-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #222;
+    color: white;
+
+    font-size: 28px;
+}
+
+.account-dropdown-icon svg {
+    stroke-width: 10;
+}
+
+
+/* ========================= */
+/* Account profiles */
+/* ========================= */
+
+.account-profiles {
+    margin-top: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.account-profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.account-profile-title {
+    margin: 0;
+
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+
+.account-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 12px;
+
+    border: 1px solid #c5c5c58c;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    cursor: pointer;
+}
+
+.account-profile-card:hover {
+    background-color: #f8f8f8;
+}
+
+.account-profile-card img {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.account-profile-card p {
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}

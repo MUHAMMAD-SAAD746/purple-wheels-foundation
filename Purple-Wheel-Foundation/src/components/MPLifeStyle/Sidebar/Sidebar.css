@@ -4,7 +4,12 @@
     padding-top: 10px;
 
     box-sizing: border-box;
-    position: relative;
+
+    position: fixed;
+    /* top: 0; */
+    left: 0;
+
+    z-index: 100;
     background-color: #ffffff;
     /* border-right: 1px solid #eeeeee; */
 }

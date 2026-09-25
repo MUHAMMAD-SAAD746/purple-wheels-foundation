@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import HotAndPepperDashboard from "../../../assets/hot-pepper-dashboard.png"
 import ContentCreators from "../../../assets/content-creators.jpg"
@@ -11,6 +12,7 @@ import PurpleWheel from "../../../assets/purplewheel.png"
 import { IoChevronDown, IoSettingsOutline, IoAdd, IoCheckmark } from "react-icons/io5";
 import AuthImagePanel from "../../../components/Auth/AuthImagePanel/AuthImagePanel";
 import generateAvatarUrl from "../../../utils/generateAvatarUrl";
+import AccountDropdown from "../../../components/AccountDropdown/AccountDropdown";
 
 import "../auth.css";
 import "./ChooseAcc.css";
@@ -18,6 +20,7 @@ import AccountCard from "../../../components/AccountCard/AccountCard";
 
 function ChooseAcc() {
     const { user, loading } = useAuth();
+    const navigate = useNavigate();
     const avatarUrl = generateAvatarUrl(user?.username);
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
@@ -53,33 +56,36 @@ function ChooseAcc() {
                         </button>
 
                         {showAccountDropdown && (
-                            <div className="account-dropdown-wrapper">
-                                <div className="account-dropdown">
-                                    <div className="account-dropdown-current">
-                                        <img
-                                            src={avatarUrl}
-                                            alt="Profile"
-                                        />
+                            // <div className="account-dropdown-wrapper">
+                            //     <div className="account-dropdown">
+                            //         <div className="account-dropdown-current">
+                            //             <img
+                            //                 src={avatarUrl}
+                            //                 alt="Profile"
+                            //             />
 
-                                        <span className="account-dropdown-username">
-                                            {user?.username}
-                                        </span>
+                            //             <span className="account-dropdown-username">
+                            //                 {user?.username}
+                            //             </span>
 
-                                        <span className="account-dropdown-check">
-                                            <IoCheckmark />
-                                        </span>
-                                    </div>
+                            //             <span className="account-dropdown-check">
+                            //                 <IoCheckmark />
+                            //             </span>
+                            //         </div>
 
 
-                                    <button className="account-dropdown-add">
-                                        <span className="account-dropdown-icon">
-                                            <IoAdd />
-                                        </span>
+                            //         <button className="account-dropdown-add">
+                            //             <span className="account-dropdown-icon">
+                            //                 <IoAdd />
+                            //             </span>
 
-                                        <span>Add Account</span>
-                                    </button>
-                                </div>
-                            </div>
+                            //             <span>Add Account</span>
+                            //         </button>
+                            //     </div>
+                            // </div>
+
+
+                            <AccountDropdown showProfiles={false} />
                         )}
 
                     </div>
@@ -106,6 +112,7 @@ function ChooseAcc() {
                     buttonText="Enter Entertainment"
                     backgroundImage={HotAndPepperDashboard}
                     gradient={true}
+                    onClick={() => navigate("/MP-LifeStyle")}
                 />
                 <AccountCard
                     logo={PurpleWheel}
@@ -115,13 +122,15 @@ function ChooseAcc() {
                     backgroundImage={ContentCreators}
                     gradient={true}
                     logoWidth="150px"
+                    onClick={() => navigate("/MP-LifeStyle")}
                 />
                 <AccountCard
                     logo={MP}
-                    title="Hotlike Pepper"
-                    category="Entertainment"
+                    title="MP Lifestyle"
+                    category="Blogs & Content Creators"
                     buttonText="Enter Entertainment"
                     backgroundImage={Charity}
+                    onClick={() => navigate("/MP-LifeStyle")}
                 />
 
             </div>

@@ -51,7 +51,7 @@ function CreatePassword() {
             setLoading(true);
 
             const response = await axios.post(
-                "http://localhost:3000/api/auth/update-password",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/update-password`,
                 {
                     password,
                 },

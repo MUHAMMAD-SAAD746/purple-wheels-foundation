@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
 
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/auth/me", {
+        axios.get(`${import.meta.env.VITE_DOMAIN_NAME}/api/auth/me`, {
             withCredentials: true
         })
             .then((response) => {

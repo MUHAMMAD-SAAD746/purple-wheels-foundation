@@ -8,6 +8,7 @@ router.post("/login", authController.loginUser)
 router.post("/forgot-password", authController.forgotPassword)
 router.post("/verify-reset-code", authController.verifyResetCode)
 router.post("/update-password", authController.updatePassword)
+router.post("/logout", authController.logoutUser)
 router.get("/me", authMiddleware, authController.userProfile)
 
 module.exports = router;

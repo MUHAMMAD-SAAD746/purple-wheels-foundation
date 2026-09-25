@@ -24,7 +24,14 @@ function App() {
                 <Route path="/verification" element={<Verification />} />
                 <Route path="/create-password" element={<CreatePassword />} />
                 <Route path="/Purple-Wheels" element={<LandingPage />} />
-                <Route path="/MP-LifeStyle" element={<MpLifeStyle />}>
+                <Route 
+                    path="/MP-LifeStyle" 
+                    element={
+                        <ProtectedRoute>
+                            <MpLifeStyle />
+                        </ProtectedRoute>
+                    }
+                >
                     <Route index element={<Home />} />
                 </Route>
                 <Route

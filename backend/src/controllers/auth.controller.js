@@ -371,11 +371,26 @@ async function updatePassword(req, res) {
 
 
 
+async function logoutUser(req, res) {
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false
+    });
+
+    return res.status(200).json({
+        message: "Logged out successfully"
+    });
+
+}
+
+
 module.exports = {
     registerUser,
     loginUser,
     userProfile,
     forgotPassword,
     verifyResetCode,
-    updatePassword
+    updatePassword,
+    logoutUser
 }

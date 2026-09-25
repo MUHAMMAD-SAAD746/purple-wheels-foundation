@@ -63,8 +63,9 @@ function Register() {
         setError("");
 
         try {
+            console.log(import.meta.env.VITE_DOMAIN_NAME);
             const response = await axios.post(
-                "http://localhost:3000/api/auth/register",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/register`,
                 {
                     username: formData.username,
                     email: formData.email,

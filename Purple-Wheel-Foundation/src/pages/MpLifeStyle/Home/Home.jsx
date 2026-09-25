@@ -9,25 +9,25 @@ import Header from "../../../components/MPLifeStyle/Header/Header";
 import FeedHeader from "../../../components/MPLifeStyle/FeedHeader/FeedHeader";
 import BlogCard from "../../../components/MPLifeStyle/BlogCard/BlogCard";
 
-// import Painting from "../../../assets/painting.png"
-// import MorningRitual from "../../../assets/morning-ritual.png"
 
 const Home = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState("All");
 
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/`
-                    // `http://localhost:3000/api/blogs/`
-                );
+                const url =
+                    selectedCategory === "All"
+                        ? `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/`
+                        : `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/?category=${selectedCategory.toLowerCase()}`;
+
+                const response = await axios.get(url);
 
                 console.log(response.data);
                 setBlogs(response.data.blogs);
-                console.log(blogs)
             } catch (error) {
                 console.error("Error fetching blogs:", error);
             } finally {
@@ -36,7 +36,7 @@ const Home = () => {
         };
 
         fetchBlogs();
-    }, []);
+    }, [selectedCategory]);
 
 
     return (
@@ -59,55 +59,33 @@ const Home = () => {
                 <div className="main-content">
                     <div className="mp-home-tabs">
                         <ul className="mp-home-tab-list">
-                            <li className="mp-home-tab active">All</li>
-                            <li className="mp-home-tab">Wellness</li>
-                            <li className="mp-home-tab">Fashion</li>
-                            <li className="mp-home-tab">Travel</li>
-                            <li className="mp-home-tab">Motivation</li>
-                            <li className="mp-home-tab">Food</li>
+                            {["All", "Wellness", "Fashion", "Travel", "Motivation", "Food"].map(
+                                (category) => (
+                                    <li
+                                        key={category}
+                                        className={`mp-home-tab ${selectedCategory === category ? "active" : ""
+                                            }`}
+                                        onClick={() => setSelectedCategory(category)}
+                                    >
+                                        {category}
+                                    </li>
+                                )
+                            )}
                         </ul>
                     </div>
-
-
-                    {/* <div className="blog-card-grid">
-                        <BlogCard
-                            image={MorningRitual}
-                            title="Morning Rituals for Better Focus"
-                            description="Discover simple morning habits that can transform your productivity and mental clarity..."
-                            profileImage={MorningRitual}
-                            authorName="Ayesha Khan"
-                            date="Oct 12, 2025"
-                            likeCount="420"
-                            viewCount="3.2k"
-                        />
-                        <BlogCard
-                            image={Painting}
-                            title="Creative Hobbies That Cost Less Than $20"
-                            description="Unleash your creativity with these affordable hobby ideas perfect for beginners."
-                            profileImage={Painting}
-                            authorName="Nora Ali"
-                            date="Oct 20, 2025"
-                            likeCount="298"
-                            viewCount="1.9k"
-                        />
-                        <BlogCard
-                            image={Painting}
-                            title="Creative Hobbies That Cost Less Than $20"
-                            description="Unleash your creativity with these affordable hobby ideas perfect for beginners."
-                            profileImage={Painting}
-                            authorName="Nora Ali"
-                            date="Oct 20, 2025"
-                            likeCount="298"
-                            viewCount="1.9k"
-                        />
-                    </div> */}
-
 
 
 
                     <div className="blog-card-grid">
                         {loading ? (
-                            <p>Loading blogs...</p>
+                            <p className="blog-loading">Loading blogs...</p>
+                        ) : blogs.length === 0 ? (
+                            <div className="no-blogs">
+                                <h3>No blogs found</h3>
+                                <p>
+                                    There are no blogs available in the {selectedCategory} category yet.
+                                </p>
+                            </div>
                         ) : (
                             blogs.map((blog) => (
                                 <BlogCard

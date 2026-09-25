@@ -4,7 +4,14 @@ async function getAllBlogs (req,res) {
     const category = req.query.category
 
     if( category ) {
-        res.status(200).json({message: "no query params"})
+        const blogs = await blogsModel.find({
+            category
+        })
+        
+        res.status(200).json({
+            message: category + ` blogs fetched Sucessfully`,
+            blogs: blogs
+        })
     }
     else {
         const blogs = await blogsModel.find()

@@ -33,6 +33,7 @@
 /* Blog Information */
 
 .blog-card-info {
+    min-height: 105px;
     margin-bottom: 20px;
 }
 

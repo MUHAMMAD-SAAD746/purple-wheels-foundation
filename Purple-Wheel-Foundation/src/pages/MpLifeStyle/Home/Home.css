@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+/* .mp-home-blur {
+    filter: blur(5px);
+    transition: filter 0.2s ease;
+} */
+
 .mp-home-content {
     width: 100%;
     padding: 135px 35px 35px;

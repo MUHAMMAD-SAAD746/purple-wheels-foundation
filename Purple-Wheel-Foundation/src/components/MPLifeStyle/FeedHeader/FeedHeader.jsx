@@ -1,6 +1,6 @@
 import "./FeedHeader.css"
 
-const FeedHeader = ({ title, subtitle, showButton = false }) => {
+const FeedHeader = ({ title, subtitle, showButton = false, onNewPost }) => {
     return (
         <div className="home-feed-header">
             <div className="home-feed-heading">
@@ -9,7 +9,10 @@ const FeedHeader = ({ title, subtitle, showButton = false }) => {
             </div>
 
             {showButton && (
-                <button className="home-feed-new-post">
+                <button 
+                    className="home-feed-new-post"
+                    onClick={onNewPost}
+                >
                     <span>+</span>
                     New Post
                 </button>

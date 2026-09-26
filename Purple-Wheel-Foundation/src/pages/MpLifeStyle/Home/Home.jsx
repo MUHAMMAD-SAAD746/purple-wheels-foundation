@@ -43,72 +43,70 @@ const Home = () => {
 
     return (
         <div className="mp-home">
-            {/* <div className={showCreatePost ? "mp-home-blur" : ""}> */}
-                <Header />
+            <Header />
 
-                <main className="mp-home-content">
-                    <FeedHeader
-                        title="HOME FEED"
-                        subtitle="Discover inspiring lifestyle content"
-                        showButton={true}
-                        onNewPost={() => setShowCreatePost(true)}
-                    />
+            <main className="mp-home-content">
+                <FeedHeader
+                    title="HOME FEED"
+                    subtitle="Discover inspiring lifestyle content"
+                    showButton={true}
+                    onNewPost={() => setShowCreatePost(true)}
+                />
 
-                    <div className="mp-home-banner">
-                        <h1>Welcome to MP Lifestyle</h1>
-                        <p>Discover inspiring stories, creative ideas, and lifestyle tips from our community</p>
-                    </div>
-
-
-                    <div className="main-content">
-                        <div className="mp-home-tabs">
-                            <ul className="mp-home-tab-list">
-                                {["All", "Wellness", "Fashion", "Travel", "Motivation", "Food"].map(
-                                    (category) => (
-                                        <li
-                                            key={category}
-                                            className={`mp-home-tab ${selectedCategory === category ? "active" : ""
-                                                }`}
-                                            onClick={() => setSelectedCategory(category)}
-                                        >
-                                            {category}
-                                        </li>
-                                    )
-                                )}
-                            </ul>
-                        </div>
+                <div className="mp-home-banner">
+                    <h1>Welcome to MP Lifestyle</h1>
+                    <p>Discover inspiring stories, creative ideas, and lifestyle tips from our community</p>
+                </div>
 
 
-
-                        <div className="blog-card-grid">
-                            {loading ? (
-                                <p className="blog-loading">Loading blogs...</p>
-                            ) : blogs.length === 0 ? (
-                                <div className="no-blogs">
-                                    <h3>No blogs found</h3>
-                                    <p>
-                                        There are no blogs available in the {selectedCategory} category yet.
-                                    </p>
-                                </div>
-                            ) : (
-                                blogs.map((blog) => (
-                                    <BlogCard
-                                        key={blog._id}
-                                        image={blog.image}
-                                        title={blog.title}
-                                        description={blog.description}
-                                        profileImage={blog.profileImage}
-                                        authorName={blog.username}
-                                        date={blog.createdAt}
-                                        likeCount={blog.likeCount}
-                                        viewCount={blog.viewCount}
-                                    />
-                                ))
+                <div className="main-content">
+                    <div className="mp-home-tabs">
+                        <ul className="mp-home-tab-list">
+                            {["All", "Wellness", "Fashion", "Travel", "Motivation", "Food"].map(
+                                (category) => (
+                                    <li
+                                        key={category}
+                                        className={`mp-home-tab ${selectedCategory === category ? "active" : ""
+                                            }`}
+                                        onClick={() => setSelectedCategory(category)}
+                                    >
+                                        {category}
+                                    </li>
+                                )
                             )}
-                        </div>
+                        </ul>
                     </div>
-                </main>
-            {/* </div> */}
+
+
+
+                    <div className="blog-card-grid">
+                        {loading ? (
+                            <p className="blog-loading">Loading blogs...</p>
+                        ) : blogs.length === 0 ? (
+                            <div className="no-blogs">
+                                <h3>No blogs found</h3>
+                                <p>
+                                    There are no blogs available in the {selectedCategory} category yet.
+                                </p>
+                            </div>
+                        ) : (
+                            blogs.map((blog) => (
+                                <BlogCard
+                                    key={blog._id}
+                                    image={blog.image}
+                                    title={blog.title}
+                                    description={blog.description}
+                                    profileImage={blog.author?.profileImage}
+                                    authorName={blog.author?.username}
+                                    date={blog.createdAt}
+                                    likeCount={blog.likeCount}
+                                    viewCount={blog.viewCount}
+                                />
+                            ))
+                        )}
+                    </div>
+                </div>
+            </main>
 
 
             {showCreatePost && (

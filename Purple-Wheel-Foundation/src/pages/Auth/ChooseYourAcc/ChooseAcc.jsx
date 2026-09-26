@@ -21,12 +21,15 @@ import AccountCard from "../../../components/AccountCard/AccountCard";
 function ChooseAcc() {
     const { user, loading } = useAuth();
     const navigate = useNavigate();
-    const avatarUrl = generateAvatarUrl(user?.username);
+    const avatarUrl = user?.profileImage || generateAvatarUrl(user?.username);
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
     if (loading) {
         return null;
     }
+
+    console.log("USER:", user);
+    console.log("PROFILE IMAGE:", user?.profileImage);
 
     return (
         <div className="auth-form-page auth-page">
@@ -56,35 +59,6 @@ function ChooseAcc() {
                         </button>
 
                         {showAccountDropdown && (
-                            // <div className="account-dropdown-wrapper">
-                            //     <div className="account-dropdown">
-                            //         <div className="account-dropdown-current">
-                            //             <img
-                            //                 src={avatarUrl}
-                            //                 alt="Profile"
-                            //             />
-
-                            //             <span className="account-dropdown-username">
-                            //                 {user?.username}
-                            //             </span>
-
-                            //             <span className="account-dropdown-check">
-                            //                 <IoCheckmark />
-                            //             </span>
-                            //         </div>
-
-
-                            //         <button className="account-dropdown-add">
-                            //             <span className="account-dropdown-icon">
-                            //                 <IoAdd />
-                            //             </span>
-
-                            //             <span>Add Account</span>
-                            //         </button>
-                            //     </div>
-                            // </div>
-
-
                             <AccountDropdown showProfiles={false} />
                         )}
 

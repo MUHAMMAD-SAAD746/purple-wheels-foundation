@@ -31,11 +31,6 @@ const blogsSchema = new mongoose.Schema(
             ]
         },
 
-        date: {
-            type: String,
-            required: true
-        },
-
         likeCount: {
             type: Number,
             default: 0
@@ -48,7 +43,7 @@ const blogsSchema = new mongoose.Schema(
 
         author: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "users",
             required: true
         }
     },

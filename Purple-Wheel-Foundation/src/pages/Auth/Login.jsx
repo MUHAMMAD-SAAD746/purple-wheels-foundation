@@ -65,7 +65,14 @@ function Login() {
                 }
             );
 
-            setUser(response.data.user);
+            const meResponse = await axios.get(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/me`,
+                {
+                    withCredentials: true
+                }
+            );
+
+            setUser(meResponse.data.user);
             navigate("/choose-account");
 
         } catch (error) {

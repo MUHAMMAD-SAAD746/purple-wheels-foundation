@@ -53,7 +53,11 @@ const BlogCard = ({
                             </p>
 
                             <p className="blog-card-date">
-                                {date}
+                                {new Date(date).toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric"
+                                })}
                             </p>
                         </div>
                     </div>

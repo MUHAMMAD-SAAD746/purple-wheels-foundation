@@ -18,7 +18,7 @@ async function authMiddleware(req, res, next) {
         console.log("JWT ERROR:", err.name);
         console.log("JWT MESSAGE:", err.message);
 
-        return res.status(401).json({ message: "Invalid or expired token", error: err })
+        return res.status(401).json({ message: "Invalid or expired token",})
     }
 }
 

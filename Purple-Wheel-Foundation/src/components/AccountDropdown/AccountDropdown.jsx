@@ -11,7 +11,7 @@ const AccountDropdown = ({ showProfiles = true }) => {
     const { user } = useAuth();
     const location = useLocation();
 
-    const avatarUrl = generateAvatarUrl(user?.username);
+    const avatarUrl = user?.profileImage || generateAvatarUrl(user?.username);
 
     return (
         <div className="account-dropdown-wrapper">

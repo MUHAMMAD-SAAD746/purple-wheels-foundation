@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import axios from "axios";
 import { IoClose, IoCloudUploadOutline } from "react-icons/io5";
 import { FaRegSave } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
@@ -9,8 +10,12 @@ const CreateNewPost = ({ onClose }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
 
-    const fileInputRef = useRef(null);
+    const [title, setTitle] = useState("");
+    const [category, setCategory] = useState("");
+    const [image, setImage] = useState("test-image");
+    const [loading, setLoading] = useState(false)
 
+    const fileInputRef = useRef(null);
 
 
 
@@ -46,6 +51,53 @@ const CreateNewPost = ({ onClose }) => {
         const file = e.target.files[0];
 
         handleFile(file);
+    };
+
+
+
+
+
+    const handlePublish = async (e) => {
+        e.preventDefault();
+
+        if (!title || !content || !image || !category) {
+            alert("Please fill all required fields");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            const response = await axios.post(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/create-blog`,
+                {
+                    title,
+                    description: content,
+                    image,
+                    category,
+                    date: new Date().toISOString().split("T")[0]
+                },
+                {
+                    withCredentials: true
+                }
+            );
+
+            console.log(response.data);
+
+            alert("Blog published successfully");
+
+            onClose();
+
+        } catch (error) {
+            console.error("Error creating blog:", error);
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to publish blog"
+            );
+        } finally {
+            setLoading(false);
+        }
     };
 
 
@@ -118,26 +170,33 @@ const CreateNewPost = ({ onClose }) => {
                 </div>
 
                 {/* Form */}
-                <form className="create-post-form">
+                <form className="create-post-form" onSubmit={handlePublish}>
                     <div className="create-post-field">
                         <label htmlFor="post-title">Title</label>
                         <input
                             type="text"
                             id="post-title"
                             placeholder="Enter post title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                         />
                     </div>
 
                     <div className="create-post-field">
                         <label htmlFor="post-category">Category</label>
-                        <select id="post-category" defaultValue="">
+                        <select
+                            id="post-category"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
                             <option value="" disabled>
                                 Select a category
                             </option>
-                            <option value="lifestyle">Lifestyle</option>
-                            <option value="creativity">Creativity</option>
-                            <option value="technology">Technology</option>
-                            <option value="education">Education</option>
+                            <option value="wellness">Wellness</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="travel">Travel</option>
+                            <option value="motivation">Motivation</option>
+                            <option value="food">Food</option>
                         </select>
                     </div>
 
@@ -164,20 +223,24 @@ const CreateNewPost = ({ onClose }) => {
                             placeholder="Creativity, habits, routine (comma separated)"
                         />
                     </div>
+
+                    {/* Footer */}
+                    <div className="create-post-actions">
+                        <button type="button" className="create-post-draft">
+                            <FaRegSave />
+                            Save Draft
+                        </button>
+
+                        <button
+                            type="submit"
+                            className="create-post-publish"
+                            disabled={loading}
+                        >
+                            <FiSend />
+                            {loading ? "Publishing..." : "Publish Now"}
+                        </button>
+                    </div>
                 </form>
-
-                {/* Footer */}
-                <div className="create-post-actions">
-                    <button type="button" className="create-post-draft">
-                        <FaRegSave />
-                        Save Draft
-                    </button>
-
-                    <button type="button" className="create-post-publish">
-                        <FiSend />
-                        Publish Now
-                    </button>
-                </div>
             </div>
         </div>
     );

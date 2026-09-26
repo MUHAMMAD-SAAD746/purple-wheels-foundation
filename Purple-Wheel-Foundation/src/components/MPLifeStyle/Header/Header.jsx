@@ -21,7 +21,7 @@ import "./Header.css"
 const Header = () => {
     const { user, setUser } = useAuth();
     const navigate = useNavigate();
-    const avatarUrl = generateAvatarUrl(user?.username);
+    const avatarUrl = user?.profileImage || generateAvatarUrl(user?.username);
 
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
     const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
@@ -52,7 +52,7 @@ const Header = () => {
         <header className="mp-home-header">
 
             <div className="mp-home-welcome">
-                <h1>Welcome Back, John!</h1>
+                <h1>Welcome Back, {user.username}!</h1>
                 <p>Manage your blogs and content with ease.</p>
             </div>
 

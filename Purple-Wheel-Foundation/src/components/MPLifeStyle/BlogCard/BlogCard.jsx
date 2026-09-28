@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { FaHeart, FaEye } from "react-icons/fa";
 import "./BlogCard.css";
 
 const BlogCard = ({
+    id,
     image,
     title,
     description,
@@ -11,8 +13,15 @@ const BlogCard = ({
     likeCount,
     viewCount,
 }) => {
+    const navigate = useNavigate();
+    
+    
     return (
-        <article className="blog-card">
+        <article 
+            className="blog-card"
+            onClick={() => navigate(`/MP-LifeStyle/post-detail/${id}`)}
+            style={{ cursor: "pointer" }}
+        >
 
             {/* Blog Image */}
             <img

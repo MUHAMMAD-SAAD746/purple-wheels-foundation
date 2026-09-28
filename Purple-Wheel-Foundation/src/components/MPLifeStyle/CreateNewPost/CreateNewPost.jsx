@@ -12,7 +12,7 @@ const CreateNewPost = ({ onClose }) => {
 
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
-    const [image, setImage] = useState("test-image");
+    // const [image, setImage] = useState("test-image");
     const [loading, setLoading] = useState(false)
 
     const fileInputRef = useRef(null);
@@ -60,7 +60,7 @@ const CreateNewPost = ({ onClose }) => {
     const handlePublish = async (e) => {
         e.preventDefault();
 
-        if (!title || !content || !image || !category) {
+        if (!title || !content || !selectedFile || !category) {
             alert("Please fill all required fields");
             return;
         }
@@ -68,15 +68,17 @@ const CreateNewPost = ({ onClose }) => {
         try {
             setLoading(true);
 
+            const formData = new FormData();
+
+            formData.append("title", title);
+            formData.append("description", content);
+            formData.append("image", selectedFile);
+            formData.append("category", category);
+            formData.append("date", new Date().toISOString().split("T")[0]);
+
             const response = await axios.post(
                 `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/create-blog`,
-                {
-                    title,
-                    description: content,
-                    image,
-                    category,
-                    date: new Date().toISOString().split("T")[0]
-                },
+                formData,
                 {
                     withCredentials: true
                 }
@@ -99,6 +101,7 @@ const CreateNewPost = ({ onClose }) => {
             setLoading(false);
         }
     };
+
 
 
 

@@ -10,6 +10,7 @@ import ChooseAcc from "./pages/Auth/ChooseYourAcc/ChooseAcc";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import MpLifeStyle from "./pages/MpLifeStyle/MpLifeStyle";
 import Home from "./pages/MpLifeStyle/Home/Home";
+import PostDetail from "./pages/MpLifeStyle/PostDetail/PostDetail";
 
 function App() {
     return (
@@ -33,7 +34,9 @@ function App() {
                     }
                 >
                     <Route index element={<Home />} />
+                    <Route path="post-detail/:id" element={<PostDetail />} />
                 </Route>
+
                 <Route
                     path="/choose-account"
                     element={

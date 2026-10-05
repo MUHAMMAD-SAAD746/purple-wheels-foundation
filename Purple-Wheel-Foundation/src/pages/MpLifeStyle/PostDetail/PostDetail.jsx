@@ -12,8 +12,8 @@ import {
 import Header from "../../../components/MPLifeStyle/Header/Header";
 
 import "./PostDetail.css";
-import CommentsCard from "../CommentsCard/CommentsCard";
-import RelatedPostCard from "../RelatedPostCard/RelatedPostCard";
+import CommentsCard from "../../../components/MPLifeStyle/CommentsCard/CommentsCard";
+import RelatedPostCard from "../../../components/MPLifeStyle/RelatedPostCard/RelatedPostCard";
 
 const PostDetail = () => {
     const { id } = useParams();

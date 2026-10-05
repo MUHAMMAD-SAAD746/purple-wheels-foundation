@@ -30,6 +30,7 @@
     border-top: 1px solid #eeeeee;
     border-bottom: 1px solid #eeeeee;
     height: 300px;
+    overflow-y: auto;
 }
 
 
@@ -161,7 +162,7 @@
 
 .comment-input-wrapper {
     position: relative;
-
+    background-color: #fff;
     width: 100%;
 
     /* margin-top: 20px; */

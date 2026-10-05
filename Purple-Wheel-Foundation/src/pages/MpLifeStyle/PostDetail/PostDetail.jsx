@@ -20,6 +20,7 @@ const PostDetail = () => {
 
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [relatedBlogs, setRelatedBlogs] = useState([]);
 
 
 
@@ -34,8 +35,17 @@ const PostDetail = () => {
                     }
                 );
 
-                console.log(response.data);
                 setBlog(response.data.blog);
+
+                const relatedResponse = await axios.get(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/related`,
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setRelatedBlogs(relatedResponse.data.relatedBlogs);
+
             } catch (error) {
                 console.error("Error fetching blog:", error);
             } finally {
@@ -62,15 +72,8 @@ const PostDetail = () => {
             <Header />
 
             <main className="post-detail">
-
-                {/* Main Content */}
                 <div className="post-detail-main">
-
-
-
-                    {/* Post */}
                     <article className="post-content-card">
-                        {/* Author Info */}
                         <div className="post-author">
                             <div className="post-author-info">
                                 <img
@@ -95,7 +98,6 @@ const PostDetail = () => {
                             </button>
                         </div>
 
-                        {/* Stats + Actions */}
                         <div className="post-top-bar">
 
                             <div className="post-stats">
@@ -132,14 +134,12 @@ const PostDetail = () => {
 
                         </div>
 
-                        {/* Blog Image */}
                         <img
                             className="post-main-image"
                             src={blog.image}
                             alt="Blog"
                         />
 
-                        {/* Blog Content */}
                         <div className="post-article-content">
 
                             <h1>{blog.title}</h1>
@@ -185,11 +185,12 @@ const PostDetail = () => {
 
                 </div>
 
-                {/* Right Sidebar */}
                 <aside className="post-detail-sidebar">
-                    {/* Related posts / advertisements / other content */}
-                    <CommentsCard />
-                    <RelatedPostCard />
+                    <CommentsCard
+                        blogId={id}
+                        blogAuthorId={blog.author?._id}
+                    />
+                    <RelatedPostCard relatedBlogs={relatedBlogs} />
                 </aside>
 
             </main>

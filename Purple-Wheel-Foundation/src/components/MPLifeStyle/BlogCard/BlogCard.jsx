@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { FaHeart, FaEye } from "react-icons/fa";
+import formatNumber from "../../../utils/formatNumber"
 import "./BlogCard.css";
 
 const BlogCard = ({
@@ -76,12 +77,12 @@ const BlogCard = ({
 
                         <div className="blog-card-stat">
                             <FaHeart className="blog-card-stat-icon" />
-                            <span>{likeCount}</span>
+                            <span>{formatNumber(likeCount)}</span>
                         </div>
 
                         <div className="blog-card-stat">
                             <FaEye className="blog-card-stat-icon" />
-                            <span>{viewCount}</span>
+                            <span>{formatNumber(viewCount)}</span>
                         </div>
 
                     </div>

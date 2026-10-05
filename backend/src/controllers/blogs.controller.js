@@ -108,4 +108,36 @@ async function getBlogById(req, res) {
 
 
 
-module.exports = { getAllBlogs, createBlog, getBlogById }
+async function relatedBlogs(req, res) {
+    const { id } = req.params;
+
+    try {
+        const blog = await blogsModel.findById(id);
+
+        if (!blog) {
+            return res.status(404).json({
+                message: "Blog not found"
+            });
+        }
+
+        const relatedBlogs = await blogsModel.find({
+            category: blog.category,
+            _id: { $ne: id }
+        });
+
+        return res.status(200).json({
+            relatedBlogs
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+}
+
+
+
+module.exports = { getAllBlogs, createBlog, getBlogById, relatedBlogs }

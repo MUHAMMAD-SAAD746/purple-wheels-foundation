@@ -1,8 +1,11 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
+import formatNumber from "../../../utils/formatNumber";
 import "./RelatedPostCard.css";
 
-const RelatedPostCard = () => {
+const RelatedPostCard = ({ relatedBlogs }) => {
+    const navigate = useNavigate();
+
     return (
         <aside className="related-post-card">
             <div className="related-post-header">
@@ -10,27 +13,20 @@ const RelatedPostCard = () => {
             </div>
 
             <div className="related-post-list">
-                <div className="related-post-item">
-                    <h4>The Art of Digital Detox</h4>
-                    <div className="related-post-views">
-                        <FaEye /> <span>3.7k views</span>
-                    </div>
-                </div>
+                {relatedBlogs.map((blog) => (
+                    <div
+                        className="related-post-item"
+                        key={blog._id}
+                        onClick={() => navigate(`/MP-LifeStyle/post-detail/${blog._id}`)}
+                    >
+                        <h4>{blog.title}</h4>
 
-                <div className="related-post-item">
-                    <h4>Sustainable Fashion on a Budget</h4>
-                    <div className="related-post-views"> <FaEye />
-                        <span>2.8k views</span>
+                        <div className="related-post-views">
+                            <FaEye />
+                            <span>{formatNumber(blog.viewCount)} views</span>
+                        </div>
                     </div>
-                </div>
-
-                <div className="related-post-item">
-                    <h4>Plant-Based Meals for Busy Weeknights</h4>
-                    <div className="related-post-views">
-                        <FaEye />
-                        <span>2.5k views</span>
-                    </div>
-                </div>
+                ))}
             </div>
         </aside>
     );

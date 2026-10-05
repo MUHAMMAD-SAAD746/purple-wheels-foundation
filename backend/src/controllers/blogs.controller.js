@@ -35,7 +35,8 @@ async function createBlog(req, res) {
         title,
         description,
         category,
-        date
+        date,
+        tags
     } = req.body;
 
     const image = req.file;
@@ -75,6 +76,9 @@ async function createBlog(req, res) {
             image: result.secure_url,
             category,
             date,
+            tags: tags
+                ? tags.split(",").map(tag => tag.trim().toLowerCase()).filter(Boolean)
+                : [],
             author: req.user.userId
         });
 

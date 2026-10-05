@@ -31,6 +31,11 @@ const blogsSchema = new mongoose.Schema(
             ]
         },
 
+        tags: {
+            type: [String],
+            default: []
+        },
+
         likeCount: {
             type: Number,
             default: 0

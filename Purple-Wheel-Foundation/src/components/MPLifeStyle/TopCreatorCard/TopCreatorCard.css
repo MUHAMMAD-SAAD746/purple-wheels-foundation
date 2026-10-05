@@ -1,0 +1,57 @@
+.top-creator-card {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fcfcfc;
+    border: 1px solid #f7f7f7;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.top-creator-card .container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top-creator-profile {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.top-creator-info {
+    min-width: 0;
+}
+
+.top-creator-name {
+    margin: 0 0 5px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #222222;
+}
+
+.top-creator-stats {
+    margin: 0;
+    font-size: 12px;
+    color: #777777;
+    white-space: nowrap;
+}
+
+.top-creator-follow-button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 9px;
+    border: none;
+    border-radius: 6px;
+    background-color: #1e90ff;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}

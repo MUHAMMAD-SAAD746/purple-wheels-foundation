@@ -53,9 +53,9 @@
 
 .blog-card-description {
     margin: 8px 0 0;
-
+    height: 62px;
     color: #828282;
-
+    overflow: hidden;
     font-size: 14px;
     line-height: 1.5;
 }

@@ -12,7 +12,7 @@ const CreateNewPost = ({ onClose }) => {
 
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
-    // const [image, setImage] = useState("test-image");
+    const [tags, setTags] = useState("");
     const [loading, setLoading] = useState(false)
 
     const fileInputRef = useRef(null);
@@ -75,6 +75,7 @@ const CreateNewPost = ({ onClose }) => {
             formData.append("image", selectedFile);
             formData.append("category", category);
             formData.append("date", new Date().toISOString().split("T")[0]);
+            formData.append("tags", tags);
 
             const response = await axios.post(
                 `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/create-blog`,
@@ -101,8 +102,6 @@ const CreateNewPost = ({ onClose }) => {
             setLoading(false);
         }
     };
-
-
 
 
 
@@ -224,6 +223,8 @@ const CreateNewPost = ({ onClose }) => {
                             type="text"
                             id="post-tags"
                             placeholder="Creativity, habits, routine (comma separated)"
+                            value={tags}
+                            onChange={(e) => setTags(e.target.value)}
                         />
                     </div>
 

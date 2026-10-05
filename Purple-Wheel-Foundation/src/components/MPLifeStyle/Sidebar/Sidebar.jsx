@@ -16,10 +16,11 @@ const menuItems = [
         label: "Home",
         path: "/MP-LifeStyle",
         icon: IoHome,
+        end: true,
     },
     {
         label: "Explore",
-        path: "/explore",
+        path: "/MP-LifeStyle/explore",
         icon: IoCompass,
     },
     {
@@ -54,10 +55,11 @@ const Sidebar = () => {
                 </p>
 
                 <ul className="sidebar-menu">
-                    {menuItems.map(({ label, path, icon: Icon }) => (
+                    {menuItems.map(({ label, path, icon: Icon, end}) => (
                         <li key={path}>
                             <NavLink
                                 to={path}
+                                end={end}
                                 className={({ isActive }) =>
                                     `sidebar-link ${isActive ? "active" : ""}`
                                 }

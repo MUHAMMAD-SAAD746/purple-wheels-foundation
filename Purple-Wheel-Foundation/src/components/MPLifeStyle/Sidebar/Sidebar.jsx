@@ -25,12 +25,12 @@ const menuItems = [
     },
     {
         label: "Creators",
-        path: "/creators",
+        path: "/MP-LifeStyle/creators",
         icon: IoPeople,
     },
     {
         label: "Analytics",
-        path: "/analytics",
+        path: "/MP-LifeStyle/analytics",
         icon: IoBarChart,
     },
     {

@@ -1,0 +1,53 @@
+.analytics-card {
+    background: #fcfcfc;
+    border-radius: 12px;
+    padding: 10px;
+    /* min-height: 120px; */
+    box-sizing: border-box;
+    border: 1px solid #f8f8f8;
+}
+
+.analytics-card-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: #000;
+    border-radius: 10px;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.analytics-card-title {
+    margin: 0 0 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.analytics-card-stat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.analytics-card-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: #222;
+    line-height: 1;
+}
+
+.analytics-card-percentage {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.analytics-card-percentage.positive {
+    color: #22a06b;
+}
+
+.analytics-card-percentage.negative {
+    color: #e5484d;
+}

@@ -1,0 +1,62 @@
+.mp-analytics {
+    width: 100%;
+    margin-top: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding-bottom: 20px;
+}
+
+.mp-analytics-cards {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+.analytics-tabs {
+    display: flex;
+    gap: 30px;
+    margin-top: 8px;
+    border-bottom: 1px solid #e5e5e5;
+    padding-left: 20px;
+}
+
+.analytics-tab {
+    position: relative;
+    width: 90px;
+    border: none;
+    background: none;
+    padding: 0 5px 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #717171;
+    cursor: pointer;
+    text-align: center;
+}
+
+.analytics-tab.active {
+    color: #000;
+    font-weight: 600;
+}
+
+.analytics-tab.active::after {
+    content: "";
+
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+
+    width: 100%;
+    height: 8px;
+
+    background-color: #1e90ff;
+    border-radius: 50px 50px 0 0;
+}
+
+.analytics-blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}

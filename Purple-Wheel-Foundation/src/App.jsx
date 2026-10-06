@@ -12,6 +12,8 @@ import MpLifeStyle from "./pages/MpLifeStyle/MpLifeStyle";
 import Home from "./pages/MpLifeStyle/Home/Home";
 import PostDetail from "./pages/MpLifeStyle/PostDetail/PostDetail";
 import Explore from "./pages/MpLifeStyle/Explore/Explore";
+import Creators from "./pages/MpLifeStyle/Creators/Creators";
+import Analytics from "./pages/MpLifeStyle/Analytics/Analytics";
 
 function App() {
     return (
@@ -37,6 +39,8 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="post-detail/:id" element={<PostDetail />} />
                     <Route path="explore" element={<Explore />} />
+                    <Route path="creators" element={<Creators />} />
+                    <Route path="analytics" element={<Analytics />} />
                 </Route>
 
                 <Route

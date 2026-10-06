@@ -6,8 +6,11 @@ const upload = require("../middleware/upload");
 
 
 router.get("/", blogsController.getAllBlogs)
+router.get("/my-blogs", authMiddleware, blogsController.myBlogs)
 router.post("/create-blog", authMiddleware, upload.single("image"), blogsController.createBlog )
+router.get("/creators", authMiddleware, blogsController.getCreators)
 router.get("/:id/related", authMiddleware, blogsController.relatedBlogs)
+router.post("/:id/view", authMiddleware, blogsController.recordBlogView)
 router.get("/:id", authMiddleware, blogsController.getBlogById)
 
 module.exports = router;

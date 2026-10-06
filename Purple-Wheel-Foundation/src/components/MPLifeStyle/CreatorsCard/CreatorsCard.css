@@ -1,0 +1,78 @@
+.creator-card {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fcfcfc;
+    border: 1px solid #f7f7f7;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.creator-card .container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.creator-profile {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.creator-info {
+    min-width: 0;
+}
+
+.creator-name {
+    margin: 0 0 5px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #222222;
+}
+
+.creator-bio {
+    margin: 6px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6b7280;
+    overflow: hidden;
+}
+
+.creator-stats {
+    margin: 0;
+    font-size: 13px;
+    color: #828282;
+    white-space: nowrap;
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+.creator-stats .stats {
+    font-weight: bold;
+    color: black;
+}
+
+.creator-follow-button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 9px;
+    border: none;
+    border-radius: 6px;
+    background-color: #1e90ff;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.creator-follow-button.following {
+    background-color: #e8f3ff;
+    color: #1e90ff;
+    border: 1px solid #1e90ff;
+}

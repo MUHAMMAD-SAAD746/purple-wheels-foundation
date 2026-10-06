@@ -28,6 +28,15 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchBlog = async () => {
             try {
+                await axios.post(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/view`,
+                    {},
+                    {
+                        withCredentials: true
+                    }
+                );
+
+
                 const response = await axios.get(
                     `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}`,
                     {
@@ -36,6 +45,7 @@ const PostDetail = () => {
                 );
 
                 setBlog(response.data.blog);
+
 
                 const relatedResponse = await axios.get(
                     `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/related`,

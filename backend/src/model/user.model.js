@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+
     email: {
         type: String,
         required: true,
@@ -12,18 +13,36 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         trim: true
     },
+
     profileImage: {
         type: String,
         default: null
     },
+
     password: {
         type: String,
         required: true
     },
+
     role: {
         type: String,
         enum: ["user", "admin"],
         default: "user"
+    },
+
+    postCount: {
+        type: Number,
+        default: 0
+    },
+
+    followers: {
+        type: Number,
+        default: 0
+    },
+
+    following: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true,

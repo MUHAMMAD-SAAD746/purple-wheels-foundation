@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const blogViewSchema = new mongoose.Schema(
+const blogLikeSchema = new mongoose.Schema(
     {
         blog: {
             type: mongoose.Schema.Types.ObjectId,
@@ -19,12 +19,11 @@ const blogViewSchema = new mongoose.Schema(
     }
 );
 
-
-blogViewSchema.index(
+blogLikeSchema.index(
     { blog: 1, user: 1 },
     { unique: true }
 );
 
-const BlogView = mongoose.model("BlogView", blogViewSchema);
+const BlogLike = mongoose.model("BlogLike", blogLikeSchema);
 
-module.exports = BlogView;
+module.exports = BlogLike;

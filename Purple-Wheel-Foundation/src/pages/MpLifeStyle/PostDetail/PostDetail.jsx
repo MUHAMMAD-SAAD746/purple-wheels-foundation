@@ -4,6 +4,7 @@ import axios from "axios";
 
 import {
     FaHeart,
+    FaRegHeart,
     FaEye,
     FaShare,
     FaBookmark,
@@ -21,6 +22,8 @@ const PostDetail = () => {
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [relatedBlogs, setRelatedBlogs] = useState([]);
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeLoading, setLikeLoading] = useState(false);
 
 
 
@@ -45,6 +48,7 @@ const PostDetail = () => {
                 );
 
                 setBlog(response.data.blog);
+                setIsLiked(response.data.isLiked);
 
 
                 const relatedResponse = await axios.get(
@@ -65,6 +69,56 @@ const PostDetail = () => {
 
         fetchBlog();
     }, [id]);
+
+
+
+
+    const handleLike = async () => {
+        if (likeLoading) return;
+
+        try {
+            setLikeLoading(true);
+
+            if (isLiked) {
+                await axios.delete(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/like`,
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setIsLiked(false);
+
+                setBlog((prevBlog) => ({
+                    ...prevBlog,
+                    likeCount: prevBlog.likeCount - 1
+                }));
+
+            } else {
+                await axios.post(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/like`,
+                    {},
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setIsLiked(true);
+
+                setBlog((prevBlog) => ({
+                    ...prevBlog,
+                    likeCount: prevBlog.likeCount + 1
+                }));
+            }
+
+        } catch (error) {
+            console.error("Error updating like:", error);
+        } finally {
+            setLikeLoading(false);
+        }
+    };
+
+
 
 
 
@@ -112,10 +166,15 @@ const PostDetail = () => {
 
                             <div className="post-stats">
 
-                                <div className="post-stat">
-                                    <FaHeart />
+                                <button
+                                    className="post-stat like-button"
+                                    onClick={handleLike}
+                                    disabled={likeLoading}
+                                    aria-label="Like post"
+                                >
+                                    {isLiked ? <FaHeart /> : <FaRegHeart />}
                                     <span>{blog.likeCount}</span>
-                                </div>
+                                </button>
 
                                 <div className="post-stat">
                                     <FaEye />

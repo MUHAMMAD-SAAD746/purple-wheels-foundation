@@ -139,10 +139,18 @@
 
 .post-stat svg {
     font-size: 16px;
+    color: #000000;
 }
 
-.post-stat svg {
-    color: #000000;
+.like-button {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.like-button:disabled {
+    cursor: default;
 }
 
 

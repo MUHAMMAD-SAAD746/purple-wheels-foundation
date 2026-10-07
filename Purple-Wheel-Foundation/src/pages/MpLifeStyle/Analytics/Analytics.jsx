@@ -7,11 +7,22 @@ import AnalyticsCard from "../../../components/MPLifeStyle/AnalyticsCard/Analyti
 import BlogCard from "../../../components/MPLifeStyle/BlogCard/BlogCard";
 import { FaEye, FaHeart, FaComment, FaChartLine } from "react-icons/fa";
 
+import formatNumber from "../../../utils/formatNumber";
+
 import "./Analytics.css"
 
 const Analytics = () => {
     const [showCreatePost, setShowCreatePost] = useState(false);
     const [blogs, setBlogs] = useState([]);
+
+    const [analytics, setAnalytics] = useState({
+        currentViews: 0,
+        previousViews: 0,
+        viewsGrowth: null,
+        currentLikes: 0,
+        previousLikes: 0,
+        likesGrowth: null
+    });
 
 
     useEffect(() => {
@@ -31,7 +42,26 @@ const Analytics = () => {
             }
         };
 
+
+        const fetchAnalytics = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/analytics`,
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setAnalytics(response.data);
+
+            } catch (error) {
+                console.error("Error fetching analytics:", error);
+            }
+        };
+
+
         fetchMyBlogs();
+        fetchAnalytics();
     }, []);
 
 
@@ -46,7 +76,8 @@ const Analytics = () => {
         0
     );
 
-
+    const viewsGrowth = analytics.viewsGrowth;
+    const likesGrowth = analytics.likesGrowth;
 
 
 
@@ -68,17 +99,31 @@ const Analytics = () => {
                         <AnalyticsCard
                             icon={<FaEye />}
                             title="Total Views"
-                            value={totalViews}
-                            percentage="+15%"
-                            positive={true}
+                            value={formatNumber(totalViews)}
+                            percentage={
+                                viewsGrowth === null
+                                    ? `+${analytics.currentViews} views`
+                                    : `${viewsGrowth > 0 ? "+" : ""}${viewsGrowth}%`
+                            }
+                            positive={
+                                viewsGrowth === null || viewsGrowth >= 0
+                            }
                         />
+
                         <AnalyticsCard
                             icon={<FaHeart />}
                             title="Total Likes"
-                            value={totalLikes}
-                            percentage="+15%"
-                            positive={true}
+                            value={formatNumber(totalLikes)}
+                            percentage={
+                                likesGrowth === null
+                                    ? `+${analytics.currentLikes} likes`
+                                    : `${likesGrowth > 0 ? "+" : ""}${likesGrowth}%`
+                            }
+                            positive={
+                                likesGrowth === null || likesGrowth >= 0
+                            }
                         />
+
                         <AnalyticsCard
                             icon={<FaComment />}
                             title="Total Comments"
@@ -86,6 +131,7 @@ const Analytics = () => {
                             percentage="+15%"
                             positive={true}
                         />
+
                         <AnalyticsCard
                             icon={<FaChartLine />}
                             title="Engagement Rate"

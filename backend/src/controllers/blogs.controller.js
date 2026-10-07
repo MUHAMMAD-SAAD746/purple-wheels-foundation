@@ -2,6 +2,7 @@ const blogsModel = require("../model/blogs.model")
 const userModel = require("../model/user.model");
 const followModel = require("../model/follows.model");
 const blogViewModel = require("../model/blogView.model");
+const blogLikeModel = require("../model/blogLike.model");
 const multer = require("multer");
 const cloudinary = require("../services/cloudinary.service");
 
@@ -132,11 +133,19 @@ async function createBlog(req, res) {
 async function getBlogById(req, res) {
     const { id } = req.params;
 
-    const blog = await blogsModel.findById(id).populate("author")
+    const blog = await blogsModel
+        .findById(id)
+        .populate("author")
+
+    const existingLike = await blogLikeModel.findOne({
+        blog: id,
+        user: req.user.userId
+    });
 
     res.status(200).json({
         message: "Blog fetched Sucessfully",
-        blog: blog
+        blog: blog,
+        isLiked: !!existingLike
     })
 }
 
@@ -256,4 +265,110 @@ const recordBlogView = async (req, res) => {
 };
 
 
-module.exports = { getAllBlogs, myBlogs, createBlog, getBlogById, relatedBlogs, getCreators, recordBlogView }
+
+
+async function getMyAnalytics(req, res) {
+    try {
+        const userId = req.user.userId;
+
+        const myBlogs = await blogsModel
+            .find({ author: userId })
+            .select("_id");
+
+
+        const blogIds = myBlogs.map(blog => blog._id);
+
+        const now = new Date();
+
+        const currentPeriodStart = new Date();
+        currentPeriodStart.setDate(now.getDate() - 30);
+
+        const previousPeriodStart = new Date();
+        previousPeriodStart.setDate(now.getDate() - 60);
+
+        // views growth calculation
+        const currentViews = await blogViewModel.countDocuments({
+            blog: { $in: blogIds },
+            createdAt: {
+                $gte: currentPeriodStart,
+                $lte: now
+            }
+        });
+
+        const previousViews = await blogViewModel.countDocuments({
+            blog: { $in: blogIds },
+            createdAt: {
+                $gte: previousPeriodStart,
+                $lt: currentPeriodStart
+            }
+        });
+
+        let viewsGrowth = null;
+
+        if (previousViews > 0) {
+            viewsGrowth =
+                ((currentViews - previousViews) / previousViews) * 100;
+
+            viewsGrowth = Number(viewsGrowth.toFixed(1));
+        }
+
+
+        // like growth calculation
+        const currentLikes = await blogLikeModel.countDocuments({
+            blog: { $in: blogIds },
+            createdAt: {
+                $gte: currentPeriodStart,
+                $lte: now
+            }
+        });
+
+        const previousLikes = await blogLikeModel.countDocuments({
+            blog: { $in: blogIds },
+            createdAt: {
+                $gte: previousPeriodStart,
+                $lt: currentPeriodStart
+            }
+        });
+
+        let likesGrowth = null;
+
+        if (previousLikes > 0) {
+            likesGrowth =
+                ((currentLikes - previousLikes) / previousLikes) * 100;
+
+            likesGrowth = Number(likesGrowth.toFixed(1));
+        }
+
+
+
+        return res.status(200).json({
+            currentViews,
+            previousViews,
+            viewsGrowth,
+            currentLikes,
+            previousLikes,
+            likesGrowth
+        });
+
+    } catch (error) {
+        console.error("Error fetching analytics:", error);
+
+        return res.status(500).json({
+            message: "Failed to fetch analytics"
+        });
+    }
+}
+
+
+
+
+module.exports = {
+    getAllBlogs,
+    myBlogs,
+    createBlog,
+    getBlogById,
+    relatedBlogs,
+    getCreators,
+    recordBlogView,
+    getMyAnalytics
+}

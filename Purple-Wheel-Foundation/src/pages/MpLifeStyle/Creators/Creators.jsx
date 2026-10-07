@@ -109,7 +109,9 @@ const Creators = () => {
                 <div className="creators-grid">
 
                     {loading ? (
-                        <p>Loading creators...</p>
+                        <p className="creators-loading">
+                            Loading creators...
+                        </p>
                     ) : (
                         creators.map((creator) => (
                             <CreatorCard

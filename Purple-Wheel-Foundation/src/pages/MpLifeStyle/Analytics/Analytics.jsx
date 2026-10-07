@@ -14,6 +14,7 @@ import "./Analytics.css"
 const Analytics = () => {
     const [showCreatePost, setShowCreatePost] = useState(false);
     const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const [analytics, setAnalytics] = useState({
         currentViews: 0,
@@ -26,42 +27,34 @@ const Analytics = () => {
 
 
     useEffect(() => {
-        const fetchMyBlogs = async () => {
+        const fetchAnalyticsData = async () => {
             try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/my-blogs`,
-                    {
-                        withCredentials: true
-                    }
-                );
+                const [blogsResponse, analyticsResponse] = await Promise.all([
+                    axios.get(
+                        `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/my-blogs`,
+                        {
+                            withCredentials: true
+                        }
+                    ),
+                    axios.get(
+                        `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/analytics`,
+                        {
+                            withCredentials: true
+                        }
+                    )
+                ]);
 
-                setBlogs(response.data.blogs);
+                setBlogs(blogsResponse.data.blogs);
+                setAnalytics(analyticsResponse.data);
 
             } catch (error) {
-                console.error("Error fetching my blogs:", error);
+                console.error("Error fetching analytics data:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
-
-        const fetchAnalytics = async () => {
-            try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/analytics`,
-                    {
-                        withCredentials: true
-                    }
-                );
-
-                setAnalytics(response.data);
-
-            } catch (error) {
-                console.error("Error fetching analytics:", error);
-            }
-        };
-
-
-        fetchMyBlogs();
-        fetchAnalytics();
+        fetchAnalyticsData();
     }, []);
 
 
@@ -154,20 +147,26 @@ const Analytics = () => {
 
 
                     <div className="analytics-blog-grid">
-                        {blogs.map((blog) => (
-                            <BlogCard
-                                key={blog._id}
-                                id={blog._id}
-                                image={blog.image}
-                                title={blog.title}
-                                description={blog.description}
-                                profileImage={blog.author?.profileImage}
-                                authorName={blog.author?.username}
-                                date={blog.createdAt}
-                                likeCount={blog.likeCount}
-                                viewCount={blog.viewCount}
-                            />
-                        ))}
+                        {loading ? (
+                            <p className="analytics-loading">
+                                Loading posts...
+                            </p>
+                        ) : (
+                            blogs.map((blog) => (
+                                <BlogCard
+                                    key={blog._id}
+                                    id={blog._id}
+                                    image={blog.image}
+                                    title={blog.title}
+                                    description={blog.description}
+                                    profileImage={blog.author?.profileImage}
+                                    authorName={blog.author?.username}
+                                    date={blog.createdAt}
+                                    likeCount={blog.likeCount}
+                                    viewCount={blog.viewCount}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </main>

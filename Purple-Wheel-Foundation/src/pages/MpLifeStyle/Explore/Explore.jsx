@@ -15,6 +15,7 @@ const Explore = () => {
     const [loading, setLoading] = useState(true);
     const [topCreators, setTopCreators] = useState([]);
     const [trendingTags, setTrendingTags] = useState([]);
+    const [selectedTag, setSelectedTag] = useState(null);
 
 
     useEffect(() => {
@@ -60,6 +61,51 @@ const Explore = () => {
         fetchBlogs();
     }, []);
 
+
+
+
+    const handleTagClick = async (tag) => {
+        try {
+            setLoading(true);
+            setSelectedTag(tag);
+
+            const response = await axios.get(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/?tag=${encodeURIComponent(tag)}`
+            );
+
+            setBlogs(response.data.blogs);
+
+        } catch (error) {
+            console.error("Error fetching tag blogs:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+    const handleClearTag = async () => {
+        try {
+            setLoading(true);
+            setSelectedTag(null);
+
+            const response = await axios.get(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/`
+            );
+
+            setBlogs(response.data.blogs);
+
+        } catch (error) {
+            console.error("Error fetching blogs:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+
+
     return (
         <div className="mp-explore">
             <Header />
@@ -76,13 +122,30 @@ const Explore = () => {
                     {/* Trending Posts */}
                     <section className="explore-trending">
 
-                        <h3 className="explore-section-title">
-                            Trending Posts
-                        </h3>
+                        <div className="explore-title-row">
+
+                            <h3 className="explore-section-title">
+                                {selectedTag
+                                    ? `Posts tagged #${selectedTag}`
+                                    : "Trending Posts"}
+                            </h3>
+
+                            {selectedTag && (
+                                <button
+                                    className="clear-tag-btn"
+                                    onClick={handleClearTag}
+                                >
+                                    Clear Tag
+                                </button>
+                            )}
+
+                        </div>
 
                         <div className="explore-blog-grid">
                             {loading ? (
-                                <p>Loading posts...</p>
+                                <p className="explore-loading">
+                                    Loading posts...
+                                </p>
                             ) : (
                                 blogs.map((blog) => (
                                     <BlogCard
@@ -141,6 +204,7 @@ const Explore = () => {
                                     <div
                                         className="trending-tag"
                                         key={tag}
+                                        onClick={() => handleTagClick(tag)}
                                     >
                                         #{tag}
                                     </div>

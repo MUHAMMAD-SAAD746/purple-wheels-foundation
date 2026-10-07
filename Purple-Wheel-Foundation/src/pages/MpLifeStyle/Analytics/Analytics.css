@@ -60,3 +60,14 @@
     gap: 20px;
     padding: 20px;
 }
+
+.analytics-loading {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    padding: 40px 20px;
+
+    color: #666666;
+    font-size: 14px;
+}

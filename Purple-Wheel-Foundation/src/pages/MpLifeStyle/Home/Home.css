@@ -137,9 +137,17 @@
     margin-top: 25px;
 }
 
+.blog-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: #666666;
+    font-size: 14px;
+}
+
 .no-blogs {
     grid-column: 1 / -1;
-    
+
     width: 100%;
     min-height: 220px;
 

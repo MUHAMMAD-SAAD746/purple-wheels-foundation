@@ -109,6 +109,29 @@
 }
 
 
+.post-status {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.post-status h2 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    color: #222222;
+}
+
+.post-status p {
+    margin: 0;
+    font-size: 14px;
+    color: #777777;
+}
+
+
 /* Top Bar */
 
 .post-top-bar {

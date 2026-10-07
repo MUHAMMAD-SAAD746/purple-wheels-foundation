@@ -5,27 +5,36 @@ const blogViewModel = require("../model/blogView.model");
 const blogLikeModel = require("../model/blogLike.model");
 const cloudinary = require("../services/cloudinary.service");
 
+
+/**
+ * - Get /api/blogs/
+ * - Get /api/blogs/?tag=ethical clothing
+ * - Get /api/blogs/?category=wellness
+ * - Get /api/blogs/?category=wellness&tag=healthy habits
+ */
+
 async function getAllBlogs(req, res) {
-    const category = req.query.category
+    // const category = req.query.category
+    const { category, tag } = req.query;
+
+    const filter = {};
 
     if (category) {
-        const blogs = await blogsModel
-            .find({ category })
-            .populate("author", "username profileImage");
+        filter.category = category;
+    }
 
-        res.status(200).json({
-            message: category + ` blogs fetched Sucessfully`,
-            blogs: blogs
-        })
+    if (tag) {
+        filter.tags = tag;
     }
 
     const blogs = await blogsModel
-        .find()
+        .find(filter)
         .populate("author", "username profileImage");
+
 
     res.status(200).json({
         message: "Blogs Fetched Successfully",
-        blogs: blogs
+        blogs
     })
 }
 

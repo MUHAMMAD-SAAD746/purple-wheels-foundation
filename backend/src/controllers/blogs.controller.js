@@ -3,7 +3,6 @@ const userModel = require("../model/user.model");
 const followModel = require("../model/follows.model");
 const blogViewModel = require("../model/blogView.model");
 const blogLikeModel = require("../model/blogLike.model");
-const multer = require("multer");
 const cloudinary = require("../services/cloudinary.service");
 
 async function getAllBlogs(req, res) {
@@ -151,6 +150,7 @@ async function getBlogById(req, res) {
 
 
 
+
 async function relatedBlogs(req, res) {
     const { id } = req.params;
 
@@ -163,10 +163,69 @@ async function relatedBlogs(req, res) {
             });
         }
 
-        const relatedBlogs = await blogsModel.find({
-            category: blog.category,
+        const allBlogs = await blogsModel.find({
             _id: { $ne: id }
         });
+
+        const currentTags = (blog.tags || []).map(tag =>
+            tag.toLowerCase()
+        );
+
+        const scoredBlogs = allBlogs.map((relatedBlog) => {
+            let score = 0;
+
+            // Same category
+            if (relatedBlog.category === blog.category) {
+                score += 2;
+            }
+
+            // Matching tags
+            const relatedTags = (relatedBlog.tags || []).map(tag =>
+                tag.toLowerCase()
+            );
+
+            const matchingTags = relatedTags.filter(tag =>
+                currentTags.includes(tag)
+            );
+
+            score += matchingTags.length * 3;
+
+            return {
+                blog: relatedBlog,
+                score
+            };
+        });
+
+        // Sort by relevance score
+        scoredBlogs.sort((a, b) => b.score - a.score);
+
+        // Get top 6 related posts
+        let relatedBlogs = scoredBlogs
+            .filter(item => item.score > 0)
+            .slice(0, 6)
+            .map(item => item.blog);
+
+        // Fallback if fewer than 6 related posts exist
+        if (relatedBlogs.length < 6) {
+            const existingIds = relatedBlogs.map(blog =>
+                blog._id.toString()
+            );
+
+            const fallbackBlogs = await blogsModel
+                .find({
+                    _id: {
+                        $ne: id,
+                        $nin: existingIds
+                    }
+                })
+                .sort({ createdAt: -1 })
+                .limit(6 - relatedBlogs.length);
+
+            relatedBlogs = [
+                ...relatedBlogs,
+                ...fallbackBlogs
+            ];
+        }
 
         return res.status(200).json({
             relatedBlogs

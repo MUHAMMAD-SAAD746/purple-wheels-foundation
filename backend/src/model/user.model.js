@@ -43,7 +43,14 @@ const userSchema = new mongoose.Schema({
     following: {
         type: Number,
         default: 0
-    }
+    },
+
+    savedPosts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Blog"
+        }
+    ]
 }, {
     timestamps: true,
 })

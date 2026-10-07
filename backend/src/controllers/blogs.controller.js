@@ -150,10 +150,14 @@ async function getBlogById(req, res) {
         user: req.user.userId
     });
 
+    const user = await userModel.findById(req.user.userId);
+    const isSaved = user.savedPosts.includes(id);
+
     res.status(200).json({
         message: "Blog fetched Sucessfully",
         blog: blog,
-        isLiked: !!existingLike
+        isLiked: !!existingLike,
+        isSaved: isSaved
     })
 }
 

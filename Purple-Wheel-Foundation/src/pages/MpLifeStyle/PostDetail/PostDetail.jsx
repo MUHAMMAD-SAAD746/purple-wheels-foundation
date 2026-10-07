@@ -8,6 +8,7 @@ import {
     FaEye,
     FaShare,
     FaBookmark,
+    FaRegBookmark,
 } from "react-icons/fa";
 
 import Header from "../../../components/MPLifeStyle/Header/Header";
@@ -24,6 +25,8 @@ const PostDetail = () => {
     const [relatedBlogs, setRelatedBlogs] = useState([]);
     const [isLiked, setIsLiked] = useState(false);
     const [likeLoading, setLikeLoading] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
+    const [saveLoading, setSaveLoading] = useState(false);
 
 
 
@@ -49,6 +52,7 @@ const PostDetail = () => {
 
                 setBlog(response.data.blog);
                 setIsLiked(response.data.isLiked);
+                setIsSaved(response.data.isSaved)
 
 
                 const relatedResponse = await axios.get(
@@ -122,13 +126,42 @@ const PostDetail = () => {
 
 
 
-    // if (loading) {
-    //     return <p>Loading blog...</p>;
-    // }
+    const handleSave = async () => {
+        if (saveLoading) return;
 
-    // if (!blog) {
-    //     return <p>Blog not found.</p>;
-    // }
+        try {
+            setSaveLoading(true);
+
+            if (isSaved) {
+                await axios.delete(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/save`,
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setIsSaved(false);
+
+            } else {
+                await axios.post(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/save`,
+                    {},
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setIsSaved(true);
+            }
+
+        } catch (error) {
+            console.error("Error updating saved post:", error);
+        } finally {
+            setSaveLoading(false);
+        }
+    };
+
+
 
 
     return (
@@ -205,9 +238,11 @@ const PostDetail = () => {
 
                                         <button
                                             className="post-action-button"
-                                            aria-label="Save post"
+                                            onClick={handleSave}
+                                            disabled={saveLoading}
+                                            aria-label={isSaved ? "Unsave post" : "Save post"}
                                         >
-                                            <FaBookmark />
+                                            {isSaved ? <FaBookmark /> : <FaRegBookmark />}
                                         </button>
 
                                     </div>

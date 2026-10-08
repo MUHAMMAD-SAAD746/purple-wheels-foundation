@@ -15,6 +15,7 @@ import Explore from "./pages/MpLifeStyle/Explore/Explore";
 import Creators from "./pages/MpLifeStyle/Creators/Creators";
 import Analytics from "./pages/MpLifeStyle/Analytics/Analytics";
 import SavedPost from "./pages/MpLifeStyle/SavedPost/SavedPost";
+import Settings from "./pages/Settings/Settings";
 
 function App() {
     return (
@@ -29,8 +30,27 @@ function App() {
                 <Route path="/verification" element={<Verification />} />
                 <Route path="/create-password" element={<CreatePassword />} />
                 <Route path="/Purple-Wheels" element={<LandingPage />} />
-                <Route 
-                    path="/MP-LifeStyle" 
+
+                <Route
+                    path="/choose-account"
+                    element={
+                        <ProtectedRoute>
+                            <ChooseAcc />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/settings"
+                    element={
+                        <ProtectedRoute>
+                            <Settings />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/MP-LifeStyle"
                     element={
                         <ProtectedRoute>
                             <MpLifeStyle />
@@ -44,15 +64,6 @@ function App() {
                     <Route path="analytics" element={<Analytics />} />
                     <Route path="saved-post" element={<SavedPost />} />
                 </Route>
-
-                <Route
-                    path="/choose-account"
-                    element={
-                        <ProtectedRoute>
-                            <ChooseAcc />
-                        </ProtectedRoute>
-                    }
-                />
 
             </Routes>
         </BrowserRouter>

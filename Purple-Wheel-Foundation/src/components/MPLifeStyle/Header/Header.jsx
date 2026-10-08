@@ -117,7 +117,10 @@ const Header = () => {
                                     <span>Saved Post</span>
                                 </div>
 
-                                <div className="settings-dropdown-item">
+                                <div 
+                                    className="settings-dropdown-item"
+                                    onClick={() => navigate("/settings")}
+                                >
                                     <IoSettings />
                                     <span>Settings</span>
                                 </div>

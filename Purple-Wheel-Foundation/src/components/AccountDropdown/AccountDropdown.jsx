@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { IoAdd, IoCheckmark } from "react-icons/io5";
 
@@ -10,6 +10,7 @@ import "./AccountDropdown.css"
 const AccountDropdown = ({ showProfiles = true }) => {
     const { user } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const avatarUrl = user?.profileImage || generateAvatarUrl(user?.username);
 
@@ -66,7 +67,10 @@ const AccountDropdown = ({ showProfiles = true }) => {
                             Your MP Life Profile
                         </p>
 
-                        <div className="account-profile-card">
+                        <div 
+                            className="account-profile-card"
+                            onClick={() => navigate("/MP-LifeStyle")}
+                        >
                             <img src={avatarUrl} alt="Profile" />
 
                             <p>{user?.username}</p>

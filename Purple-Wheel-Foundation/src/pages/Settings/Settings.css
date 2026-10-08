@@ -1,0 +1,342 @@
+.settings-page {
+    min-height: 100vh;
+}
+
+.settings-header {
+    height: 72px;
+    padding: 0 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #fff;
+    border-bottom: 1px solid #e8eef5;
+}
+
+.settings-logo img {
+    width: 150px;
+    display: block;
+}
+
+.settings-header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.settings-icon {
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+}
+
+.settings-profile-wrapper {
+    position: relative;
+}
+
+.settings-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.settings-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #e9eef5;
+}
+
+.settings-chevron {
+    font-size: 18px;
+    color: #555;
+}
+
+
+.setting-main-content {
+    padding: 40px;
+}
+
+
+.settings-profile-card {
+    padding: 24px;
+
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    background-color: #fafafa;
+    border-radius: 12px;
+}
+
+.settings-profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #e9eef5;
+}
+
+.settings-user-info h3 {
+    font-size: 20px;
+}
+
+.settings-user-info p {
+    color: #828282;
+}
+
+.settings-email {
+    font-size: 14px;
+}
+
+.settings-phone {
+    font-size: 16px;
+}
+
+
+
+.settings-personal-info {
+    margin: 40px 0;
+}
+
+.settings-personal-info h3,
+.settings-security h3 {
+    margin-bottom: 24px;
+}
+
+.settings-form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.settings-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settings-form-group label {
+    font-size: 14px;
+    color: #333;
+}
+
+.settings-form-group input {
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+}
+
+
+.settings-connect-accounts {
+    margin: 40px 0;
+}
+
+.settings-connect-accounts h3 {
+    margin-bottom: 24px;
+}
+
+.settings-social-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+}
+
+.settings-social-card {
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    background-color: #f7f7f7;
+    border: 1px solid #f3f2f2;
+    border-radius: 10px;
+}
+
+.settings-social-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+}
+
+.settings-social-icon svg {
+    font-size: 18px;
+}
+
+.settings-social-icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.settings-social-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-social-info span {
+    font-size: 14px;
+}
+
+.settings-social-card button {
+    width: 100%;
+    height: 40px;
+
+    border: none;
+    border-radius: 10px;
+    background-color: #1e90ff;
+    color: white;
+    cursor: pointer;
+}
+
+
+
+
+.settings-notification-preferences {
+    margin: 40px 0;
+}
+
+.settings-notification-preferences h3 {
+    margin-bottom: 24px;
+}
+
+.settings-notification-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.settings-notification-card {
+    padding: 15px 10px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    background-color: #f7f7f7;
+    border: 1px solid #f3f2f2;
+    border-radius: 10px;
+}
+
+.settings-notification-card p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 0.8;
+}
+
+.settings-notification-card span {
+    font-size: 13px;
+    color: #828282;
+}
+
+
+/* Checkbox */
+
+.settings-checkbox {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.settings-checkbox input {
+    position: absolute;
+    opacity: 0;
+}
+
+.settings-checkbox span {
+    width: 22px;
+    height: 22px;
+
+    display: block;
+
+    border: 2px solid #d1d5db;
+    border-radius: 5px;
+}
+
+
+/* Checked */
+
+.settings-checkbox input:checked+span {
+    background-color: #542f6c;
+    border-color: #542f6c;
+}
+
+.settings-checkbox input:checked+span::after {
+    content: "";
+
+    position: absolute;
+    left: 7px;
+    top: 3px;
+
+    width: 5px;
+    height: 10px;
+
+    border: solid white;
+    border-width: 0 2px 2px 0;
+
+    transform: rotate(45deg);
+}
+
+
+.settings-logout-section {
+    margin: 40px 0;
+    width: 43%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f7f7f7;
+    border: 1px solid #f3f2f2;
+    border-radius: 10px;
+}
+
+.settings-logout-info {
+    margin-right: 40px;
+}
+
+.settings-logout-info p {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.settings-logout-info span {
+    font-size: 13px;
+    color: #828282;
+    line-height: 0.8;
+}
+
+.settings-logout-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #ebe8ee;
+    border-radius: 50%;
+}
+
+.settings-logout-icon svg {
+    font-size: 22px;
+    color: #542f6c;
+}

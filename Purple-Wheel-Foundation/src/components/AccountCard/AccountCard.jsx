@@ -1,4 +1,3 @@
-import HotAndPepperDashboard from "../../assets/hot-pepper-dashboard.png"
 import "./AccountCard.css"
 
 function AccountCard({

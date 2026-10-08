@@ -14,6 +14,7 @@ import PostDetail from "./pages/MpLifeStyle/PostDetail/PostDetail";
 import Explore from "./pages/MpLifeStyle/Explore/Explore";
 import Creators from "./pages/MpLifeStyle/Creators/Creators";
 import Analytics from "./pages/MpLifeStyle/Analytics/Analytics";
+import SavedPost from "./pages/MpLifeStyle/SavedPost/SavedPost";
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                     <Route path="explore" element={<Explore />} />
                     <Route path="creators" element={<Creators />} />
                     <Route path="analytics" element={<Analytics />} />
+                    <Route path="saved-post" element={<SavedPost />} />
                 </Route>
 
                 <Route

@@ -109,7 +109,10 @@ const Header = () => {
                                     <span>View Profile</span>
                                 </div>
 
-                                <div className="settings-dropdown-item">
+                                <div 
+                                    className="settings-dropdown-item"
+                                    onClick={() => navigate("/MP-LifeStyle/saved-post")}
+                                >
                                     <IoBookmark />
                                     <span>Saved Post</span>
                                 </div>

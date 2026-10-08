@@ -18,6 +18,7 @@ router.post("/:blogId/like", authMiddleware, blogLikeController.likeBlog)
 router.delete("/:blogId/like", authMiddleware, blogLikeController.unlikeBlog)
 router.post("/:blogId/save", authMiddleware, blogSaveController.saveBlog)
 router.delete("/:blogId/save", authMiddleware, blogSaveController.unsaveBlog)
+router.get("/saved", authMiddleware, blogSaveController.getAllSavedBlogs)
 router.get("/:id", authMiddleware, blogsController.getBlogById)
 
 module.exports = router;

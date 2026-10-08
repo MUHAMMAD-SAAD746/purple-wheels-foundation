@@ -59,7 +59,39 @@ async function unsaveBlog(req, res) {
 
 
 
+
+async function getAllSavedBlogs(req, res) {
+    try {
+        const userId = req.user.userId;
+
+        const user = await userModel
+            .findById(userId)
+            .populate({
+                path: "savedPosts",
+                populate: {
+                    path: "author",
+                    select: "username profileImage"
+                }
+            });
+
+        res.status(200).json({
+            savedPosts: user.savedPosts
+        });
+
+    } catch (error) {
+        console.error("Error fetching saved blogs:", error);
+
+        res.status(500).json({
+            message: "Failed to fetch saved blogs"
+        });
+    }
+}
+
+
+
+
 module.exports = {
     saveBlog,
-    unsaveBlog
+    unsaveBlog,
+    getAllSavedBlogs
 }

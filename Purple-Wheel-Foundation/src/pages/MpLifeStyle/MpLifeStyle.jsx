@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Sidebar from "../../components/MPLifeStyle/sidebar/Sidebar";
+import Sidebar from "../../components/MPLifeStyle/Sidebar/Sidebar";
 
 import "./MpLifeStyle.css";
 

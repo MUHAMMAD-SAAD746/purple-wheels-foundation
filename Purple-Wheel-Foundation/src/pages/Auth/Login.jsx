@@ -65,6 +65,8 @@ function Login() {
                 }
             );
 
+            console.log("Login successful, calling /me");
+
             const meResponse = await axios.get(
                 `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/me`,
                 {

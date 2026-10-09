@@ -29,8 +29,7 @@ async function getAllBlogs(req, res) {
 
     const blogs = await blogsModel
         .find(filter)
-        .populate("author", "username profileImage");
-
+        .populate("author", "username profileImage followers following");
 
     res.status(200).json({
         message: "Blogs Fetched Successfully",

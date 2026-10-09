@@ -3,16 +3,18 @@ import axios from "axios";
 import { IoClose, IoCloudUploadOutline } from "react-icons/io5";
 import { FaRegSave } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
+import { useAuth } from "../../../context/AuthContext";
 import "./CreateNewPost.css";
 
-const CreateNewPost = ({ onClose }) => {
-    const [content, setContent] = useState("");
+const CreateNewPost = ({ onClose, draft, onSave }) => {
+    const { user } = useAuth();
+    const [content, setContent] = useState(draft?.content || "");
     const [selectedFile, setSelectedFile] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
 
-    const [title, setTitle] = useState("");
-    const [category, setCategory] = useState("");
-    const [tags, setTags] = useState("");
+    const [title, setTitle] = useState(draft?.title || "");
+    const [category, setCategory] = useState(draft?.category || "");
+    const [tags, setTags] = useState(draft?.tags || "");
     const [loading, setLoading] = useState(false)
 
     const fileInputRef = useRef(null);
@@ -101,6 +103,58 @@ const CreateNewPost = ({ onClose }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+
+
+    const handleSaveDraft = () => {
+        const drafts = JSON.parse(
+            localStorage.getItem("mp_lifestyle_drafts")
+        ) || [];
+
+        if (draft) {
+            const updatedDrafts = drafts.map((item) =>
+                item.id === draft.id
+                    ? {
+                        ...item,
+                        title,
+                        content,
+                        category,
+                        tags,
+                        updatedAt: new Date().toISOString()
+                    }
+                    : item
+            );
+
+            localStorage.setItem(
+                "mp_lifestyle_drafts",
+                JSON.stringify(updatedDrafts)
+            );
+
+            alert("Draft updated successfully");
+        } else {
+            const newDraft = {
+                id: Date.now(),
+                userId: user._id,
+                title,
+                content,
+                category,
+                tags,
+                createdAt: new Date().toISOString()
+            };
+
+            drafts.push(newDraft);
+
+            localStorage.setItem(
+                "mp_lifestyle_drafts",
+                JSON.stringify(drafts)
+            );
+
+            alert("Draft saved successfully");
+        }
+
+        onClose();
+        onSave();
     };
 
 
@@ -230,7 +284,11 @@ const CreateNewPost = ({ onClose }) => {
 
                     {/* Footer */}
                     <div className="create-post-actions">
-                        <button type="button" className="create-post-draft">
+                        <button
+                            type="button"
+                            className="create-post-draft"
+                            onClick={handleSaveDraft}
+                        >
                             <FaRegSave />
                             Save Draft
                         </button>

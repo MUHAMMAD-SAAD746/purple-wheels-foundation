@@ -13,14 +13,15 @@ const BlogCard = ({
     date,
     likeCount,
     viewCount,
+    onClick,
 }) => {
     const navigate = useNavigate();
-    
-    
+
+
     return (
-        <article 
+        <article
             className="blog-card"
-            onClick={() => navigate(`/MP-LifeStyle/post-detail/${id}`)}
+            onClick={onClick || (() => navigate(`/MP-LifeStyle/post-detail/${id}`))}
             style={{ cursor: "pointer" }}
         >
 

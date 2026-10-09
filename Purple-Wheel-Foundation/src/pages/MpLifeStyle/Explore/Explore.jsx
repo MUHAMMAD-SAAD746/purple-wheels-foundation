@@ -41,14 +41,15 @@ const Explore = () => {
                             id: author._id,
                             username: author.username,
                             profileImage: author.profileImage,
-                            posts: 0
+                            posts: 0,
+                            followers: author.followers,
+                            following: author.following
                         };
                     }
 
                     creatorMap[author._id].posts += 1;
                 });
 
-                console.log("Top Creators:", Object.values(creatorMap));
                 setTopCreators(Object.values(creatorMap));
 
             } catch (error) {
@@ -183,12 +184,11 @@ const Explore = () => {
                                     key={creator.id}
                                     profileImage={creator.profileImage}
                                     username={creator.username}
-                                    followers="0"
+                                    followers={creator.followers}
                                     posts={creator.posts}
-                                    following="0"
+                                    following={creator.following}
                                 />
                             ))}
-
                         </div>
 
 

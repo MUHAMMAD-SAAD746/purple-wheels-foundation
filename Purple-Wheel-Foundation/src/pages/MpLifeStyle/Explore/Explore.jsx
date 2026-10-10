@@ -18,6 +18,7 @@ const Explore = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [topCreators, setTopCreators] = useState([]);
+    const [topCreatorsLoading, setTopCreatorsLoading] = useState(true);
     const [trendingTags, setTrendingTags] = useState([]);
     const [selectedTag, setSelectedTag] = useState(null);
 
@@ -67,6 +68,8 @@ const Explore = () => {
                 );
             } catch (error) {
                 console.error("Error fetching top creators:", error);
+            } finally {
+                setTopCreatorsLoading(false);
             }
         };
 
@@ -182,7 +185,6 @@ const Explore = () => {
 
                 <div className="explore-content">
 
-                    {/* Trending Posts */}
                     <section className="explore-trending">
 
                         <div className="explore-title-row">
@@ -233,33 +235,36 @@ const Explore = () => {
                     {/* Right Section */}
                     <aside className="explore-sidebar">
 
-                        {/* Top Creators */}
                         <div className="explore-sidebar-card top-creator-section">
 
                             <h3 className="explore-section-title">
                                 Top Creators
                             </h3>
 
-                            {/* Top creators will go here */}
-                            {topCreators.map((creator) => (
-                                <TopCreatorCard
-                                    key={creator.id}
-                                    creatorId={creator.id}
-                                    profileImage={creator.profileImage}
-                                    username={creator.username}
-                                    followers={creator.followers}
-                                    posts={creator.posts}
-                                    following={creator.following}
-                                    isFollowing={creator.isFollowing}
-                                    isCurrentUser={creator.id === currentUserId}
-                                    onFollow={handleFollow}
-                                    onUnfollow={handleUnfollow}
-                                />
-                            ))}
+                            {topCreatorsLoading ? (
+                                <p className="explore-loading">Loading creators...</p>
+                            ) : topCreators.length > 0 ? (
+                                topCreators.map((creator) => (
+                                    <TopCreatorCard
+                                        key={creator.id}
+                                        creatorId={creator.id}
+                                        profileImage={creator.profileImage}
+                                        username={creator.username}
+                                        followers={creator.followers}
+                                        posts={creator.posts}
+                                        following={creator.following}
+                                        isFollowing={creator.isFollowing}
+                                        isCurrentUser={creator.id === currentUserId}
+                                        onFollow={handleFollow}
+                                        onUnfollow={handleUnfollow}
+                                    />
+                                ))
+                            ) : (
+                                <p className="explore-loading">No creators found.</p>
+                            )}
                         </div>
 
 
-                        {/* Trending Tags */}
                         <div className="explore-sidebar-card">
 
                             <h3 className="explore-section-title">

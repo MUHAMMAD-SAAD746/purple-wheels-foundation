@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../../context/AuthContext";
 
 import Header from "../../../components/MPLifeStyle/Header/Header";
 import FeedHeader from "../../../components/MPLifeStyle/FeedHeader/FeedHeader";
@@ -11,6 +12,9 @@ import getTrendingTags from "../../../utils/getTrendingTags";
 import "./Explore.css";
 
 const Explore = () => {
+    const { user } = useAuth();
+    const currentUserId = user?._id;
+
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [topCreators, setTopCreators] = useState([]);
@@ -29,29 +33,6 @@ const Explore = () => {
                 setBlogs(fetchedBlogs);
                 setTrendingTags(getTrendingTags(fetchedBlogs, 10));
 
-                const creatorMap = {};
-
-                fetchedBlogs.forEach((blog) => {
-                    const author = blog.author;
-
-                    if (!author) return;
-
-                    if (!creatorMap[author._id]) {
-                        creatorMap[author._id] = {
-                            id: author._id,
-                            username: author.username,
-                            profileImage: author.profileImage,
-                            posts: 0,
-                            followers: author.followers,
-                            following: author.following
-                        };
-                    }
-
-                    creatorMap[author._id].posts += 1;
-                });
-
-                setTopCreators(Object.values(creatorMap));
-
             } catch (error) {
                 console.error("Error fetching blogs:", error);
             } finally {
@@ -60,6 +41,36 @@ const Explore = () => {
         };
 
         fetchBlogs();
+    }, []);
+
+
+
+
+    useEffect(() => {
+        const fetchTopCreators = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/topCreators`,
+                    { withCredentials: true }
+                );
+
+                setTopCreators(
+                    response.data.creators.map((creator) => ({
+                        id: creator._id,
+                        username: creator.username,
+                        profileImage: creator.profileImage,
+                        posts: creator.postCount,
+                        followers: creator.followers,
+                        following: creator.following,
+                        isFollowing: creator.isFollowing
+                    }))
+                );
+            } catch (error) {
+                console.error("Error fetching top creators:", error);
+            }
+        };
+
+        fetchTopCreators();
     }, []);
 
 
@@ -101,6 +112,57 @@ const Explore = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+
+
+
+
+
+    const handleFollow = (creatorId) => {
+        setTopCreators((prev) =>
+            prev.map((creator) => {
+                if (creator.id === creatorId) {
+                    return {
+                        ...creator,
+                        isFollowing: true,
+                        followers: creator.followers + 1
+                    };
+                }
+
+                if (creator.id === currentUserId) {
+                    return {
+                        ...creator,
+                        following: creator.following + 1
+                    };
+                }
+
+                return creator;
+            })
+        );
+    };
+
+    const handleUnfollow = (creatorId) => {
+        setTopCreators((prev) =>
+            prev.map((creator) => {
+                if (creator.id === creatorId) {
+                    return {
+                        ...creator,
+                        isFollowing: false,
+                        followers: creator.followers - 1
+                    };
+                }
+
+                if (creator.id === currentUserId) {
+                    return {
+                        ...creator,
+                        following: creator.following - 1
+                    };
+                }
+
+                return creator;
+            })
+        );
     };
 
 
@@ -172,7 +234,7 @@ const Explore = () => {
                     <aside className="explore-sidebar">
 
                         {/* Top Creators */}
-                        <div className="explore-sidebar-card">
+                        <div className="explore-sidebar-card top-creator-section">
 
                             <h3 className="explore-section-title">
                                 Top Creators
@@ -182,11 +244,16 @@ const Explore = () => {
                             {topCreators.map((creator) => (
                                 <TopCreatorCard
                                     key={creator.id}
+                                    creatorId={creator.id}
                                     profileImage={creator.profileImage}
                                     username={creator.username}
                                     followers={creator.followers}
                                     posts={creator.posts}
                                     following={creator.following}
+                                    isFollowing={creator.isFollowing}
+                                    isCurrentUser={creator.id === currentUserId}
+                                    onFollow={handleFollow}
+                                    onUnfollow={handleUnfollow}
                                 />
                             ))}
                         </div>

@@ -108,6 +108,12 @@
     gap: 15px;
 }
 
+.top-creator-section {
+    height: fit-content;
+    max-width: 715px;
+    overflow-y: auto;
+}
+
 .trending-tags {
     display: flex;
     flex-wrap: wrap;

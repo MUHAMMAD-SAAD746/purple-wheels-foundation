@@ -28,7 +28,6 @@ const Home = () => {
 
                 const response = await axios.get(url);
 
-                console.log(response.data);
                 setBlogs(response.data.blogs);
             } catch (error) {
                 console.error("Error fetching blogs:", error);

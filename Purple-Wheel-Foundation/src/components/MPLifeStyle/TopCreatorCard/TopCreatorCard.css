@@ -55,3 +55,10 @@
     justify-content: center;
     gap: 7px;
 }
+
+
+.top-creator-follow-button.following {
+    background-color: #e8f3ff;
+    color: #1e90ff;
+    border: 1px solid #1e90ff;
+}

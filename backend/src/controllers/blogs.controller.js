@@ -433,6 +433,45 @@ async function getMyAnalytics(req, res) {
 
 
 
+
+async function topCreators(req, res) {
+    try {
+        const creators = await userModel
+            .find({ postCount: { $gt: 0 } })
+            .select("username profileImage postCount followers following")
+            .sort({ followers: -1, postCount: -1 })
+            .limit(5);
+
+        const creatorsWithFollowStatus = await Promise.all(
+            creators.map(async (creator) => {
+                const follow = await followModel.findOne({
+                    follower: req.user.userId,
+                    following: creator._id
+                });
+
+                return {
+                    ...creator.toObject(),
+                    isFollowing: !!follow
+                };
+            })
+        );
+
+        res.status(200).json({
+            creators: creatorsWithFollowStatus
+        });
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            message: "Failed to fetch top creators"
+        });
+    }
+}
+
+
+
+
 module.exports = {
     getAllBlogs,
     myBlogs,
@@ -441,5 +480,6 @@ module.exports = {
     relatedBlogs,
     getCreators,
     recordBlogView,
-    getMyAnalytics
+    getMyAnalytics,
+    topCreators
 }

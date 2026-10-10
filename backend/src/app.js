@@ -23,7 +23,7 @@ app.use(cors({
 // Bulletproof Serverless Safety Net: Ensure DB connection is active before routes hit
 app.use(async (req, res, next) => {
     try {
-        await connectDb(); // Safe, fast, and eliminates race conditions/timeouts
+        await connectDb();// Safe, fast, and eliminates race conditions/timeouts
         next();
     } catch (err) {
         console.error("Critical: Route blocked due to DB failure:", err.message);

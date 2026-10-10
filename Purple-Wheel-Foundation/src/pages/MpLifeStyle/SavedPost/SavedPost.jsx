@@ -5,6 +5,8 @@ import Header from '../../../components/MPLifeStyle/Header/Header'
 import FeedHeader from '../../../components/MPLifeStyle/FeedHeader/FeedHeader'
 import BlogCard from '../../../components/MPLifeStyle/BlogCard/BlogCard'
 
+import { FaBookmark } from "react-icons/fa";
+
 import "./SavedPost.css";
 
 
@@ -54,21 +56,34 @@ const SavedPost = () => {
                         <div className="blog-loading">
                             Loading saved posts...
                         </div>
+                    ) : blogs.length === 0 ? (
+                        <div className="empty-saved-posts">
+                            <div className="empty-saved-icon">
+                                <FaBookmark />
+                            </div>
+
+                            <h3>No Saved Posts Yet</h3>
+
+                            <p>
+                                Posts you save will appear here.
+                                Explore your feed and save something you love!
+                            </p>
+                        </div>
                     ) : (
-                            blogs.map((blog) => (
-                                <BlogCard
-                                    key={blog._id}
-                                    id={blog._id}
-                                    image={blog.image}
-                                    title={blog.title}
-                                    description={blog.description}
-                                    profileImage={blog.author?.profileImage}
-                                    authorName={blog.author?.username}
-                                    date={blog.createdAt}
-                                    likeCount={blog.likeCount}
-                                    viewCount={blog.viewCount}
-                                />
-                            ))
+                        blogs.map((blog) => (
+                            <BlogCard
+                                key={blog._id}
+                                id={blog._id}
+                                image={blog.image}
+                                title={blog.title}
+                                description={blog.description}
+                                profileImage={blog.author?.profileImage}
+                                authorName={blog.author?.username}
+                                date={blog.createdAt}
+                                likeCount={blog.likeCount}
+                                viewCount={blog.viewCount}
+                            />
+                        ))
                     )}
                 </div>
 

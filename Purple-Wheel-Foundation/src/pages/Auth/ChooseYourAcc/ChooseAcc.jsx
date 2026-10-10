@@ -28,9 +28,6 @@ function ChooseAcc() {
         return null;
     }
 
-    console.log("USER:", user);
-    console.log("PROFILE IMAGE:", user?.profileImage);
-
     return (
         <div className="auth-form-page auth-page">
             <AuthImagePanel />

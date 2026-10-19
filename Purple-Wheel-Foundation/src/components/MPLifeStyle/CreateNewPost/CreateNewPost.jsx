@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import axios from "axios";
+import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import { IoClose, IoCloudUploadOutline } from "react-icons/io5";
 import { FaRegSave } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
@@ -13,6 +14,7 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
     const [isDragging, setIsDragging] = useState(false);
 
     const [title, setTitle] = useState(draft?.title || "");
+    const [subtitle, setSubtitle] = useState(draft?.subtitle || "");
     const [category, setCategory] = useState(draft?.category || "");
     const [tags, setTags] = useState(draft?.tags || "");
     const [loading, setLoading] = useState(false)
@@ -73,6 +75,7 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
             const formData = new FormData();
 
             formData.append("title", title);
+            formData.append("subtitle", subtitle);
             formData.append("description", content);
             formData.append("image", selectedFile);
             formData.append("category", category);
@@ -118,6 +121,7 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                     ? {
                         ...item,
                         title,
+                        subtitle,
                         content,
                         category,
                         tags,
@@ -137,6 +141,7 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                 id: Date.now(),
                 userId: user._id,
                 title,
+                subtitle,
                 content,
                 category,
                 tags,
@@ -239,6 +244,17 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                     </div>
 
                     <div className="create-post-field">
+                        <label htmlFor="post-subtitle">Subtitle</label>
+                        <textarea
+                            id="post-subtitle"
+                            placeholder="Write a short description for your blog..."
+                            maxLength={100}
+                            value={subtitle}
+                            onChange={(e) => setSubtitle(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="create-post-field">
                         <label htmlFor="post-category">Category</label>
                         <select
                             id="post-category"
@@ -258,17 +274,11 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
 
                     <div className="create-post-field">
                         <label htmlFor="post-content">About Post</label>
-                        <textarea
-                            id="post-content"
-                            placeholder="Write your post content here..."
-                            maxLength={10000}
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                        />
 
-                        <p className="create-post-character-count">
-                            {content.length.toLocaleString()}/10,000 characters
-                        </p>
+                        <RichTextEditor
+                            value={content}
+                            onChange={setContent}
+                        />
                     </div>
 
                     <div className="create-post-field">

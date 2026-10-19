@@ -337,16 +337,14 @@
 
 /* Input and Select */
 
-.create-post-field input,
-.create-post-field select {
+.create-post-field input {
     height: 44px;
 }
-
 
 /* Textarea */
 
 .create-post-field textarea {
-    min-height: 150px;
+    min-height: 90px;
 
     resize: vertical;
 
@@ -370,18 +368,6 @@
     border-color: #1e90ff;
 
     box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.08);
-}
-
-
-/* Character Count */
-
-.create-post-character-count {
-    align-self: flex-end;
-
-    margin: -2px 0 0;
-
-    color: #888888;
-    font-size: 12px;
 }
 
 

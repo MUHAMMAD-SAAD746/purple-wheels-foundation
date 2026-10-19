@@ -95,7 +95,7 @@ const Home = () => {
                                     id={blog._id}
                                     image={blog.image}
                                     title={blog.title}
-                                    description={blog.description}
+                                    subtitle={blog.subtitle}
                                     profileImage={blog.author?.profileImage}
                                     authorName={blog.author?.username}
                                     date={blog.createdAt}

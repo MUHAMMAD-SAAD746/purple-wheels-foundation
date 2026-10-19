@@ -66,6 +66,7 @@ async function createBlog(req, res) {
 
     const {
         title,
+        subtitle,
         description,
         category,
         date,
@@ -105,6 +106,7 @@ async function createBlog(req, res) {
 
         const blog = await blogsModel.create({
             title,
+            subtitle,
             description,
             image: result.secure_url,
             category,

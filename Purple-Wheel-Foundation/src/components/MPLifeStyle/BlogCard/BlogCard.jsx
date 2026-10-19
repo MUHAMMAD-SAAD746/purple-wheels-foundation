@@ -7,7 +7,7 @@ const BlogCard = ({
     id,
     image,
     title,
-    description,
+    subtitle,
     profileImage,
     authorName,
     date,
@@ -43,7 +43,7 @@ const BlogCard = ({
                     </h2>
 
                     <p className="blog-card-description">
-                        {description}
+                        {subtitle}
                     </p>
                 </div>
 

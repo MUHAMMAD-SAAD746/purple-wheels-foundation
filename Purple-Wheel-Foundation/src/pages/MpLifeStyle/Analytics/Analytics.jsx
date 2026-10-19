@@ -199,7 +199,7 @@ const Analytics = () => {
                                         id={blog._id}
                                         image={blog.image}
                                         title={blog.title}
-                                        description={blog.description}
+                                        subtitle={blog.subtitle}
                                         profileImage={blog.author?.profileImage}
                                         authorName={blog.author?.username}
                                         date={blog.createdAt}
@@ -216,7 +216,7 @@ const Analytics = () => {
                                         id={draft.id}
                                         image={undefined}
                                         title={draft.title || "Untitled Draft"}
-                                        description={draft.content}
+                                        subtitle={draft.subtitle}
                                         profileImage={user?.profileImage}
                                         authorName={user?.username}
                                         date={draft.createdAt}

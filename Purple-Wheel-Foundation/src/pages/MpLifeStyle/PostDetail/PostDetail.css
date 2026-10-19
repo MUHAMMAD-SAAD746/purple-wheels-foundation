@@ -280,6 +280,64 @@
 }
 
 
+
+
+/* =========================================== */
+/* main description styling of blog */
+/* =========================================== */
+
+.blog-description {
+    overflow-wrap: anywhere;
+    line-height: 1.7;
+}
+
+.blog-description p {
+    margin-bottom: 16px;
+}
+
+.blog-description h1 {
+    font-size: 2rem;
+    margin: 24px 0 12px;
+}
+
+.blog-description h2 {
+    font-size: 1.5rem;
+    margin: 20px 0 10px;
+}
+
+.blog-description h3 {
+    font-size: 1.25rem;
+    margin: 18px 0 8px;
+}
+
+.blog-description h4 {
+    font-size: 1.1rem;
+    margin: 16px 0 8px;
+}
+
+.blog-description ul,
+.blog-description ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+}
+
+.blog-description strong {
+    font-weight: 700;
+}
+
+.blog-description em {
+    font-style: italic;
+}
+
+.blog-description u {
+    text-decoration: underline;
+}
+
+/* ========================================= */
+
+
+
+
 /* Responsive */
 
 @media (max-width: 900px) {

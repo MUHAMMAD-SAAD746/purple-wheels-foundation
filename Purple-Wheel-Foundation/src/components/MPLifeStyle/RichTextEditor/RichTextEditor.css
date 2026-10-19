@@ -1,0 +1,104 @@
+.rich-text-editor {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.rich-text-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    background: #f8f9fa;
+}
+
+.rich-text-toolbar button,
+.rich-text-toolbar select {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 34px;
+    padding: 7px 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+}
+
+.rich-text-toolbar button {
+    cursor: pointer;
+}
+
+.rich-text-toolbar button:hover,
+.rich-text-toolbar button:focus-visible,
+.rich-text-toolbar select:hover {
+    background: #eaf4ff;
+    color: #1e90ff;
+    border-color: #1e90ff;
+}
+
+.rich-text-toolbar select {
+    width: 130px !important;
+    min-width: 0;
+    padding: 5px 3px !important;
+    cursor: pointer;
+    outline: none;
+}
+
+.rich-text-content .tiptap {
+    min-height: 200px;
+    padding: 12px;
+    outline: none;
+    overflow-wrap: anywhere;
+}
+
+.rich-text-content .tiptap p {
+    margin: 0 0 10px;
+}
+
+.rich-text-content .tiptap h1 {
+    font-size: 2rem;
+    margin: 20px 0 12px;
+}
+
+.rich-text-content .tiptap h2 {
+    font-size: 1.5rem;
+    margin: 18px 0 10px;
+}
+
+.rich-text-content .tiptap h3 {
+    font-size: 1.25rem;
+    margin: 16px 0 8px;
+}
+
+.rich-text-content .tiptap h4 {
+    font-size: 1.1rem;
+    margin: 14px 0 8px;
+}
+
+.rich-text-content .tiptap ul,
+.rich-text-content .tiptap ol {
+    padding-left: 24px;
+    margin: 10px 0;
+}
+
+.rich-text-content .tiptap:focus {
+    outline: none;
+}
+
+/* Character Count */
+
+.create-post-character-count {
+    align-self: flex-end;
+
+    margin: -2px 0 0;
+
+    color: #888888;
+    font-size: 12px;
+}

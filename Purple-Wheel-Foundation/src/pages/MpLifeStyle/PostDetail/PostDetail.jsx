@@ -259,40 +259,10 @@ const PostDetail = () => {
 
                                     <h1>{blog.title}</h1>
 
-                                    <p>
-                                        This is the introduction of the blog post.
-                                        The author can explain the main topic here
-                                        and provide some useful information to the
-                                        readers.
-                                    </p>
-
-                                    <h2>First Heading</h2>
-
-                                    <p>
-                                        This is the first section of the blog post.
-                                        Multiple paragraphs can be added here depending
-                                        on the content of the article.
-                                    </p>
-
-                                    <p>
-                                        Another paragraph can be added to continue
-                                        explaining the topic in more detail.
-                                    </p>
-
-                                    <h2>Second Heading</h2>
-
-                                    <p>
-                                        This section contains more information about
-                                        the topic. You can render multiple headings
-                                        and paragraphs dynamically from your backend.
-                                    </p>
-
-                                    <h3>Sub Heading</h3>
-
-                                    <p>
-                                        Additional content can be placed under the
-                                        sub-heading.
-                                    </p>
+                                    <div
+                                        className="blog-description"
+                                        dangerouslySetInnerHTML={{ __html: blog.description }}
+                                    />
 
                                 </div>
                             </>

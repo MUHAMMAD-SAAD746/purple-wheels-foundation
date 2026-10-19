@@ -8,6 +8,13 @@ const blogsSchema = new mongoose.Schema(
             trim: true
         },
 
+        subtitle: {
+            type: String,
+            trim: true,
+            maxlength: 200,
+            default: "",
+        },
+
         description: {
             type: String,
             required: true,

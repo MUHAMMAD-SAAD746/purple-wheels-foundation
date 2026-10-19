@@ -1,0 +1,137 @@
+.delete-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+}
+
+.delete-modal {
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: deleteModalAppear 0.2s ease-out;
+}
+
+.delete-modal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.delete-modal h2 {
+    margin: 0 0 12px;
+    color: #1f2937;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.delete-modal-message {
+    margin: 0 0 22px;
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.delete-modal-message strong {
+    color: #374151;
+}
+
+.delete-modal-error {
+    margin: 0 0 18px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.delete-modal-actions button {
+    min-height: 44px;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.delete-modal-actions button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.delete-modal-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.delete-modal-cancel {
+    flex: 1;
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.delete-modal-cancel:hover:not(:disabled) {
+    background: #e5e7eb;
+}
+
+.delete-modal-confirm {
+    flex: 1;
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.delete-modal-confirm:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+@keyframes deleteModalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .delete-modal {
+        padding: 24px 20px;
+    }
+
+    .delete-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .delete-modal-actions button {
+        width: 100%;
+    }
+}

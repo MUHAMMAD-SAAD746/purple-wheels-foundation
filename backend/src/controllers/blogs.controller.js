@@ -7,10 +7,14 @@ const cloudinary = require("../services/cloudinary.service");
 
 
 /**
- * - Get /api/blogs/
- * - Get /api/blogs/?tag=ethical clothing
- * - Get /api/blogs/?category=wellness
- * - Get /api/blogs/?category=wellness&tag=healthy habits
+ * - GET /api/blogs/
+ * (Retrieves all blog posts.)
+ * - GET /api/blogs/?tag=ethical clothing
+ * (Retrieves blog posts filtered by the specified tag.)
+ * - GET /api/blogs/?category=wellness
+ * (Retrieves blog posts filtered by the specified category.)
+ * - GET /api/blogs/?category=wellness&tag=healthy habits
+ * (Retrieves blog posts matching both the specified category and tag.)
  */
 
 async function getAllBlogs(req, res) {
@@ -226,6 +230,58 @@ async function updateBlog(req, res) {
         });
     }
 }
+
+
+
+/**
+ * - DELETE /api/blogs/:id
+ * - Deletes a blog post by its ID if the authenticated user is its author.
+ * - Returns 404 if the blog does not exist and 403 if the user is not authorized.
+ */
+
+async function deleteBlog(req, res) {
+    try {
+        const { id } = req.params;
+        const userId = req.user.userId;
+
+        const blog = await blogsModel.findById(id);
+
+        if (!blog) {
+            return res.status(404).json({
+                message: "Blog not found"
+            });
+        }
+
+        // Ensure the logged-in user owns this blog
+        if (blog.author.toString() !== userId) {
+            return res.status(403).json({
+                message: "You are not authorized to delete this blog"
+            });
+        }
+
+        await blogsModel.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            message: "Blog deleted successfully",
+            blogId: id
+        });
+
+    } catch (error) {
+        console.error("Delete blog error:", error);
+
+        // Handle invalid MongoDB ObjectIds
+        if (error.name === "CastError") {
+            return res.status(400).json({
+                message: "Invalid blog ID"
+            });
+        }
+
+        return res.status(500).json({
+            message: "Failed to delete blog"
+        });
+    }
+}
+
 
 
 
@@ -570,6 +626,7 @@ module.exports = {
     myBlogs,
     createBlog,
     updateBlog,
+    deleteBlog,
     getBlogById,
     relatedBlogs,
     getCreators,

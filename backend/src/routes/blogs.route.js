@@ -21,6 +21,7 @@ router.delete("/:blogId/save", authMiddleware, blogSaveController.unsaveBlog)
 router.get("/saved", authMiddleware, blogSaveController.getAllSavedBlogs)
 router.get("/topCreators", authMiddleware, blogsController.topCreators)
 router.put("/:id", authMiddleware, upload.single("image"), blogsController.updateBlog);
+router.delete("/:id", authMiddleware, blogsController.deleteBlog);
 router.get("/:id", authMiddleware, blogsController.getBlogById)
 
 module.exports = router;

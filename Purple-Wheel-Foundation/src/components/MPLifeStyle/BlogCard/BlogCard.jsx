@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaEye, FaComment, FaEdit, FaPencilAlt } from "react-icons/fa";
+import { FaHeart, FaEye, FaComment, FaPencilAlt, FaTrash, FaTrashAlt } from "react-icons/fa";
 import formatNumber from "../../../utils/formatNumber"
 import "./BlogCard.css";
 
@@ -16,6 +16,7 @@ const BlogCard = ({
     commentCount = 0,
     onClick,
     onEdit,
+    onDelete,
     showAuthor = true,
 }) => {
     const navigate = useNavigate();
@@ -28,13 +29,32 @@ const BlogCard = ({
             style={{ cursor: "pointer" }}
         >
 
-            {/* Blog Image */}
-            <img
-                className="blog-card-image"
-                src={image}
-                alt={title}
-                referrerPolicy="no-referrer"
-            />
+
+            {/* Blog Image Wrapper */}
+            <div className="blog-card-image-wrapper">
+                <img
+                    className="blog-card-image"
+                    src={image}
+                    alt={title}
+                    referrerPolicy="no-referrer"
+                />
+
+                {!showAuthor && (
+                    <button
+                        type="button"
+                        className="blog-card-delete-btn"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete?.();
+                        }}
+                        aria-label="Delete post"
+                        title="Delete post"
+                    >
+                        <FaTrashAlt />
+                    </button>
+                )}
+            </div>
+
 
             {/* Card Content */}
             <div className="blog-card-content">

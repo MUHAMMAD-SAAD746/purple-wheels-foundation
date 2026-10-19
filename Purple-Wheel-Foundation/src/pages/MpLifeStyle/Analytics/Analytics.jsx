@@ -6,6 +6,7 @@ import FeedHeader from '../../../components/MPLifeStyle/FeedHeader/FeedHeader'
 import CreateNewPost from "../../../components/MPLifeStyle/CreateNewPost/CreateNewPost";
 import AnalyticsCard from "../../../components/MPLifeStyle/AnalyticsCard/AnalyticsCard";
 import BlogCard from "../../../components/MPLifeStyle/BlogCard/BlogCard";
+import DeletePostModal from "../../../components/MPLifeStyle/DeletePostModal/DeletePostModal";
 import { FaEye, FaHeart, FaComment, FaChartLine } from "react-icons/fa";
 
 import formatNumber from "../../../utils/formatNumber";
@@ -30,6 +31,11 @@ const Analytics = () => {
         previousLikes: 0,
         likesGrowth: null
     });
+
+
+    const [blogToDelete, setBlogToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState("");
 
 
 
@@ -61,6 +67,51 @@ const Analytics = () => {
             loadDrafts();
         } catch (error) {
             console.error("Error refreshing blogs:", error);
+        }
+    };
+
+
+
+
+    const openDeleteModal = (blog) => {
+        setDeleteError("");
+        setBlogToDelete(blog);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!blogToDelete || isDeleting) return;
+
+        setIsDeleting(true);
+        setDeleteError("");
+
+        try {
+            await axios.delete(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${blogToDelete._id}`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            // Remove the deleted post from the UI
+            setBlogs((prevBlogs) =>
+                prevBlogs.filter(
+                    (blog) => blog._id !== blogToDelete._id
+                )
+            );
+
+            setBlogToDelete(null);
+        } catch (error) {
+            console.error(
+                "Failed to delete blog:",
+                error.response?.data || error.message
+            );
+
+            setDeleteError(
+                error.response?.data?.message ||
+                "Unable to delete the post. Please try again."
+            );
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -215,6 +266,7 @@ const Analytics = () => {
                                         likeCount={blog.likeCount}
                                         viewCount={blog.viewCount}
                                         showAuthor={false}
+                                        onDelete={() => openDeleteModal(blog)}
                                         onEdit={() => {
                                             setSelectedDraft(null);
                                             setSelectedBlog(blog);
@@ -265,6 +317,21 @@ const Analytics = () => {
                     }}
                 />
             )}
+
+
+            <DeletePostModal
+                isOpen={Boolean(blogToDelete)}
+                postTitle={blogToDelete?.title}
+                isDeleting={isDeleting}
+                error={deleteError}
+                onCancel={() => {
+                    if (isDeleting) return;
+
+                    setBlogToDelete(null);
+                    setDeleteError("");
+                }}
+                onConfirm={handleConfirmDelete}
+            />
         </div>
     )
 }

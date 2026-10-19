@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaEye } from "react-icons/fa";
+import { FaHeart, FaEye, FaComment, FaEdit, FaPencilAlt } from "react-icons/fa";
 import formatNumber from "../../../utils/formatNumber"
 import "./BlogCard.css";
 
@@ -13,7 +13,10 @@ const BlogCard = ({
     date,
     likeCount,
     viewCount,
+    commentCount = 0,
     onClick,
+    onEdit,
+    showAuthor = true,
 }) => {
     const navigate = useNavigate();
 
@@ -50,28 +53,29 @@ const BlogCard = ({
                 {/* Card Footer */}
                 <div className="blog-card-footer">
 
-                    {/* Author */}
-                    <div className="blog-card-author">
-                        <img
-                            className="blog-card-profile"
-                            src={profileImage}
-                            alt={authorName}
-                        />
+                    {showAuthor && (
+                        <div className="blog-card-author">
+                            <img
+                                className="blog-card-profile"
+                                src={profileImage}
+                                alt={authorName}
+                            />
 
-                        <div className="blog-card-author-info">
-                            <p className="blog-card-author-name">
-                                {authorName}
-                            </p>
+                            <div className="blog-card-author-info">
+                                <p className="blog-card-author-name">
+                                    {authorName}
+                                </p>
 
-                            <p className="blog-card-date">
-                                {new Date(date).toLocaleDateString("en-US", {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric"
-                                })}
-                            </p>
+                                <p className="blog-card-date">
+                                    {new Date(date).toLocaleDateString("en-US", {
+                                        month: "short",
+                                        day: "numeric",
+                                        year: "numeric"
+                                    })}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* Stats */}
                     <div className="blog-card-stats">
@@ -86,7 +90,28 @@ const BlogCard = ({
                             <span>{formatNumber(viewCount)}</span>
                         </div>
 
+                        {!showAuthor && (
+                            <div className="blog-card-stat">
+                                <FaComment className="blog-card-stat-icon" />
+                                <span>{formatNumber(commentCount)}</span>
+                            </div>
+                        )}
                     </div>
+
+                    {!showAuthor && (
+                        <button
+                            type="button"
+                            className="blog-card-edit-btn"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onEdit?.();
+                            }}
+                            aria-label="Edit post"
+                            title="Edit post"
+                        >
+                            <FaPencilAlt />
+                        </button>
+                    )}
 
                 </div>
             </div>

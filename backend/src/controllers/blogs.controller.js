@@ -139,6 +139,97 @@ async function createBlog(req, res) {
 
 
 
+
+async function updateBlog(req, res) {
+    const { id } = req.params;
+
+    const {
+        title,
+        subtitle,
+        description,
+        category,
+        tags
+    } = req.body;
+
+    try {
+        const blog = await blogsModel.findById(id);
+
+        if (!blog) {
+            return res.status(404).json({
+                message: "Blog not found"
+            });
+        }
+
+
+        // Verify blog ownership
+        if (blog.author.toString() !== req.user?.userId.toString()) {
+            return res.status(403).json({
+                message: "You are not authorized to update this blog"
+            });
+        }
+
+        // Update only the fields provided
+        if (title !== undefined) {
+            blog.title = title;
+        }
+
+        if (subtitle !== undefined) {
+            blog.subtitle = subtitle;
+        }
+
+        if (description !== undefined) {
+            blog.description = description;
+        }
+
+        if (category !== undefined) {
+            blog.category = category;
+        }
+
+        if (tags !== undefined) {
+            blog.tags = tags
+                ? tags.split(",")
+                    .map(tag => tag.trim().toLowerCase())
+                    .filter(Boolean)
+                : [];
+        }
+
+        // Replace the image only when a new image is uploaded
+        if (req.file) {
+            blog.image = req.file.path;
+        }
+
+        await blog.save();
+
+        return res.status(200).json({
+            message: "Blog updated successfully",
+            blog
+        });
+
+    } catch (error) {
+        console.error("Update blog error:", error);
+
+        if (error.name === "CastError") {
+            return res.status(400).json({
+                message: "Invalid blog ID"
+            });
+        }
+
+        if (error.name === "ValidationError") {
+            return res.status(400).json({
+                message: error.message
+            });
+        }
+
+        return res.status(500).json({
+            message: "Failed to update blog",
+            error: error.message
+        });
+    }
+}
+
+
+
+
 async function getBlogById(req, res) {
     const { id } = req.params;
 
@@ -478,6 +569,7 @@ module.exports = {
     getAllBlogs,
     myBlogs,
     createBlog,
+    updateBlog,
     getBlogById,
     relatedBlogs,
     getCreators,

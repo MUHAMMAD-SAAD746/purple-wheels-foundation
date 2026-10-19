@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import { IoClose, IoCloudUploadOutline } from "react-icons/io5";
@@ -7,19 +7,40 @@ import { FiSend } from "react-icons/fi";
 import { useAuth } from "../../../context/AuthContext";
 import "./CreateNewPost.css";
 
-const CreateNewPost = ({ onClose, draft, onSave }) => {
+const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
     const { user } = useAuth();
-    const [content, setContent] = useState(draft?.content || "");
+
+    const isEditing = Boolean(blog);
+
     const [selectedFile, setSelectedFile] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
-
-    const [title, setTitle] = useState(draft?.title || "");
-    const [subtitle, setSubtitle] = useState(draft?.subtitle || "");
-    const [category, setCategory] = useState(draft?.category || "");
-    const [tags, setTags] = useState(draft?.tags || "");
     const [loading, setLoading] = useState(false)
 
+    const [title, setTitle] = useState("");
+    const [subtitle, setSubtitle] = useState("");
+    const [category, setCategory] = useState("");
+    const [description, setDescription] = useState("");
+    const [tags, setTags] = useState("");
+
     const fileInputRef = useRef(null);
+
+
+
+    useEffect(() => {
+        const post = draft ?? blog;
+
+        setTitle(post?.title ?? "");
+        setSubtitle(post?.subtitle ?? "");
+        setDescription(post?.description ?? "");
+        setCategory(post?.category ?? "");
+        setTags(
+            Array.isArray(post?.tags)
+                ? post.tags.join(", ")
+                : post?.tags ?? ""
+        );
+
+        setSelectedFile(null);
+    }, [draft, blog]);
 
 
 
@@ -61,10 +82,59 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
 
 
 
+    // const handlePublish = async (e) => {
+    //     e.preventDefault();
+
+    //     if (!title || !description || (!selectedFile && !blog?.image) || !category) {
+    //         alert("Please fill all required fields");
+    //         return;
+    //     }
+
+    //     try {
+    //         setLoading(true);
+
+    //         const formData = new FormData();
+
+    //         formData.append("title", title);
+    //         formData.append("subtitle", subtitle);
+    //         formData.append("description", description);
+    //         formData.append("image", selectedFile);
+    //         formData.append("category", category);
+    //         formData.append("date", new Date().toISOString().split("T")[0]);
+    //         formData.append("tags", tags);
+
+    //         const response = await axios.post(
+    //             `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/create-blog`,
+    //             formData,
+    //             {
+    //                 withCredentials: true
+    //             }
+    //         );
+
+    //         console.log(response.data);
+
+    //         alert("Blog published successfully");
+
+    //         onClose();
+
+    //     } catch (error) {
+    //         console.error("Error creating blog:", error);
+
+    //         alert(
+    //             error.response?.data?.message ||
+    //             "Failed to publish blog"
+    //         );
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+
+
     const handlePublish = async (e) => {
         e.preventDefault();
 
-        if (!title || !content || !selectedFile || !category) {
+        if (!title || !description || (!selectedFile && !blog?.image) || !category) {
             alert("Please fill all required fields");
             return;
         }
@@ -76,37 +146,57 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
 
             formData.append("title", title);
             formData.append("subtitle", subtitle);
-            formData.append("description", content);
-            formData.append("image", selectedFile);
+            formData.append("description", description);
+
+            // Only send an image if a new file was selected.
+            if (selectedFile) {
+                formData.append("image", selectedFile);
+            }
+
             formData.append("category", category);
             formData.append("date", new Date().toISOString().split("T")[0]);
             formData.append("tags", tags);
 
-            const response = await axios.post(
-                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/create-blog`,
-                formData,
-                {
-                    withCredentials: true
-                }
-            );
+            const url = isEditing
+                ? `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${blog._id}`
+                : `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/create-blog`;
+
+            const response = await axios({
+                method: isEditing ? "put" : "post",
+                url,
+                data: formData,
+                withCredentials: true,
+            });
 
             console.log(response.data);
 
-            alert("Blog published successfully");
+            alert(
+                isEditing
+                    ? "Blog updated successfully"
+                    : "Blog published successfully"
+            );
 
+            onSave?.();
             onClose();
 
         } catch (error) {
-            console.error("Error creating blog:", error);
+            console.error(
+                isEditing ? "Error updating blog:" : "Error creating blog:",
+                error
+            );
 
             alert(
                 error.response?.data?.message ||
-                "Failed to publish blog"
+                (isEditing
+                    ? "Failed to update blog"
+                    : "Failed to publish blog")
             );
         } finally {
             setLoading(false);
         }
     };
+
+
 
 
 
@@ -122,7 +212,7 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                         ...item,
                         title,
                         subtitle,
-                        content,
+                        description,
                         category,
                         tags,
                         updatedAt: new Date().toISOString()
@@ -142,7 +232,7 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                 userId: user._id,
                 title,
                 subtitle,
-                content,
+                description,
                 category,
                 tags,
                 createdAt: new Date().toISOString()
@@ -179,19 +269,35 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                         <IoClose />
                     </button>
 
-                    <h2>Create New Post</h2>
+                    <h2>{isEditing ? "Update Post" : "Create New Post"}</h2>
                 </div>
+
 
                 {/* Upload Area */}
                 <div
-                    className={`create-post-upload ${isDragging ? "dragging" : ""
-                        }`}
-                    onDragOver={handleDragOver}
+                    className={`create-post-upload ${isDragging ? "dragging" : ""}`}
+                    onDragOver={(e) => {
+                        if (blog) return;
+                        handleDragOver(e);
+                    }}
                     onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                    onClick={() => fileInputRef.current.click()}
+                    onDrop={(e) => {
+                        if (blog) return;
+                        handleDrop(e);
+                    }}
+                    onClick={() => {
+                        if (!blog) fileInputRef.current?.click();
+                    }}
                 >
-                    {selectedFile ? (
+                    {blog?.image ? (
+                        <div className="create-post-preview">
+                            <img
+                                src={blog.image}
+                                alt="Existing blog media"
+                            />
+                            <p>Existing image — image editing is disabled for now.</p>
+                        </div>
+                    ) : selectedFile ? (
                         <div className="create-post-preview">
                             {selectedFile.type.startsWith("image/") ? (
                                 <img
@@ -202,33 +308,34 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                                 <video
                                     src={URL.createObjectURL(selectedFile)}
                                     controls
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                             )}
-
                             <p>{selectedFile.name}</p>
                         </div>
                     ) : (
                         <div className="create-post-upload-content">
                             <IoCloudUploadOutline className="create-post-upload-icon" />
-
                             <p className="create-post-upload-title">
                                 Click to upload or drag and drop
                             </p>
-
                             <p className="create-post-upload-subtitle">
                                 Upload images or videos
                             </p>
                         </div>
                     )}
 
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*,video/*"
-                        hidden
-                        onChange={handleFileChange}
-                    />
+                    {!blog && (
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*,video/*"
+                            hidden
+                            onChange={handleFileChange}
+                        />
+                    )}
                 </div>
+
 
                 {/* Form */}
                 <form className="create-post-form" onSubmit={handlePublish}>
@@ -276,8 +383,8 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                         <label htmlFor="post-content">About Post</label>
 
                         <RichTextEditor
-                            value={content}
-                            onChange={setContent}
+                            value={description}
+                            onChange={setDescription}
                         />
                     </div>
 
@@ -309,7 +416,9 @@ const CreateNewPost = ({ onClose, draft, onSave }) => {
                             disabled={loading}
                         >
                             <FiSend />
-                            {loading ? "Publishing..." : "Publish Now"}
+                            {loading
+                                ? (isEditing ? "Updating..." : "Publishing...")
+                                : (isEditing ? "Update Post" : "Publish Now")}
                         </button>
                     </div>
                 </form>

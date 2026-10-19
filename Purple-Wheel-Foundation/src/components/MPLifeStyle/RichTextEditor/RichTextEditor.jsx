@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEffect, useState } from "react";
+import { useEditor, useEditorState, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CharacterCount from "@tiptap/extension-character-count";
 import Underline from "@tiptap/extension-underline";
@@ -32,9 +32,30 @@ const RichTextEditor = ({ value, onChange }) => {
         }
     });
 
+
+
+    useEffect(() => {
+        if (!editor) return;
+
+        const currentContent = editor.getHTML();
+        const newContent = value || "";
+
+        if (currentContent !== newContent) {
+            editor.commands.setContent(newContent, {
+                emitUpdate: false,
+            });
+        }
+    }, [editor, value]);
+
+
+
     if (!editor) return null;
 
-    const characterCount = editor.storage.characterCount.characters();
+    const characterCount = useEditorState({
+        editor,
+        selector: ({ editor }) =>
+            editor?.storage.characterCount.characters() ?? 0,
+    });
 
     return (
         <>

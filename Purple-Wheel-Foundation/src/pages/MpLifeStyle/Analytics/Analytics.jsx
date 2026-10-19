@@ -20,6 +20,7 @@ const Analytics = () => {
     const [drafts, setDrafts] = useState([]);
     const [activeTab, setActiveTab] = useState("publish");
     const [loading, setLoading] = useState(true);
+    const [selectedBlog, setSelectedBlog] = useState(null);
 
     const [analytics, setAnalytics] = useState({
         currentViews: 0,
@@ -47,6 +48,24 @@ const Analytics = () => {
 
 
 
+    const refreshBlogs = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/my-blogs`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            setBlogs(response.data.blogs);
+            loadDrafts();
+        } catch (error) {
+            console.error("Error refreshing blogs:", error);
+        }
+    };
+
+
+
 
     useEffect(() => {
         const fetchAnalyticsData = async () => {
@@ -68,16 +87,6 @@ const Analytics = () => {
 
                 setBlogs(blogsResponse.data.blogs);
                 setAnalytics(analyticsResponse.data);
-
-                // const savedDrafts = JSON.parse(
-                //     localStorage.getItem("mp_lifestyle_drafts")
-                // ) || [];
-
-                // const userDrafts = savedDrafts.filter(
-                //     (draft) => draft.userId === user?._id
-                // );
-
-                // setDrafts(userDrafts);
 
                 loadDrafts();
 
@@ -205,6 +214,12 @@ const Analytics = () => {
                                         date={blog.createdAt}
                                         likeCount={blog.likeCount}
                                         viewCount={blog.viewCount}
+                                        showAuthor={false}
+                                        onEdit={() => {
+                                            setSelectedDraft(null);
+                                            setSelectedBlog(blog);
+                                            setShowCreatePost(true);
+                                        }}
                                     />
                                 ))
                             )
@@ -240,11 +255,13 @@ const Analytics = () => {
 
             {showCreatePost && (
                 <CreateNewPost
-                    onSave={loadDrafts}
+                    onSave={refreshBlogs}
                     draft={selectedDraft}
+                    blog={selectedBlog}
                     onClose={() => {
                         setShowCreatePost(false);
                         setSelectedDraft(null);
+                        setSelectedBlog(null);
                     }}
                 />
             )}

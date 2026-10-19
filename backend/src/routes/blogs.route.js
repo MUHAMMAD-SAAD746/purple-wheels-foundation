@@ -9,7 +9,7 @@ const upload = require("../middleware/upload");
 
 router.get("/", blogsController.getAllBlogs)
 router.get("/my-blogs", authMiddleware, blogsController.myBlogs)
-router.post("/create-blog", authMiddleware, upload.single("image"), blogsController.createBlog )
+router.post("/create-blog", authMiddleware, upload.single("image"), blogsController.createBlog)
 router.get("/creators", authMiddleware, blogsController.getCreators)
 router.get("/analytics", authMiddleware, blogsController.getMyAnalytics)
 router.get("/:id/related", authMiddleware, blogsController.relatedBlogs)
@@ -20,6 +20,7 @@ router.post("/:blogId/save", authMiddleware, blogSaveController.saveBlog)
 router.delete("/:blogId/save", authMiddleware, blogSaveController.unsaveBlog)
 router.get("/saved", authMiddleware, blogSaveController.getAllSavedBlogs)
 router.get("/topCreators", authMiddleware, blogsController.topCreators)
+router.put("/:id", authMiddleware, upload.single("image"), blogsController.updateBlog);
 router.get("/:id", authMiddleware, blogsController.getBlogById)
 
 module.exports = router;

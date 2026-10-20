@@ -104,7 +104,10 @@ const Header = () => {
                     {showSettingsDropdown && (
                         <div className="settings-dropdown">
                             <div className="settings-dropdown-options">
-                                <div className="settings-dropdown-item">
+                                <div 
+                                    className="settings-dropdown-item"
+                                    onClick={() => navigate("/settings")}
+                                >
                                     <IoPerson />
                                     <span>View Profile</span>
                                 </div>
@@ -119,7 +122,7 @@ const Header = () => {
 
                                 <div 
                                     className="settings-dropdown-item"
-                                    onClick={() => navigate("/settings")}
+                                    onClick={() => navigate("/settings#accounts")}
                                 >
                                     <IoSettings />
                                     <span>Settings</span>

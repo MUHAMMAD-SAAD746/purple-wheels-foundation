@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 import AccountDropdown from "../../components/AccountDropdown/AccountDropdown";
@@ -25,6 +26,17 @@ const Settings = () => {
 
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ");
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.hash === "#accounts") {
+            document.getElementById("accounts")?.scrollIntoView({
+                behavior: "instant",
+                block: "start"
+            });
+        }
+    }, [location]);
 
 
 
@@ -168,7 +180,7 @@ const Settings = () => {
                 </div>
 
 
-                <div className="settings-connect-accounts">
+                <div className="settings-connect-accounts" id="accounts">
                     <h3>CONNECT ACCOUNTS</h3>
 
                     <div className="settings-social-grid">
@@ -283,7 +295,7 @@ const Settings = () => {
 
 
 
-                <div 
+                <div
                     className="settings-logout-section"
                     onClick={handleLogout}
                 >

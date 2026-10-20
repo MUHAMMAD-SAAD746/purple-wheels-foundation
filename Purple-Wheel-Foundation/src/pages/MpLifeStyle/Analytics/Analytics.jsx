@@ -30,7 +30,11 @@ const Analytics = () => {
         viewsGrowth: null,
         currentLikes: 0,
         previousLikes: 0,
-        likesGrowth: null
+        likesGrowth: null,
+        totalComments: 0,
+        currentPeriodComments: 0,
+        previousPeriodComments: 0,
+        commentsGrowth: null
     });
 
 
@@ -173,6 +177,26 @@ const Analytics = () => {
 
 
 
+    const currentEngagementRate =
+        analytics.currentViews > 0
+            ? ((analytics.currentLikes + analytics.currentPeriodComments) /
+                analytics.currentViews) * 100
+            : 0;
+
+    const previousEngagementRate =
+        analytics.previousViews > 0
+            ? ((analytics.previousLikes + analytics.previousPeriodComments) /
+                analytics.previousViews) * 100
+            : 0;
+
+    const engagementGrowth =
+        previousEngagementRate > 0
+            ? ((currentEngagementRate - previousEngagementRate) /
+                previousEngagementRate) * 100
+            : null;
+
+
+
     return (
         <div>
             <Header />
@@ -219,17 +243,31 @@ const Analytics = () => {
                         <AnalyticsCard
                             icon={<FaComment />}
                             title="Total Comments"
-                            value="1200"
-                            percentage="+15%"
-                            positive={true}
+                            value={formatNumber(analytics.totalComments)}
+                            percentage={
+                                analytics.commentsGrowth === null
+                                    ? `+${analytics.currentPeriodComments} comments`
+                                    : `${analytics.commentsGrowth > 0 ? "+" : ""}${analytics.commentsGrowth}%`
+                            }
+                            positive={
+                                analytics.commentsGrowth === null ||
+                                analytics.commentsGrowth >= 0
+                            }
                         />
 
                         <AnalyticsCard
+                            className="engagement-card"
                             icon={<FaChartLine />}
                             title="Engagement Rate"
-                            value="24%"
-                            percentage="+15%"
-                            positive={true}
+                            value={`${currentEngagementRate.toFixed(1)}%`}
+                            percentage={
+                                engagementGrowth === null
+                                    ? ""
+                                    : `${engagementGrowth > 0 ? "+" : ""}${engagementGrowth.toFixed(1)}%`
+                            }
+                            positive={
+                                engagementGrowth === null || engagementGrowth >= 0
+                            }
                         />
                     </div>
 

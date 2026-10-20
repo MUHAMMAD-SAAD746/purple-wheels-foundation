@@ -51,3 +51,12 @@
 .analytics-card-percentage.negative {
     color: #e5484d;
 }
+
+.engagement-card .analytics-card-stat {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.engagement-card .analytics-card-percentage {
+    white-space: normal;
+}

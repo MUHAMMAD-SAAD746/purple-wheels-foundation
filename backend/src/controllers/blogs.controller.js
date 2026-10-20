@@ -3,6 +3,7 @@ const userModel = require("../model/user.model");
 const followModel = require("../model/follows.model");
 const blogViewModel = require("../model/blogView.model");
 const blogLikeModel = require("../model/blogLike.model");
+const commentsModel = require("../model/comments.model");
 const cloudinary = require("../services/cloudinary.service");
 
 
@@ -498,6 +499,10 @@ async function getMyAnalytics(req, res) {
 
         const blogIds = myBlogs.map(blog => blog._id);
 
+        const totalComments = await commentsModel.countDocuments({
+            blog: { $in: blogIds }
+        });
+
         const now = new Date();
 
         const currentPeriodStart = new Date();
@@ -505,6 +510,36 @@ async function getMyAnalytics(req, res) {
 
         const previousPeriodStart = new Date();
         previousPeriodStart.setDate(now.getDate() - 60);
+
+
+        // comments growth calculation 
+        const currentPeriodComments = await commentsModel.countDocuments({
+            blog: { $in: blogIds },
+            createdAt: {
+                $gte: currentPeriodStart,
+                $lte: now
+            }
+        });
+
+        const previousPeriodComments = await commentsModel.countDocuments({
+            blog: { $in: blogIds },
+            createdAt: {
+                $gte: previousPeriodStart,
+                $lt: currentPeriodStart
+            }
+        });
+
+        let commentsGrowth = null;
+
+        if (previousPeriodComments > 0) {
+            commentsGrowth = Number(
+                (
+                    ((currentPeriodComments - previousPeriodComments) /
+                        previousPeriodComments) * 100
+                ).toFixed(1)
+            );
+        }
+
 
         // views growth calculation
         const currentViews = await blogViewModel.countDocuments({
@@ -567,7 +602,11 @@ async function getMyAnalytics(req, res) {
             viewsGrowth,
             currentLikes,
             previousLikes,
-            likesGrowth
+            likesGrowth,
+            totalComments,
+            currentPeriodComments,
+            previousPeriodComments,
+            commentsGrowth
         });
 
     } catch (error) {

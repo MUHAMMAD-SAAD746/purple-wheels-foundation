@@ -5,10 +5,11 @@ const AnalyticsCard = ({
     title,
     value,
     percentage,
-    positive = true
+    positive = true,
+    className = ""
 }) => {
     return (
-        <div className="analytics-card">
+        <div className={`analytics-card ${className}`}>
             <div className="analytics-card-icon">
                 {icon}
             </div>

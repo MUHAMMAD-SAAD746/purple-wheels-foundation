@@ -16,7 +16,9 @@ export function AuthProvider({ children }) {
                 setUser(response.data.user);
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response?.status !== 401) {
+                    console.error(error);
+                }
             })
             .finally(() => {
                 setLoading(false);

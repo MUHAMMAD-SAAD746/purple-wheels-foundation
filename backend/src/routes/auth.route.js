@@ -9,6 +9,12 @@ router.post("/forgot-password", authController.forgotPassword)
 router.post("/verify-reset-code", authController.verifyResetCode)
 router.post("/update-password", authController.updatePassword)
 router.post("/logout", authController.logoutUser)
-router.get("/me", authMiddleware, authController.userProfile)
+router.get("/me", (req, res, next) => {
+    if (!req.cookies?.token) {
+        return res.status(200).json({ user: null });
+    }
+
+    next();
+}, authMiddleware, authController.userProfile)
 
 module.exports = router;

@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import AuthImagePanel from "../../components/Auth/AuthImagePanel/AuthImagePanel";
 import AuthInput from "../../components/Auth/AuthInput/AuthInput";
 import GoogleButton from "../../components/Auth/GoogleButton/GoogleButton";
+import { Spinner } from "../../components/Spinner/Spinner";
 
 import "./auth.css";
 
@@ -15,6 +16,8 @@ function Login() {
     const navigate = useNavigate();
     const { setUser } = useAuth();
     const location = useLocation();
+
+    const [loading, setLoading] = useState(false);
 
     const isAdminLogin = location.pathname === "/admin/login";
 
@@ -42,6 +45,7 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (loading) return;
 
         const validationError = validateForm();
 
@@ -51,6 +55,7 @@ function Login() {
         }
 
         setError("");
+        setLoading(true);
 
         try {
             const response = await axios.post(
@@ -80,6 +85,8 @@ function Login() {
             setError(
                 error.response?.data?.message || "Something went wrong"
             );
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -106,6 +113,7 @@ function Login() {
                         placeholder="johndoe@gmail.com"
                         icon={<FaEnvelope />}
                         value={formData.email}
+                        autoComplete="email"
                         onChange={(e) =>
                             setFormData({
                                 ...formData,
@@ -122,6 +130,7 @@ function Login() {
                         placeholder="Password"
                         icon={<FaLock />}
                         value={formData.password}
+                        autoComplete="current-password"
                         onChange={(e) =>
                             setFormData({
                                 ...formData,
@@ -148,8 +157,12 @@ function Login() {
 
                     {error && <p className="auth-error">{error}</p>}
 
-                    <button type="submit" className="submit-button">
-                        Login
+                    <button
+                        type="submit"
+                        className="submit-button"
+                        disabled={loading}
+                    >
+                        {loading ? <Spinner className="spinner-icon" /> : "Login"}
                     </button>
                 </form>
 

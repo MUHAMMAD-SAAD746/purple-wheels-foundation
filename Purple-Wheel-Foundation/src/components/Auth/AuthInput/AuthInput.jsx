@@ -12,6 +12,7 @@ function AuthInput({
     icon,
     value,
     onChange,
+    autoComplete,
 }) {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -38,6 +39,7 @@ function AuthInput({
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
+                    autoComplete={autoComplete}
                 />
 
                 {type === "password" && (

@@ -11,16 +11,21 @@ import {
     FaRegBookmark,
 } from "react-icons/fa";
 
+import { useAuth } from "../../../context/AuthContext";
+
 import Header from "../../../components/MPLifeStyle/Header/Header";
-import { showToast } from "../../../utils/toast";
 
 import CommentsCard from "../../../components/MPLifeStyle/CommentsCard/CommentsCard";
 import RelatedPostCard from "../../../components/MPLifeStyle/RelatedPostCard/RelatedPostCard";
+import { Spinner, CircleSpinner } from "../../../components/Spinner/Spinner";
+
+import { showToast } from "../../../utils/toast";
 
 import "./PostDetail.css";
 
 const PostDetail = () => {
     const { id } = useParams();
+    const { user } = useAuth();
 
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,6 +34,8 @@ const PostDetail = () => {
     const [likeLoading, setLikeLoading] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [followLoading, setFollowLoading] = useState(false)
 
 
 
@@ -57,6 +64,20 @@ const PostDetail = () => {
                 setIsSaved(response.data.isSaved)
 
 
+                const authorId = response.data.blog.author?._id;
+
+                if (authorId && user?._id && authorId !== user._id) {
+                    const followResponse = await axios.get(
+                        `${import.meta.env.VITE_DOMAIN_NAME}/api/follows/${authorId}`,
+                        {
+                            withCredentials: true
+                        }
+                    );
+
+                    setIsFollowing(followResponse.data.isFollowing);
+                }
+
+
                 const relatedResponse = await axios.get(
                     `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/${id}/related`,
                     {
@@ -75,7 +96,47 @@ const PostDetail = () => {
         };
 
         fetchBlog();
-    }, [id]);
+    }, [id, user?._id]);
+
+
+
+
+
+    const handleFollow = async () => {
+        if (followLoading || !blog?.author?._id) return;
+
+        try {
+            setFollowLoading(true);
+
+            if (isFollowing) {
+                await axios.delete(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/follows/${blog.author._id}`,
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setIsFollowing(false);
+            } else {
+                await axios.post(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/follows/${blog.author._id}`,
+                    {},
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                setIsFollowing(true);
+            }
+        } catch (error) {
+            showToast(
+                error.response?.data?.message || "Failed to update follow status.",
+                "error"
+            );
+        } finally {
+            setFollowLoading(false);
+        }
+    };
 
 
 
@@ -214,9 +275,17 @@ const PostDetail = () => {
                                         </div>
                                     </div>
 
-                                    <button className="follow-button">
-                                        Follow
-                                    </button>
+                                    {user && user?._id !== blog.author?._id && (
+                                        <button
+                                            className="follow-button"
+                                            onClick={handleFollow}
+                                            disabled={followLoading}
+                                        >
+                                            {isFollowing
+                                                    ? "Following"
+                                                    : "Follow"}
+                                        </button>
+                                    )}
                                 </div>
 
                                 <div className="post-top-bar">

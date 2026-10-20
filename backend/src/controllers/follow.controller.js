@@ -122,7 +122,32 @@ async function unfollowUser(req, res) {
 
 
 
+
+async function getFollowStatus(req, res) {
+    const followerId = req.user.userId;
+    const followingId = req.params.userId;
+
+    try {
+        const existingFollow = await followModel.findOne({
+            follower: followerId,
+            following: followingId
+        });
+
+        return res.status(200).json({
+            isFollowing: !!existingFollow
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Failed to get follow status"
+        });
+    }
+}
+
+
+
 module.exports = {
     followUser,
-    unfollowUser
+    unfollowUser,
+    getFollowStatus
 };

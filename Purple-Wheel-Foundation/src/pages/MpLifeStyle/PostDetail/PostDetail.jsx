@@ -17,6 +17,7 @@ import Header from "../../../components/MPLifeStyle/Header/Header";
 
 import CommentsCard from "../../../components/MPLifeStyle/CommentsCard/CommentsCard";
 import RelatedPostCard from "../../../components/MPLifeStyle/RelatedPostCard/RelatedPostCard";
+import SharePostModal from "../../../components/MPLifeStyle/SharePostModal/SharePostModal";
 import { Spinner, CircleSpinner } from "../../../components/Spinner/Spinner";
 
 import { showToast } from "../../../utils/toast";
@@ -30,12 +31,17 @@ const PostDetail = () => {
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [relatedBlogs, setRelatedBlogs] = useState([]);
+
     const [isLiked, setIsLiked] = useState(false);
     const [likeLoading, setLikeLoading] = useState(false);
+
     const [isSaved, setIsSaved] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
+
     const [isFollowing, setIsFollowing] = useState(false);
     const [followLoading, setFollowLoading] = useState(false)
+
+    const [showShareModal, setShowShareModal] = useState(false);
 
 
 
@@ -277,13 +283,13 @@ const PostDetail = () => {
 
                                     {user && user?._id !== blog.author?._id && (
                                         <button
-                                            className="follow-button"
+                                            className={`follow-button ${isFollowing ? "following" : ""}`}
                                             onClick={handleFollow}
                                             disabled={followLoading}
                                         >
                                             {isFollowing
-                                                    ? "Following"
-                                                    : "Follow"}
+                                                ? "Following"
+                                                : "Follow"}
                                         </button>
                                     )}
                                 </div>
@@ -314,6 +320,7 @@ const PostDetail = () => {
                                         <button
                                             className="post-action-button"
                                             aria-label="Share post"
+                                            onClick={() => setShowShareModal(true)}
                                         >
                                             <FaShare />
                                         </button>
@@ -365,6 +372,13 @@ const PostDetail = () => {
                 )}
 
             </main>
+
+            {showShareModal && blog && (
+                <SharePostModal
+                    blogUrl={window.location.href}
+                    onClose={() => setShowShareModal(false)}
+                />
+            )}
         </div>
     );
 };

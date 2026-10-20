@@ -1,0 +1,117 @@
+.share-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.share-modal {
+    width: 100%;
+    max-width: 450px;
+    background: #ffffff;
+    border: 1px solid #e5eef8;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 12px 35px rgba(30, 144, 255, 0.12);
+}
+
+.share-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.share-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+.share-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.share-modal-close:hover {
+    background: #f0f7ff;
+    color: #1e90ff;
+}
+
+.share-modal-description {
+    margin: 12px 0 20px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.share-link-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    background: #f8fbff;
+}
+
+.share-link-icon {
+    flex-shrink: 0;
+    color: #1e90ff;
+}
+
+.share-link-container input {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #475569;
+    font-size: 13px;
+}
+
+.share-copy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 9px 12px;
+    border: 1px solid #1e90ff;
+    border-radius: 6px;
+    background: #1e90ff;
+    color: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.share-copy-button:hover {
+    background: #187bdb;
+}
+
+@media (max-width: 480px) {
+    .share-modal {
+        padding: 18px;
+    }
+
+    .share-link-container {
+        gap: 7px;
+    }
+
+    .share-copy-button {
+        padding: 9px;
+    }
+}

@@ -14,6 +14,7 @@ const commentSchema = new mongoose.Schema(
             required: true
         },
 
+        // null for comments (not used for comments), used when replying to a comment
         parentComment: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "comments",

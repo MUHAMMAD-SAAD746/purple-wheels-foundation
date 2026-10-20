@@ -12,10 +12,12 @@ import {
 } from "react-icons/fa";
 
 import Header from "../../../components/MPLifeStyle/Header/Header";
+import { showToast } from "../../../utils/toast";
 
-import "./PostDetail.css";
 import CommentsCard from "../../../components/MPLifeStyle/CommentsCard/CommentsCard";
 import RelatedPostCard from "../../../components/MPLifeStyle/RelatedPostCard/RelatedPostCard";
+
+import "./PostDetail.css";
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -66,6 +68,7 @@ const PostDetail = () => {
 
             } catch (error) {
                 console.error("Error fetching blog:", error);
+                showToast("Failed to load blog post.", "error", 4000);
             } finally {
                 setLoading(false);
             }
@@ -117,6 +120,10 @@ const PostDetail = () => {
 
         } catch (error) {
             console.error("Error updating like:", error);
+            showToast(
+                error.response?.data?.message || "Failed to update like.",
+                "error"
+            );
         } finally {
             setLikeLoading(false);
         }
@@ -141,6 +148,7 @@ const PostDetail = () => {
                 );
 
                 setIsSaved(false);
+                showToast("Post removed from saved posts.", "info");
 
             } else {
                 await axios.post(
@@ -152,10 +160,15 @@ const PostDetail = () => {
                 );
 
                 setIsSaved(true);
+                showToast("Post saved successfully!");
             }
 
         } catch (error) {
             console.error("Error updating saved post:", error);
+            showToast(
+                error.response?.data?.message || "Failed to update saved post.",
+                "error"
+            );
         } finally {
             setSaveLoading(false);
         }

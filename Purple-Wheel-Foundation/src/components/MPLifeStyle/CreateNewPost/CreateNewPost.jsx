@@ -5,6 +5,7 @@ import { IoClose, IoCloudUploadOutline } from "react-icons/io5";
 import { FaRegSave } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { useAuth } from "../../../context/AuthContext";
+import { showToast } from "../../../utils/toast";
 import "./CreateNewPost.css";
 
 const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
@@ -48,6 +49,7 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
         if (!file) return;
 
         if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+            showToast("Please select a valid image or video.", "warning");
             return;
         }
 
@@ -82,60 +84,12 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
 
 
 
-    // const handlePublish = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!title || !description || (!selectedFile && !blog?.image) || !category) {
-    //         alert("Please fill all required fields");
-    //         return;
-    //     }
-
-    //     try {
-    //         setLoading(true);
-
-    //         const formData = new FormData();
-
-    //         formData.append("title", title);
-    //         formData.append("subtitle", subtitle);
-    //         formData.append("description", description);
-    //         formData.append("image", selectedFile);
-    //         formData.append("category", category);
-    //         formData.append("date", new Date().toISOString().split("T")[0]);
-    //         formData.append("tags", tags);
-
-    //         const response = await axios.post(
-    //             `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/create-blog`,
-    //             formData,
-    //             {
-    //                 withCredentials: true
-    //             }
-    //         );
-
-    //         console.log(response.data);
-
-    //         alert("Blog published successfully");
-
-    //         onClose();
-
-    //     } catch (error) {
-    //         console.error("Error creating blog:", error);
-
-    //         alert(
-    //             error.response?.data?.message ||
-    //             "Failed to publish blog"
-    //         );
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-
 
     const handlePublish = async (e) => {
         e.preventDefault();
 
         if (!title || !description || (!selectedFile && !blog?.image) || !category) {
-            alert("Please fill all required fields");
+            showToast("Please fill all required fields.", "warning");
             return;
         }
 
@@ -170,10 +124,11 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
 
             console.log(response.data);
 
-            alert(
+            showToast(
                 isEditing
-                    ? "Blog updated successfully"
-                    : "Blog published successfully"
+                    ? "Blog updated successfully!"
+                    : "Blog published successfully!",
+                "success"
             );
 
             onSave?.();
@@ -185,11 +140,13 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
                 error
             );
 
-            alert(
+            showToast(
                 error.response?.data?.message ||
                 (isEditing
-                    ? "Failed to update blog"
-                    : "Failed to publish blog")
+                    ? "Failed to update blog."
+                    : "Failed to publish blog."),
+                "error",
+                4000
             );
         } finally {
             setLoading(false);
@@ -225,7 +182,7 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
                 JSON.stringify(updatedDrafts)
             );
 
-            alert("Draft updated successfully");
+            showToast("Draft updated successfully!");
         } else {
             const newDraft = {
                 id: Date.now(),
@@ -245,7 +202,7 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
                 JSON.stringify(drafts)
             );
 
-            alert("Draft saved successfully");
+            showToast("Draft saved successfully!");
         }
 
         onClose();

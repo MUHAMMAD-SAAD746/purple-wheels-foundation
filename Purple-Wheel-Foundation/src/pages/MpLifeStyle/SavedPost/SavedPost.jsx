@@ -4,6 +4,7 @@ import axios from "axios";
 import Header from '../../../components/MPLifeStyle/Header/Header'
 import FeedHeader from '../../../components/MPLifeStyle/FeedHeader/FeedHeader'
 import BlogCard from '../../../components/MPLifeStyle/BlogCard/BlogCard'
+import { showToast } from "../../../utils/toast";
 
 import { FaBookmark } from "react-icons/fa";
 
@@ -30,6 +31,7 @@ const SavedPost = () => {
                 setBlogs(response.data.savedPosts);
             } catch (error) {
                 console.error("Error fetching saved posts:", error);
+                showToast("Failed to load saved posts.", "error", 4000);
             } finally {
                 setLoading(false);
             }
@@ -76,7 +78,7 @@ const SavedPost = () => {
                                 id={blog._id}
                                 image={blog.image}
                                 title={blog.title}
-                                description={blog.description}
+                                subtitle={blog.subtitle}
                                 profileImage={blog.author?.profileImage}
                                 authorName={blog.author?.username}
                                 date={blog.createdAt}

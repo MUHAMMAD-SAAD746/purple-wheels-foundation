@@ -8,6 +8,7 @@ import BlogCard from "../../../components/MPLifeStyle/BlogCard/BlogCard";
 import TopCreatorCard from "../../../components/MPLifeStyle/TopCreatorCard/TopCreatorCard"
 
 import getTrendingTags from "../../../utils/getTrendingTags";
+import { showToast } from "../../../utils/toast";
 
 import "./Explore.css";
 
@@ -36,6 +37,7 @@ const Explore = () => {
 
             } catch (error) {
                 console.error("Error fetching blogs:", error);
+                showToast("Failed to load blogs.", "error", 4000);
             } finally {
                 setLoading(false);
             }
@@ -68,6 +70,7 @@ const Explore = () => {
                 );
             } catch (error) {
                 console.error("Error fetching top creators:", error);
+                showToast("Failed to load top creators.", "error", 4000);
             } finally {
                 setTopCreatorsLoading(false);
             }
@@ -92,6 +95,7 @@ const Explore = () => {
 
         } catch (error) {
             console.error("Error fetching tag blogs:", error);
+            showToast("Failed to load posts for this tag.", "error", 4000);
         } finally {
             setLoading(false);
         }
@@ -112,6 +116,7 @@ const Explore = () => {
 
         } catch (error) {
             console.error("Error fetching blogs:", error);
+            showToast("Failed to load blogs.", "error", 4000);
         } finally {
             setLoading(false);
         }

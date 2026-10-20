@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import "./Home.css";
-
 import Header from "../../../components/MPLifeStyle/Header/Header";
 import FeedHeader from "../../../components/MPLifeStyle/FeedHeader/FeedHeader";
 import BlogCard from "../../../components/MPLifeStyle/BlogCard/BlogCard";
 import CreateNewPost from "../../../components/MPLifeStyle/CreateNewPost/CreateNewPost";
+
+import { showToast } from "../../../utils/toast";
+
+import "./Home.css";
 
 
 const Home = () => {
@@ -31,6 +33,7 @@ const Home = () => {
                 setBlogs(response.data.blogs);
             } catch (error) {
                 console.error("Error fetching blogs:", error);
+                showToast("Failed to load blogs.", "error", 4000);
             } finally {
                 setLoading(false);
             }

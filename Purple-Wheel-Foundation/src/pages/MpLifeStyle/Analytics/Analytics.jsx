@@ -7,6 +7,7 @@ import CreateNewPost from "../../../components/MPLifeStyle/CreateNewPost/CreateN
 import AnalyticsCard from "../../../components/MPLifeStyle/AnalyticsCard/AnalyticsCard";
 import BlogCard from "../../../components/MPLifeStyle/BlogCard/BlogCard";
 import DeletePostModal from "../../../components/MPLifeStyle/DeletePostModal/DeletePostModal";
+import { showToast } from "../../../utils/toast";
 import { FaEye, FaHeart, FaComment, FaChartLine } from "react-icons/fa";
 
 import formatNumber from "../../../utils/formatNumber";
@@ -99,6 +100,7 @@ const Analytics = () => {
                 )
             );
 
+            showToast("Blog deleted successfully!", "success");
             setBlogToDelete(null);
         } catch (error) {
             console.error(
@@ -106,10 +108,12 @@ const Analytics = () => {
                 error.response?.data || error.message
             );
 
-            setDeleteError(
+            const message =
                 error.response?.data?.message ||
-                "Unable to delete the post. Please try again."
-            );
+                "Unable to delete the post. Please try again.";
+
+            setDeleteError(message);
+            showToast(message, "error", 4000);
         } finally {
             setIsDeleting(false);
         }
@@ -143,6 +147,7 @@ const Analytics = () => {
 
             } catch (error) {
                 console.error("Error fetching analytics data:", error);
+                showToast("Failed to load analytics data.", "error", 4000);
             } finally {
                 setLoading(false);
             }

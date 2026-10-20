@@ -7,6 +7,8 @@ import Header from "../../../components/MPLifeStyle/Header/Header"
 import FeedHeader from '../../../components/MPLifeStyle/FeedHeader/FeedHeader'
 import CreatorCard from '../../../components/MPLifeStyle/CreatorsCard/CreatorsCard'
 
+import { showToast } from "../../../utils/toast";
+
 import "./Creators.css";
 
 const Creators = () => {
@@ -30,6 +32,7 @@ const Creators = () => {
 
             } catch (error) {
                 console.error("Error fetching creators:", error);
+                showToast("Failed to load creators. Please try again.", "error", 4000);
 
             } finally {
                 setLoading(false);

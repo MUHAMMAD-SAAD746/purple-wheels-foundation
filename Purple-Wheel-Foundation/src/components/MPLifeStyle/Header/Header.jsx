@@ -1,51 +1,27 @@
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import {
     IoNotificationsOutline,
     IoChevronDown,
     IoSettingsOutline,
-    IoPerson,
-    IoBookmark,
-    IoSettings,
 } from "react-icons/io5";
 
-import { MdLogout } from "react-icons/md";
 
 import { useAuth } from "../../../context/AuthContext";
 import generateAvatarUrl from "../../../utils/generateAvatarUrl";
 import AccountDropdown from "../../../components/AccountDropdown/AccountDropdown";
+import SettingsDropdown from "../../../components/MPLifeStyle/SettingsDropdown/SettingsDropdown";
 
 import "./Header.css"
 
 const Header = () => {
     const { user, setUser } = useAuth();
-    const navigate = useNavigate();
+
     const avatarUrl = user?.profileImage || generateAvatarUrl(user?.username);
 
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
     const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
 
-
-    const handleLogout = async () => {
-        try {
-            await axios.post(
-                `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/logout`,
-                {},
-                {
-                    withCredentials: true
-                }
-            );
-
-            setUser(null);
-            setShowSettingsDropdown(false);
-
-            navigate("/login");
-
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    };
 
 
     return (
@@ -99,46 +75,10 @@ const Header = () => {
                     </button>
 
 
-
-
                     {showSettingsDropdown && (
-                        <div className="settings-dropdown">
-                            <div className="settings-dropdown-options">
-                                <div 
-                                    className="settings-dropdown-item"
-                                    onClick={() => navigate("/settings")}
-                                >
-                                    <IoPerson />
-                                    <span>View Profile</span>
-                                </div>
-
-                                <div 
-                                    className="settings-dropdown-item"
-                                    onClick={() => navigate("/MP-LifeStyle/saved-post")}
-                                >
-                                    <IoBookmark />
-                                    <span>Saved Post</span>
-                                </div>
-
-                                <div 
-                                    className="settings-dropdown-item"
-                                    onClick={() => navigate("/settings#accounts")}
-                                >
-                                    <IoSettings />
-                                    <span>Settings</span>
-                                </div>
-                            </div>
-
-                            <div className="settings-dropdown-logout-section">
-                                <div
-                                    className="settings-dropdown-logout"
-                                    onClick={handleLogout}
-                                >
-                                    <MdLogout />
-                                    <span>Log Out</span>
-                                </div>
-                            </div>
-                        </div>
+                        <SettingsDropdown
+                            onClose={() => setShowSettingsDropdown(false)}
+                        />
                     )}
                 </div>
 

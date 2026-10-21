@@ -138,6 +138,10 @@
 
     font-size: 13px;
     font-weight: 600;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .blog-card-date {
@@ -192,4 +196,53 @@
 .blog-card-edit-btn:hover {
     color: #6c4cff;
     background: #f0edff;
+}
+
+
+/* Smaller desktop screens and laptops */
+@media (max-width: 1309px) {
+    .blog-card-content {
+        padding: 14px;
+    }
+
+    .blog-card-footer {
+        gap: 8px;
+    }
+
+    .blog-card-stats {
+        gap: 8px;
+    }
+
+    .blog-card-stat {
+        gap: 4px;
+        font-size: 12px;
+    }
+
+    .blog-card-stat-icon {
+        font-size: 12px;
+    }
+
+    .blog-card-author {
+        gap: 7px;
+        min-width: 0;
+    }
+
+    .blog-card-date {
+        white-space: nowrap;
+    }
+
+    .blog-card-author-info {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .blog-card-author-name {
+        font-size: 12px;
+    }
+
+    .blog-card-profile {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
 }

@@ -176,3 +176,74 @@
     font-weight: 500;
     color: #333;
 }
+
+
+
+/* Responsive Account Dropdown */
+
+@media (max-width: 767px) {
+    .account-dropdown-wrapper {
+        width: calc(100vw - 32px);
+        max-width: 360px;
+        min-width: 0;
+        padding: 14px;
+        box-sizing: border-box;
+    }
+
+    .account-profiles {
+        margin-top: 14px;
+        gap: 12px;
+    }
+
+    .account-profile-section {
+        gap: 6px;
+    }
+
+    .account-profile-title {
+        font-size: 12px;
+    }
+
+    .account-profile-card {
+        gap: 10px;
+        padding: 8px 10px;
+    }
+
+    .account-profile-card img,
+    .account-dropdown-current img,
+    .account-dropdown-icon {
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+    }
+
+    .account-dropdown-current,
+    .account-dropdown-add {
+        gap: 10px;
+        padding: 6px;
+    }
+
+    .account-dropdown-username,
+    .account-profile-card p,
+    .account-dropdown-add {
+        font-size: 13px;
+    }
+
+    .account-dropdown-icon {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 400px) {
+    .account-dropdown-wrapper {
+        width: calc(100vw - 24px);
+        padding: 10px;
+    }
+
+    .account-dropdown {
+        padding: 8px 6px;
+    }
+
+    .account-profile-title {
+        font-size: 11px;
+    }
+}

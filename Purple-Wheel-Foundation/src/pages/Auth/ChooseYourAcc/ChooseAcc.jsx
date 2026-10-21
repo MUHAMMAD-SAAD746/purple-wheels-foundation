@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-import HotAndPepperDashboard from "../../../assets/hot-pepper-dashboard.png"
-import ContentCreators from "../../../assets/content-creators.jpg"
-import Charity from "../../../assets/charity.png"
+import HotAndPepperDashboard from "../../../assets/hot-pepper-dashboard.avif"
+import ContentCreators from "../../../assets/content-creators.avif"
+import Charity from "../../../assets/charity.avif"
 import Hotandpepper from "../../../assets/pepper.png"
 import MP from "../../../assets/MP.png"
 import PurpleWheel from "../../../assets/purplewheel.png"

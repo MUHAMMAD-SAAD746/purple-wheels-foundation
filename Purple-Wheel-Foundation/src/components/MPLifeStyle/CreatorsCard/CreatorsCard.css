@@ -86,3 +86,33 @@
     color: #1e90ff;
     border: 1px solid #1e90ff;
 }
+
+
+@media (max-width: 767px) {
+    .creator-card {
+        padding: 15px;
+    }
+
+    .creator-profile {
+        width: 42px;
+        height: 42px;
+    }
+
+    .creator-name {
+        font-size: 14px;
+    }
+
+    .creator-bio {
+        font-size: 12px;
+    }
+
+    .creator-stats {
+        font-size: 12px;
+        margin-top: 15px;
+    }
+
+    .creator-follow-button {
+        padding: 8px;
+        font-size: 12px;
+    }
+}

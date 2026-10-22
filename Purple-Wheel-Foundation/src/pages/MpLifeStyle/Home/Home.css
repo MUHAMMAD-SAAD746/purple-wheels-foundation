@@ -214,11 +214,13 @@
     }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 767px) {
     .mp-home-content {
         padding: 120px 20px 35px;
     }
+}
 
+@media (max-width: 680px) {
     .blog-card-grid {
         grid-template-columns: repeat(1, minmax(0, 1fr));
     }

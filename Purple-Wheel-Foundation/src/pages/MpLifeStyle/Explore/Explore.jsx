@@ -28,7 +28,7 @@ const Explore = () => {
         const fetchBlogs = async () => {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/`
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/trending`
                 );
 
                 const fetchedBlogs = response.data.blogs;
@@ -88,7 +88,10 @@ const Explore = () => {
             setSelectedTag(tag);
 
             const response = await axios.get(
-                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/?tag=${encodeURIComponent(tag)}`
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/trending`,
+                {
+                    params: { tag }
+                }
             );
 
             setBlogs(response.data.blogs);
@@ -109,7 +112,7 @@ const Explore = () => {
             setSelectedTag(null);
 
             const response = await axios.get(
-                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/`
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/blogs/trending`
             );
 
             setBlogs(response.data.blogs);
@@ -182,18 +185,14 @@ const Explore = () => {
             <Header />
 
             <main className="mp-home-content">
-
                 <FeedHeader
                     title="EXPLORE"
                     subtitle="Discover trending content and top creators"
                 />
 
                 <div className="explore-content">
-
                     <section className="explore-trending">
-
                         <div className="explore-title-row">
-
                             <h3 className="explore-section-title">
                                 {selectedTag
                                     ? `Posts tagged #${selectedTag}`
@@ -208,7 +207,6 @@ const Explore = () => {
                                     Clear Tag
                                 </button>
                             )}
-
                         </div>
 
                         <div className="explore-blog-grid">
@@ -233,15 +231,12 @@ const Explore = () => {
                                 ))
                             )}
                         </div>
-
                     </section>
 
 
                     {/* Right Section */}
                     <aside className="explore-sidebar">
-
                         <div className="explore-sidebar-card top-creator-section">
-
                             <h3 className="explore-section-title">
                                 Top Creators
                             </h3>
@@ -271,7 +266,6 @@ const Explore = () => {
 
 
                         <div className="explore-sidebar-card">
-
                             <h3 className="explore-section-title">
                                 Trending Tags
                             </h3>
@@ -287,13 +281,9 @@ const Explore = () => {
                                     </div>
                                 ))}
                             </div>
-
                         </div>
-
                     </aside>
-
                 </div>
-
             </main>
         </div>
     );

@@ -44,6 +44,104 @@ async function getAllBlogs(req, res) {
 
 
 
+async function getBlogById(req, res) {
+    const { id } = req.params;
+
+    const blog = await blogsModel
+        .findById(id)
+        .populate("author")
+
+    const existingLike = await blogLikeModel.findOne({
+        blog: id,
+        user: req.user.userId
+    });
+
+    const user = await userModel.findById(req.user.userId);
+    const isSaved = user.savedPosts.includes(id);
+
+    res.status(200).json({
+        message: "Blog fetched Sucessfully",
+        blog: blog,
+        isLiked: !!existingLike,
+        isSaved: isSaved
+    })
+}
+
+
+/**
+ * - GET /api/blogs/trending
+ * (Retrieves 50 trending blog based on points higest to lowest.)
+ * - points calculated by (2(likes)+views)/(age in hour +24)
+ * - GET /api/blogs/trending?tag=ethical clothing
+ * - GET /api/blogs/trending?category=wellness
+ * - GET /api/blogs/trending?category=wellness&tag=healthy habits
+ * (Retrieves blog posts filtered by the specified tag or category or both.)
+ */
+
+async function getTrendingBlogs(req, res) {
+    try {
+        const { category, tag } = req.query;
+
+        const filter = {};
+
+        if (category) filter.category = category;
+        if (tag) filter.tags = tag;
+
+        const now = new Date();
+        const thirtyDaysAgo = new Date(now);
+
+        thirtyDaysAgo.setDate(now.getDate() - 30);
+
+        // First, find blogs from the last 30 days
+        let blogs = await blogsModel.find({
+            ...filter,
+            createdAt: { $gte: thirtyDaysAgo }
+        }).populate("author", "username profileImage");
+
+        // If none exist, search all dates
+        if (blogs.length === 0) {
+            blogs = await blogsModel.find(filter)
+                .populate("author", "username profileImage");
+        }
+
+        // Calculate trending score
+        blogs = blogs.map(blog => {
+            const ageInHours = Math.max(
+                0,
+                (now - new Date(blog.createdAt)) / (1000 * 60 * 60)
+            );
+
+            const trendingScore =
+                ((blog.likeCount || 0) * 2 + (blog.viewCount || 0)) /
+                (ageInHours + 24);
+
+            return {
+                ...blog.toObject(),
+                trendingScore
+            };
+        });
+
+        // Highest trending score first
+        blogs.sort((a, b) => b.trendingScore - a.trendingScore);
+
+        return res.status(200).json({
+            message: "Trending blogs fetched successfully",
+            blogs: blogs.slice(0, 50)
+        });
+
+    } catch (error) {
+        console.error("Error fetching trending blogs:", error);
+
+        return res.status(500).json({
+            message: "Failed to fetch trending blogs"
+        });
+    }
+}
+
+
+
+
+
 const myBlogs = async (req, res) => {
     try {
         const blogs = await blogsModel.find({
@@ -64,6 +162,7 @@ const myBlogs = async (req, res) => {
         });
     }
 };
+
 
 
 
@@ -286,33 +385,6 @@ async function deleteBlog(req, res) {
 
 
 
-
-async function getBlogById(req, res) {
-    const { id } = req.params;
-
-    const blog = await blogsModel
-        .findById(id)
-        .populate("author")
-
-    const existingLike = await blogLikeModel.findOne({
-        blog: id,
-        user: req.user.userId
-    });
-
-    const user = await userModel.findById(req.user.userId);
-    const isSaved = user.savedPosts.includes(id);
-
-    res.status(200).json({
-        message: "Blog fetched Sucessfully",
-        blog: blog,
-        isLiked: !!existingLike,
-        isSaved: isSaved
-    })
-}
-
-
-
-
 async function relatedBlogs(req, res) {
     const { id } = req.params;
 
@@ -398,48 +470,6 @@ async function relatedBlogs(req, res) {
 
         return res.status(500).json({
             message: "Server error"
-        });
-    }
-}
-
-
-
-
-async function getCreators(req, res) {
-
-    try {
-
-        const currentUserId = req.user.userId;
-
-        // Find all users followed by the current user
-        const followingUsers = await followModel.find({
-            follower: currentUserId
-        }).select("following");
-
-        // Create an array of followed user IDs
-        const followingIds = followingUsers.map(
-            follow => follow.following.toString()
-        );
-
-        const creators = await userModel
-            .find({ postCount: { $gt: 0 } })
-            .select("username profileImage postCount followers following");
-
-        const creatorsWithFollowStatus = creators.map(creator => ({
-            ...creator.toObject(),
-            isFollowing: followingIds.includes(creator._id.toString())
-        }));
-
-        return res.status(200).json({
-            creators: creatorsWithFollowStatus
-        });
-
-    } catch (error) {
-
-        console.error("Error fetching creators:", error);
-
-        return res.status(500).json({
-            message: "Failed to fetch creators"
         });
     }
 }
@@ -621,6 +651,48 @@ async function getMyAnalytics(req, res) {
 
 
 
+async function getCreators(req, res) {
+
+    try {
+
+        const currentUserId = req.user.userId;
+
+        // Find all users followed by the current user
+        const followingUsers = await followModel.find({
+            follower: currentUserId
+        }).select("following");
+
+        // Create an array of followed user IDs
+        const followingIds = followingUsers.map(
+            follow => follow.following.toString()
+        );
+
+        const creators = await userModel
+            .find({ postCount: { $gt: 0 } })
+            .select("username profileImage postCount followers following");
+
+        const creatorsWithFollowStatus = creators.map(creator => ({
+            ...creator.toObject(),
+            isFollowing: followingIds.includes(creator._id.toString())
+        }));
+
+        return res.status(200).json({
+            creators: creatorsWithFollowStatus
+        });
+
+    } catch (error) {
+
+        console.error("Error fetching creators:", error);
+
+        return res.status(500).json({
+            message: "Failed to fetch creators"
+        });
+    }
+}
+
+
+
+
 
 async function topCreators(req, res) {
     try {
@@ -662,14 +734,15 @@ async function topCreators(req, res) {
 
 module.exports = {
     getAllBlogs,
+    getBlogById,
+    getTrendingBlogs,
     myBlogs,
     createBlog,
     updateBlog,
     deleteBlog,
-    getBlogById,
     relatedBlogs,
-    getCreators,
     recordBlogView,
     getMyAnalytics,
+    getCreators,
     topCreators
 }

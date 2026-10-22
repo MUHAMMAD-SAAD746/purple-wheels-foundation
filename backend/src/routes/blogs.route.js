@@ -8,6 +8,7 @@ const upload = require("../middleware/upload");
 
 
 router.get("/", blogsController.getAllBlogs)
+router.get("/trending", blogsController.getTrendingBlogs);
 router.get("/my-blogs", authMiddleware, blogsController.myBlogs)
 router.post("/create-blog", authMiddleware, upload.single("image"), blogsController.createBlog)
 router.get("/creators", authMiddleware, blogsController.getCreators)

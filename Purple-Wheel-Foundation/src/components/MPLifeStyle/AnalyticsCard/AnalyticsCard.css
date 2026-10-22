@@ -2,7 +2,6 @@
     background: #fcfcfc;
     border-radius: 12px;
     padding: 10px;
-    /* min-height: 120px; */
     box-sizing: border-box;
     border: 1px solid #f8f8f8;
 }
@@ -59,4 +58,64 @@
 
 .engagement-card .analytics-card-percentage {
     white-space: normal;
+}
+
+
+@media (max-width: 480px) {
+    .analytics-card {
+        padding: 10px;
+    }
+
+    .analytics-card-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 17px;
+    }
+
+    .analytics-card-title {
+        font-size: 13px;
+    }
+
+    .analytics-card-stat {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .analytics-card-value {
+        font-size: 22px;
+    }
+
+    .analytics-card-percentage {
+        font-size: 11px;
+    }
+}
+
+
+@media (max-width: 380px) {
+    .analytics-card {
+        padding: 8px;
+    }
+
+    .analytics-card-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+        margin-bottom: 6px;
+    }
+
+    .analytics-card-title {
+        font-size: 12px;
+    }
+
+    .analytics-card-value {
+        font-size: 18px;
+    }
+
+    .analytics-card-percentage {
+        font-size: 10px;
+    }
+
+    .analytics-card-stat {
+        gap: 5px;
+    }
 }

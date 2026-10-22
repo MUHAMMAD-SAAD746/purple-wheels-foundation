@@ -131,7 +131,7 @@
 
 /* Tablet */
 
-@media (max-width: 900px) {
+@media (max-width: 1220px) {
 
     .explore-content {
         grid-template-columns: 1fr;
@@ -139,6 +139,16 @@
 
     .explore-blog-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .explore-sidebar {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+        align-items: start;
+    }
+
+    .top-creator-section {
+        max-width: 100%;
     }
 }
 
@@ -157,6 +167,10 @@
     }
 
     .explore-blog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .explore-sidebar {
         grid-template-columns: 1fr;
     }
 }

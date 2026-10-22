@@ -1,5 +1,6 @@
 .creator-card {
     width: 100%;
+    overflow: hidden;
     box-sizing: border-box;
     background-color: #fcfcfc;
     border: 1px solid #f7f7f7;
@@ -23,6 +24,8 @@
 
 .creator-info {
     min-width: 0;
+    flex: 1;
+    overflow: hidden;
 }
 
 .creator-name {
@@ -30,6 +33,9 @@
     font-size: 15px;
     font-weight: 600;
     color: #222222;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .creator-bio {
@@ -38,6 +44,7 @@
     line-height: 1.5;
     color: #6b7280;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .creator-stats {
@@ -47,6 +54,9 @@
     white-space: nowrap;
     margin-top: 20px;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .creator-stats .stats {

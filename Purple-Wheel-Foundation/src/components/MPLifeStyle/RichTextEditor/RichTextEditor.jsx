@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useEditor, useEditorState, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CharacterCount from "@tiptap/extension-character-count";
@@ -9,16 +9,15 @@ import {
     FaUnderline,
     FaListUl,
     FaListOl,
-    FaHeading
 } from "react-icons/fa";
 
 import "./RichTextEditor.css";
 
 
 const RichTextEditor = ({ value, onChange }) => {
-    const [heading, setHeading] = useState("");
 
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit,
             Underline,
@@ -49,13 +48,27 @@ const RichTextEditor = ({ value, onChange }) => {
 
 
 
-    if (!editor) return null;
 
-    const characterCount = useEditorState({
+    const editorState = useEditorState({
         editor,
-        selector: ({ editor }) =>
-            editor?.storage.characterCount.characters() ?? 0,
+        selector: ({ editor }) => ({
+            characterCount:
+                editor?.storage.characterCount.characters() ?? 0,
+
+            heading: editor?.isActive("heading", { level: 1 })
+                ? "1"
+                : editor?.isActive("heading", { level: 2 })
+                    ? "2"
+                    : editor?.isActive("heading", { level: 3 })
+                        ? "3"
+                        : editor?.isActive("heading", { level: 4 })
+                            ? "4"
+                            : "",
+        }),
     });
+
+
+    if (!editor) return null;
 
     return (
         <>
@@ -87,16 +100,17 @@ const RichTextEditor = ({ value, onChange }) => {
 
                     <select
                         title="Select heading"
-                        value={heading}
+                        value={editorState?.heading ?? ""}
                         onChange={(e) => {
                             const level = e.target.value;
-                            setHeading(level);
 
-                            if (level) {
+                            if (level === "") {
+                                editor.chain().focus().setParagraph().run();
+                            } else {
                                 editor
                                     .chain()
                                     .focus()
-                                    .toggleHeading({ level: Number(level) })
+                                    .setHeading({ level: Number(level) })
                                     .run();
                             }
                         }}
@@ -132,7 +146,7 @@ const RichTextEditor = ({ value, onChange }) => {
             </div>
 
             <p className="create-post-character-count">
-                {characterCount.toLocaleString()}/10,000 characters
+                {(editorState?.characterCount ?? 0).toLocaleString()}/10,000 characters
             </p>
         </>
     );

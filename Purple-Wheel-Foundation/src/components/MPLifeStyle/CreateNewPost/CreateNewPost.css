@@ -1,5 +1,3 @@
-/* Overlay */
-
 .create-post-overlay {
     position: fixed;
     inset: 0;
@@ -12,8 +10,6 @@
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(10px);
 }
-
-/* Right Drawer */
 
 .create-post-drawer {
     width: 450px;
@@ -46,7 +42,6 @@
     }
 }
 
-/* Header */
 .create-post-header {
     position: sticky;
     top: -25px;
@@ -88,47 +83,6 @@
     font-weight: 600;
 }
 
-/* Upload Area */
-
-/* .create-post-upload {
-    flex-shrink: 0;
-    height: 200px;
-    margin: 22px 0;
-
-    border: 2px dashed #b3b3b3;
-    border-radius: 10px;
-    background-color: #fafafa;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-} */
-
-/* .create-post-upload:hover {
-    border-color: #1e90ff;
-    background-color: #f7fbff;
-} */
-
-/* .create-post-upload-content {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-    text-align: center;
-} */
-
-
-
-
-
-
-
-
-
-
-
 
 .create-post-upload {
     position: relative;
@@ -156,9 +110,6 @@
     background-color: #f4faff;
 }
 
-
-/* Upload Content */
-
 .create-post-upload-content {
     width: 100%;
     height: 100%;
@@ -171,18 +122,12 @@
     text-align: center;
 }
 
-
-/* Upload Icon */
-
 .create-post-upload-icon {
     margin-bottom: 12px;
 
     color: #1e90ff;
     font-size: 45px;
 }
-
-
-/* Upload Text */
 
 .create-post-upload-title {
     margin: 0 0 6px;
@@ -200,9 +145,6 @@
 
     font-size: 13px;
 }
-
-
-/* Preview */
 
 .create-post-preview {
     width: 100%;
@@ -244,26 +186,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-/* Form */
-
 .create-post-form {
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
-
-/* Footer */
 
 .create-post-actions {
     position: sticky;
@@ -278,8 +205,6 @@
 
     background-color: #ffffff;
 }
-
-/* Upload Icon */
 
 .create-post-upload-icon {
     margin-bottom: 12px;
@@ -300,9 +225,6 @@
     font-size: 13px;
 }
 
-
-/* Form Fields */
-
 .create-post-field {
     display: flex;
     flex-direction: column;
@@ -314,9 +236,6 @@
     font-size: 14px;
     font-weight: 600;
 }
-
-
-/* Input + Select + Textarea */
 
 .create-post-field input,
 .create-post-field select,
@@ -340,14 +259,9 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-
-/* Input and Select */
-
 .create-post-field input {
     height: 44px;
 }
-
-/* Textarea */
 
 .create-post-field textarea {
     min-height: 90px;
@@ -357,16 +271,11 @@
     line-height: 1.5;
 }
 
-
-/* Placeholder */
-
 .create-post-field input::placeholder,
 .create-post-field textarea::placeholder {
     color: #a0a0a0;
 }
 
-
-/* Focus */
 
 .create-post-field input:focus,
 .create-post-field select:focus,
@@ -375,9 +284,6 @@
 
     box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.08);
 }
-
-
-/* Action Buttons */
 
 .create-post-actions button {
     min-height: 42px;
@@ -401,9 +307,6 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-
-/* Save Draft */
-
 .create-post-draft {
     color: #000000;
     background-color: #ffffff;
@@ -415,9 +318,6 @@
     color: #ffffff;
     background-color: #000000;
 }
-
-
-/* Publish */
 
 .create-post-publish {
     color: #ffffff;
@@ -431,13 +331,11 @@
 }
 
 
-
-/* Responsive */
-
 @media (max-width: 600px) {
     .create-post-drawer {
         width: 100%;
         padding: 20px 15px;
+        border-radius: 0;
     }
 
     .create-post-actions {

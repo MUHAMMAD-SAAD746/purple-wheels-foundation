@@ -356,7 +356,7 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
                         />
                     </div>
 
-                    {/* Footer */}
+
                     <div className="create-post-actions">
                         <button
                             type="button"

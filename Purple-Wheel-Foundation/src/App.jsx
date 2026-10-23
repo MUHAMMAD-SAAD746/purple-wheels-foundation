@@ -32,15 +32,6 @@ function App() {
                 <Route path="/Purple-Wheels" element={<LandingPage />} />
 
                 <Route
-                    path="/choose-account"
-                    element={
-                        <ProtectedRoute>
-                            <ChooseAcc />
-                        </ProtectedRoute>
-                    }
-                />
-
-                <Route
                     path="/settings"
                     element={
                         <ProtectedRoute>

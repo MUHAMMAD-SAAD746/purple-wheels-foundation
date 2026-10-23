@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import {
     IoNotificationsOutline,
@@ -22,6 +22,29 @@ const Header = () => {
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
     const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
 
+    const accountRef = useRef(null);
+    const settingsRef = useRef(null);
+
+
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (accountRef.current && !accountRef.current.contains(event.target)) {
+                setShowAccountDropdown(false);
+            }
+
+            if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+                setShowSettingsDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
 
 
     return (
@@ -43,7 +66,7 @@ const Header = () => {
 
 
 
-                <div className="profile-dropdown-wrapper">
+                <div className="profile-dropdown-wrapper" ref={accountRef}>
                     <button
                         className="mp-home-action profile-button"
                         aria-label="Account menu"
@@ -64,7 +87,7 @@ const Header = () => {
 
 
 
-                <div className="settings-dropdown-wrapper">
+                <div className="settings-dropdown-wrapper" ref={settingsRef}>
                     <button
                         className="mp-home-action settings-button"
                         aria-label="Settings menu"

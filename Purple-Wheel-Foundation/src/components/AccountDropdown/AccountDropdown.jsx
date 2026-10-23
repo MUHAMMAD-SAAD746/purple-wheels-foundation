@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { IoAdd, IoCheckmark } from "react-icons/io5";
 
@@ -10,7 +10,6 @@ import "./AccountDropdown.css"
 const AccountDropdown = ({ showProfiles = true }) => {
     const { user } = useAuth();
     const location = useLocation();
-    const navigate = useNavigate();
 
     const avatarUrl = user?.profileImage || generateAvatarUrl(user?.username);
 
@@ -43,63 +42,6 @@ const AccountDropdown = ({ showProfiles = true }) => {
                     <span>Add Account</span>
                 </button>
             </div>
-
-
-
-            {showProfiles && (
-                <div className="account-profiles">
-
-                    <div className="account-profile-section">
-                        <p className="account-profile-title">
-                            Your Hot Life Entertainment Profile
-                        </p>
-
-                        <div className="account-profile-card">
-                            <img src={avatarUrl} alt="Profile" />
-
-                            <p>{user?.username}</p>
-                        </div>
-                    </div>
-
-
-                    <div className="account-profile-section">
-                        <p className="account-profile-title">
-                            Your MP Life Profile
-                        </p>
-
-                        <div 
-                            className="account-profile-card"
-                            onClick={() => navigate("/MP-LifeStyle")}
-                        >
-                            <img src={avatarUrl} alt="Profile" />
-
-                            <p>{user?.username}</p>
-
-                            {location.pathname.startsWith("/MP-LifeStyle") && (
-                                <span className="account-dropdown-check account-dropdown-check-mp">
-                                    <IoCheckmark />
-                                </span>
-                            )}
-                        </div>
-                    </div>
-
-
-                    <div className="account-profile-section">
-                        <p className="account-profile-title">
-                            Your Purple Wheel Foundation Profile
-                        </p>
-
-                        <div className="account-profile-card">
-                            <img src={avatarUrl} alt="Profile" />
-
-                            <p>{user?.username}</p>
-                        </div>
-                    </div>
-
-                </div>
-            )}
-
-
         </div>
     );
 };

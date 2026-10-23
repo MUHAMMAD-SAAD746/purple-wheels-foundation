@@ -79,7 +79,7 @@ function Login() {
             );
 
             setUser(meResponse.data.user);
-            navigate("/choose-account");
+            navigate("/MP-LifeStyle");
 
         } catch (error) {
             setError(

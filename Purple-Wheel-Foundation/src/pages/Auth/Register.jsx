@@ -63,7 +63,6 @@ function Register() {
         setError("");
 
         try {
-            console.log(import.meta.env.VITE_DOMAIN_NAME);
             const response = await axios.post(
                 `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/register`,
                 {
@@ -77,7 +76,7 @@ function Register() {
             );
 
             setUser(response.data.user);
-            navigate("/choose-account");
+            navigate("/MP-LifeStyle");
 
         } catch (error) {
             setError(error.response?.data?.message || "Something went wrong");

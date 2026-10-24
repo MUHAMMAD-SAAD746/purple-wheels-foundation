@@ -158,6 +158,18 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
 
 
     const handleSaveDraft = () => {
+        if (
+            !title.trim() &&
+            !subtitle.trim() &&
+            !description.trim() &&
+            !category &&
+            !tags.trim()
+        ) {
+            showToast("Please enter some content before saving a draft.", "warning");
+            return;
+        }
+
+
         const drafts = JSON.parse(
             localStorage.getItem("mp_lifestyle_drafts")
         ) || [];

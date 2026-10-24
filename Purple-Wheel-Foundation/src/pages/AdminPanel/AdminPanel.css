@@ -1,0 +1,186 @@
+/* =========================================
+   AdminPanel.css — Layout wrapper styles
+   ========================================= */
+
+.admin-panel-layout {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    background-color: #f8fbff;
+}
+
+.admin-panel-main-wrapper {
+    flex: 1;
+    min-width: 0;
+    margin-left: 260px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-panel-content {
+    padding: 100px 30px 30px;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+/* Card / section styles shared across admin pages */
+
+.admin-section-card {
+    background-color: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.admin-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.admin-filter-select {
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #e8edf2;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    color: #555555;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaaaaa' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 32px;
+}
+
+.admin-filter-select:focus {
+    outline: none;
+    border-color: #1e90ff;
+}
+
+.admin-table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.admin-table-count {
+    font-size: 13px;
+    color: #888888;
+}
+
+/* Action icon buttons in table rows */
+.admin-action-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e8edf2;
+    border-radius: 7px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    color: #666666;
+    padding: 0;
+}
+
+.admin-action-btn:hover {
+    background-color: #f7f9fb;
+    border-color: #dce3e9;
+    color: #111111;
+}
+
+.admin-action-btn--danger:hover {
+    background-color: #fff5f5;
+    border-color: #fecaca;
+    color: #e74c3c;
+}
+
+.admin-action-btn--success:hover {
+    background-color: #edfdf4;
+    border-color: #bbf7d0;
+    color: #16a34a;
+}
+
+.admin-action-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.admin-action-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Avatar in tables */
+.admin-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.admin-user-info {
+    min-width: 0;
+}
+
+.admin-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111111;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-user-email {
+    font-size: 12px;
+    color: #888888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =====================
+   Responsive
+   ===================== */
+
+@media (max-width: 991px) {
+    .admin-panel-main-wrapper {
+        margin-left: 70px;
+    }
+
+    .admin-panel-content {
+        padding: 98px 20px 24px;
+    }
+}
+
+@media (max-width: 575px) {
+    .admin-panel-main-wrapper {
+        margin-left: 0;
+    }
+
+    .admin-panel-content {
+        padding: 136px 16px 24px;
+    }
+}

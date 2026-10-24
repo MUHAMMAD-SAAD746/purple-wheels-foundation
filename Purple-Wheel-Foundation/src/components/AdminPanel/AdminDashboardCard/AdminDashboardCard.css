@@ -1,0 +1,101 @@
+/* =========================================
+   AdminDashboardCard.css
+   ========================================= */
+
+.admin-dash-card {
+    background-color: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-sizing: border-box;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.admin-dash-card:hover {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
+.admin-dash-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admin-dash-card-info {
+    min-width: 0;
+}
+
+.admin-dash-card-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #888888;
+    white-space: nowrap;
+}
+
+.admin-dash-card-value {
+    margin: 8px 0 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #111111;
+    line-height: 1;
+}
+
+.admin-dash-card-icon-wrap {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.admin-dash-card-icon-wrap--blue   { background-color: #eef5ff; }
+.admin-dash-card-icon-wrap--green  { background-color: #edfdf4; }
+.admin-dash-card-icon-wrap--orange { background-color: #fff7ed; }
+.admin-dash-card-icon-wrap--purple { background-color: #f5f0ff; }
+
+.admin-dash-card-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.admin-dash-card--blue   .admin-dash-card-icon { color: #1e90ff; }
+.admin-dash-card--green  .admin-dash-card-icon { color: #22c55e; }
+.admin-dash-card--orange .admin-dash-card-icon { color: #f97316; }
+.admin-dash-card--purple .admin-dash-card-icon { color: #8b5cf6; }
+
+
+/* Trend */
+
+.admin-dash-card-trend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.admin-dash-card-trend-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.admin-dash-card-trend-badge--up {
+    background-color: #edfdf4;
+    color: #16a34a;
+}
+
+.admin-dash-card-trend-badge--down {
+    background-color: #fff5f5;
+    color: #e74c3c;
+}
+
+.admin-dash-card-trend-label {
+    font-size: 12px;
+    color: #aaaaaa;
+}

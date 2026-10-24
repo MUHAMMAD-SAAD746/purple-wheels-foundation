@@ -1,0 +1,33 @@
+/* =========================================
+   AdminPageHeader.css
+   ========================================= */
+
+.admin-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.admin-page-header-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111111;
+}
+
+.admin-page-header-subtitle {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #888888;
+}
+
+.admin-page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}

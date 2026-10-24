@@ -78,13 +78,28 @@ function Login() {
                 }
             );
 
-            setUser(meResponse.data.user);
-            navigate("/MP-LifeStyle");
+            const loggedInUser = meResponse.data.user;
+
+            setUser(loggedInUser);
+
+            if (isAdminLogin) {
+                navigate("/admin/dashboard");
+            } else {
+                navigate("/MP-LifeStyle");
+            }
 
         } catch (error) {
-            setError(
-                error.response?.data?.message || "Something went wrong"
-            );
+            if (error.response?.status === 403) {
+                setError(
+                    isAdminLogin
+                        ? "Access denied. Admin account required."
+                        : "Please use the admin login page."
+                );
+            } else {
+                setError(
+                    error.response?.data?.message || "Something went wrong"
+                );
+            }
         } finally {
             setLoading(false);
         }

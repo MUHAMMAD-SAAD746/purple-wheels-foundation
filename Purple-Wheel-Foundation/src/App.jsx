@@ -17,6 +17,17 @@ import Analytics from "./pages/MpLifeStyle/Analytics/Analytics";
 import SavedPost from "./pages/MpLifeStyle/SavedPost/SavedPost";
 import Settings from "./pages/Settings/Settings";
 
+// --- Admin Panel (additive only) ---
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
+import AdminDashboard from "./pages/AdminPanel/Dashboard/Dashboard";
+import AdminUsers from "./pages/AdminPanel/Users/Users";
+import AdminBlogs from "./pages/AdminPanel/Blogs/Blogs";
+import AdminComments from "./pages/AdminPanel/Comments/Comments";
+import AdminCreators from "./pages/AdminPanel/Creators/Creators";
+import AdminReports from "./pages/AdminPanel/Reports/Reports";
+
+import AdminProtectedRoute from "./routes/AdminProtectedRoute";
+
 function App() {
     return (
         <BrowserRouter>
@@ -54,6 +65,25 @@ function App() {
                     <Route path="creators" element={<Creators />} />
                     <Route path="analytics" element={<Analytics />} />
                     <Route path="saved-post" element={<SavedPost />} />
+                </Route>
+
+                {/* Admin Panel — separate layout, no backend auth required for demo */}
+                {/* Admin Panel — protected routes */}
+                <Route
+                    path="/admin"
+                    element={
+                        <AdminProtectedRoute>
+                            <AdminPanel />
+                        </AdminProtectedRoute>
+                    }
+                >
+                    <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                    <Route path="dashboard" element={<AdminDashboard />} />
+                    <Route path="users" element={<AdminUsers />} />
+                    <Route path="blogs" element={<AdminBlogs />} />
+                    <Route path="comments" element={<AdminComments />} />
+                    <Route path="creators" element={<AdminCreators />} />
+                    <Route path="reports" element={<AdminReports />} />
                 </Route>
 
             </Routes>

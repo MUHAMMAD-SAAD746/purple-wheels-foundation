@@ -1,0 +1,81 @@
+/* =========================================
+   Comments.css
+   ========================================= */
+
+.admin-comments-page {
+    width: 100%;
+}
+
+.admin-table-muted {
+    color: #888888;
+    font-size: 13px;
+}
+
+.admin-comments-content {
+    font-size: 13px;
+    color: #333333;
+    max-width: 220px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-comments-blog {
+    font-size: 12px;
+    color: #555555;
+    max-width: 160px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Comment detail modal */
+
+.admin-comment-detail {}
+
+.admin-comment-detail-body {
+    background-color: #f8fbff;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.admin-comment-detail-content {
+    margin: 0;
+    font-size: 14px;
+    color: #333333;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.admin-comment-detail-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.admin-comment-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: #555555;
+}
+
+.admin-comment-detail-label {
+    font-weight: 600;
+    color: #888888;
+    min-width: 60px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.admin-comment-detail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}

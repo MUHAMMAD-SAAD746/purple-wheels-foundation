@@ -1,0 +1,182 @@
+/* =========================================
+   AdminModal.css
+   ========================================= */
+
+.admin-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: admin-overlay-in 0.2s ease;
+}
+
+@keyframes admin-overlay-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.admin-modal {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    animation: admin-modal-in 0.2s ease;
+}
+
+@keyframes admin-modal-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.admin-modal--sm { max-width: 420px; }
+.admin-modal--md { max-width: 620px; }
+.admin-modal--lg { max-width: 840px; }
+
+.admin-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.admin-modal-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111111;
+}
+
+.admin-modal-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #888888;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.admin-modal-close:hover {
+    background-color: #f7f9fb;
+    color: #111111;
+}
+
+.admin-modal-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.admin-modal-body {
+    padding: 20px 24px 24px;
+}
+
+/* Confirm modal */
+
+.admin-confirm-modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 8px 0 20px;
+    gap: 12px;
+}
+
+.admin-confirm-icon-wrap {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background-color: #fff5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-confirm-icon {
+    width: 28px;
+    height: 28px;
+    color: #e74c3c;
+}
+
+.admin-confirm-message {
+    margin: 0;
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.6;
+    max-width: 300px;
+}
+
+.admin-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Shared button styles (scoped to admin) */
+
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-btn--primary {
+    background-color: #1e90ff;
+    color: #ffffff;
+}
+
+.admin-btn--primary:hover {
+    background-color: #1a7de8;
+}
+
+.admin-btn--danger {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+.admin-btn--danger:hover {
+    background-color: #c0392b;
+}
+
+.admin-btn--ghost {
+    background-color: transparent;
+    border-color: #e8edf2;
+    color: #555555;
+}
+
+.admin-btn--ghost:hover {
+    background-color: #f7f9fb;
+    border-color: #dce3e9;
+    color: #111111;
+}
+
+.admin-btn--success {
+    background-color: #22c55e;
+    color: #ffffff;
+}
+
+.admin-btn--success:hover {
+    background-color: #16a34a;
+}

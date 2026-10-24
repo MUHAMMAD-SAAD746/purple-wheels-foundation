@@ -1,0 +1,75 @@
+/* =========================================
+   AdminSearch.css
+   ========================================= */
+
+.admin-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.admin-search-icon {
+    position: absolute;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    color: #aaaaaa;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.admin-search-input {
+    height: 40px;
+    padding: 0 36px 0 36px;
+    border: 1px solid #e8edf2;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    color: #111111;
+    width: 260px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.admin-search-input::placeholder {
+    color: #bbbbbb;
+}
+
+.admin-search-input:focus {
+    outline: none;
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
+}
+
+.admin-search-clear {
+    position: absolute;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #aaaaaa;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+    padding: 0;
+}
+
+.admin-search-clear:hover {
+    color: #555555;
+}
+
+.admin-search-clear svg {
+    width: 15px;
+    height: 15px;
+}
+
+@media (max-width: 575px) {
+    .admin-search-input {
+        width: 100%;
+    }
+}

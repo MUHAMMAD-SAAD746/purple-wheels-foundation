@@ -1,0 +1,276 @@
+/* =========================================
+   Dashboard.css
+   ========================================= */
+
+.admin-dashboard {
+    width: 100%;
+}
+
+/* Stat cards grid */
+
+.admin-dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* Middle row */
+
+.admin-dashboard-mid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* Bottom row */
+
+.admin-dashboard-bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 16px;
+    min-width: 0;
+}
+
+.admin-dashboard-bottom > .admin-section-card {
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Section titles */
+
+.admin-dashboard-section-title {
+    margin: 0 0 18px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111111;
+}
+
+
+/* Bar Chart */
+
+.admin-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 160px;
+}
+
+.admin-bar-chart-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+}
+
+.admin-bar-chart-bar-wrap {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.admin-bar-chart-bar {
+    width: 100%;
+    max-width: 36px;
+    background: linear-gradient(to top, #1e90ff, #74b9ff);
+    border-radius: 6px 6px 0 0;
+    min-height: 4px;
+    transition: opacity 0.2s ease;
+}
+
+.admin-bar-chart-bar:hover {
+    opacity: 0.75;
+}
+
+.admin-bar-chart-label {
+    font-size: 11px;
+    color: #aaaaaa;
+    font-weight: 500;
+}
+
+
+/* Activity card */
+
+.admin-activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.admin-activity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-activity-month {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333333;
+    min-width: 36px;
+}
+
+.admin-activity-stats {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.admin-activity-chip {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.admin-activity-chip--blue   { background-color: #eef5ff; color: #1e90ff; }
+.admin-activity-chip--green  { background-color: #edfdf4; color: #16a34a; }
+.admin-activity-chip--orange { background-color: #fff7ed; color: #ea580c; }
+
+.admin-dashboard-divider {
+    height: 1px;
+    background-color: #eeeeee;
+    margin: 14px 0;
+}
+
+.admin-dashboard-totals {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-dashboard-total-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-dashboard-total-label {
+    font-size: 13px;
+    color: #888888;
+}
+
+.admin-dashboard-total-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111111;
+}
+
+
+/* Mini tables */
+
+.admin-dashboard-table-scroll {
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    overflow-x: auto;
+}
+
+.admin-dashboard-mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 400px;
+}
+
+.admin-dashboard-mini-table thead th {
+    padding: 0 12px 10px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #aaaaaa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.admin-dashboard-mini-table tbody tr {
+    border-bottom: 1px solid #f8f8f8;
+    transition: background-color 0.15s ease;
+}
+
+.admin-dashboard-mini-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.admin-dashboard-mini-table tbody tr:hover {
+    background-color: #fafcff;
+}
+
+.admin-dashboard-mini-table tbody td {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #333333;
+    vertical-align: middle;
+}
+
+.admin-dashboard-blog-title {
+    font-weight: 500;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-dashboard-author,
+.admin-dashboard-date {
+    color: #888888;
+    white-space: nowrap;
+}
+
+
+/* =====================
+   Responsive
+   ===================== */
+
+@media (max-width: 1200px) {
+    .admin-dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-dashboard-mid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-dashboard-chart-card {
+        order: 1;
+    }
+
+    .admin-dashboard-activity-card {
+        order: 2;
+    }
+}
+
+@media (max-width: 900px) {
+    .admin-dashboard-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575px) {
+    .admin-dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .admin-dashboard-mid,
+    .admin-dashboard-bottom {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 380px) {
+    .admin-dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}

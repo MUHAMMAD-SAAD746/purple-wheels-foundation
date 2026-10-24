@@ -1,0 +1,339 @@
+/* =========================================
+   AdminSidebar.css
+   All classes are namespaced with "admin-sidebar"
+   to avoid conflicts with the user panel sidebar.
+   ========================================= */
+
+.admin-sidebar {
+    width: 260px;
+    min-height: 100vh;
+    padding-top: 10px;
+    box-sizing: border-box;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 200;
+    background-color: #ffffff;
+    border-right: 1px solid #eeeeee;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Brand / Logo */
+
+.admin-sidebar-brand {
+    height: 80px;
+    padding: 0 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border-bottom: 1px solid #eeeeee;
+    flex-shrink: 0;
+}
+
+.admin-sidebar-logo-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background-color: #1e90ff;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+}
+
+.admin-sidebar-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.admin-sidebar-brand-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111111;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-sidebar-brand-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #1e90ff;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+
+/* Navigation */
+
+.admin-sidebar-nav {
+    flex: 1;
+    padding: 24px 0 0;
+    overflow-y: auto;
+}
+
+.admin-sidebar-section-title {
+    margin: 0 0 10px;
+    padding: 0 20px;
+    color: #afafaf;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.admin-sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.admin-sidebar-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 12px;
+    width: calc(100% - 24px);
+    padding: 11px 14px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: #717171;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-sidebar-link:hover {
+    background-color: #f7f9fb;
+    color: #111111;
+}
+
+.admin-sidebar-link--active {
+    background-color: #eef5ff;
+    color: #1e90ff;
+    font-weight: 600;
+}
+
+.admin-sidebar-link--active::before {
+    content: "";
+    width: 3px;
+    height: 22px;
+    background-color: #1e90ff;
+    border-radius: 3px 0 0 3px;
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.admin-sidebar-link-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+
+/* Footer */
+
+.admin-sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #eeeeee;
+    flex-shrink: 0;
+}
+
+.admin-sidebar-footer-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888888;
+}
+
+.admin-sidebar-footer-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    flex-shrink: 0;
+}
+
+
+/* Mobile top bar — hidden on desktop */
+
+.admin-sidebar-mobile-topbar {
+    display: none;
+}
+
+.admin-sidebar-overlay {
+    display: none;
+}
+
+
+/* =========================================
+   Responsive — Tablet (max 991px): icon-only sidebar
+   ========================================= */
+
+@media (max-width: 991px) {
+    .admin-sidebar {
+        width: 70px;
+        padding-top: 0;
+    }
+
+    .admin-sidebar-brand {
+        justify-content: center;
+        padding: 0;
+        height: 70px;
+    }
+
+    .admin-sidebar-brand-text {
+        display: none;
+    }
+
+    .admin-sidebar-section-title {
+        display: none;
+    }
+
+    .admin-sidebar-link {
+        justify-content: center;
+        gap: 0;
+        margin: 0 8px;
+        width: calc(100% - 16px);
+        padding: 12px;
+    }
+
+    .admin-sidebar-link span {
+        display: none;
+    }
+
+    .admin-sidebar-link--active::before {
+        right: -8px;
+        height: 18px;
+    }
+
+    .admin-sidebar-footer {
+        display: none;
+    }
+}
+
+
+/* =========================================
+   Responsive — Mobile (max 575px): top bar + drawer
+   ========================================= */
+
+@media (max-width: 575px) {
+
+    /* Show mobile top bar */
+    .admin-sidebar-mobile-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        height: 60px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #eeeeee;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 300;
+        box-sizing: border-box;
+    }
+
+    .admin-sidebar-mobile-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .admin-sidebar-mobile-brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    .admin-sidebar-mobile-toggle {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e8edf2;
+        border-radius: 8px;
+        background-color: #ffffff;
+        color: #555555;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    /* Sidebar becomes a slide-in drawer */
+    .admin-sidebar {
+        width: 260px;
+        top: 0;
+        left: -260px;
+        transition: left 0.3s ease;
+        z-index: 250;
+        padding-top: 0;
+    }
+
+    .admin-sidebar--open {
+        left: 0;
+    }
+
+    .admin-sidebar-brand {
+        height: 60px;
+        padding: 0 16px;
+        justify-content: flex-start;
+    }
+
+    .admin-sidebar-brand-text {
+        display: flex;
+    }
+
+    .admin-sidebar-section-title {
+        display: block;
+    }
+
+    .admin-sidebar-link {
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 11px 14px;
+        margin: 0 12px;
+        width: calc(100% - 24px);
+    }
+
+    .admin-sidebar-link span {
+        display: inline;
+    }
+
+    .admin-sidebar-footer {
+        display: block;
+    }
+
+    /* Overlay */
+    .admin-sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.35);
+        z-index: 240;
+    }
+}

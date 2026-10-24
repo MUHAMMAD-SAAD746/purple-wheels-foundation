@@ -1,0 +1,39 @@
+/* =========================================
+   AdminStatusBadge.css
+   ========================================= */
+
+.admin-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.admin-badge--active,
+.admin-badge--approved {
+    background-color: #edfdf4;
+    color: #16a34a;
+}
+
+.admin-badge--inactive,
+.admin-badge--rejected {
+    background-color: #fff5f5;
+    color: #e74c3c;
+}
+
+.admin-badge--pending {
+    background-color: #fff7ed;
+    color: #ea580c;
+}
+
+.admin-badge--creator {
+    background-color: #f5f0ff;
+    color: #8b5cf6;
+}
+
+.admin-badge--user {
+    background-color: #eef5ff;
+    color: #1e90ff;
+}

@@ -50,7 +50,13 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "blog"
         }
-    ]
+    ],
+
+    status: {
+        type: String,
+        enum: ["active", "inactive"],
+        default: "active"
+    },
 }, {
     timestamps: true,
 })

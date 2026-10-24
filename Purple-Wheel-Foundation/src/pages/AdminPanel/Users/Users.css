@@ -1,0 +1,52 @@
+/* =========================================
+   Users.css
+   ========================================= */
+
+.admin-users-page {
+    width: 100%;
+}
+
+.admin-table-muted {
+    color: #888888;
+    font-size: 13px;
+}
+
+/* User detail modal */
+
+.admin-user-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+}
+
+.admin-user-detail-avatar img {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+.admin-user-detail-info {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-user-detail-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #555555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-user-detail-info strong {
+    color: #111111;
+    min-width: 80px;
+}

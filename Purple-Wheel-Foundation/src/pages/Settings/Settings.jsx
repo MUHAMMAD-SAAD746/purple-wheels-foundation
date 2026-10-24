@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import AccountDropdown from "../../components/AccountDropdown/AccountDropdown";
@@ -10,7 +10,7 @@ import Tiktok from "../../assets/icons/tiktok.svg";
 import Facebook from "../../assets/icons/facebook.svg";
 import Linkedin from "../../assets/icons/linkedin.svg";
 import Twitter from "../../assets/icons/twitter.svg";
-import { IoSettingsOutline, IoChevronDown } from "react-icons/io5";
+import { IoSettingsOutline, IoChevronDown, IoArrowBack } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 
 
@@ -19,6 +19,9 @@ import { useAuth } from "../../context/AuthContext";
 import "./Settings.css";
 
 const Settings = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const { user, setUser } = useAuth();
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
@@ -27,7 +30,6 @@ const Settings = () => {
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ");
 
-    const location = useLocation();
 
     useEffect(() => {
         if (location.hash === "#accounts") {
@@ -62,6 +64,14 @@ const Settings = () => {
 
             <div className="settings-header">
                 <div className="settings-logo">
+                    <button
+                        className="settings-back-button"
+                        onClick={() => navigate(-1)}
+                    >
+                        <IoArrowBack />
+                        Back
+                    </button>
+
                     <img src={PurpleWheelLogo} alt="Purple Wheel" />
                 </div>
 

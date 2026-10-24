@@ -45,7 +45,7 @@ const Settings = () => {
     const handleLogout = async () => {
         try {
             await axios.post(
-                "http://localhost:3000/api/auth/logout",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/auth/logout`,
                 {},
                 { withCredentials: true }
             );

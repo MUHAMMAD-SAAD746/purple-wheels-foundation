@@ -94,15 +94,80 @@ const Comments = () => {
         setCurrentPage(1);
     };
 
-    const changeStatus = (id, newStatus) => {
-        setComments((prev) =>
-            prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c))
-        );
+
+
+
+
+    const changeStatus = async (id, newStatus) => {
+        try {
+            await axios.patch(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/comments/${id}/status`,
+                { status: newStatus },
+                {
+                    withCredentials: true,
+                }
+            );
+
+            setComments((prev) =>
+                prev.map((comment) =>
+                    comment.id === id
+                        ? { ...comment, status: newStatus }
+                        : comment
+                )
+            );
+
+            setViewComment((prev) =>
+                prev?.id === id
+                    ? { ...prev, status: newStatus }
+                    : prev
+            );
+        } catch (err) {
+            console.error("Failed to update comment status:", err);
+
+            alert(
+                err.response?.data?.message ||
+                "Failed to update comment status."
+            );
+        }
     };
 
-    const deleteComment = (id) => {
-        setComments((prev) => prev.filter((c) => c.id !== id));
+
+
+
+
+
+    const deleteComment = async (id) => {
+        try {
+            await axios.delete(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/comments/${id}`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            setComments((prev) =>
+                prev.filter((comment) => comment.id !== id)
+            );
+
+            setTotalComments((prev) => prev - 1);
+            setDeleteTarget(null);
+
+            // If the deleted comment was the only item on this page,
+            // move to the previous page.
+            if (comments.length === 1 && currentPage > 1) {
+                setCurrentPage((prev) => prev - 1);
+            }
+        } catch (err) {
+            console.error("Failed to delete comment:", err);
+
+            alert(
+                err.response?.data?.message || "Failed to delete comment."
+            );
+        }
     };
+
+
+
 
     const columns = [
         {

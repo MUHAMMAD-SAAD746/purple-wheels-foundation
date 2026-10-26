@@ -55,10 +55,34 @@ const Blogs = () => {
         );
     };
 
-    const deleteBlog = (id) => {
-        setBlogs((prev) => prev.filter((b) => b.id !== id));
-    };
 
+
+
+    const deleteBlog = async (id) => {
+        try {
+            await axios.delete(
+                `http://localhost:3000/api/admin/blogs/${id}`,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            setDeleteTarget(null);
+
+            // Handle deleting the last blog on the current page
+            if (blogs.length === 1 && currentPage > 1) {
+                setCurrentPage((prev) => prev - 1);
+            } else {
+                fetchBlogs();
+            }
+        } catch (err) {
+            console.error("Failed to delete blog:", err);
+
+            setError(
+                err.response?.data?.message || "Failed to delete blog."
+            );
+        }
+    };
 
 
 
@@ -329,7 +353,7 @@ const Blogs = () => {
             <AdminConfirmModal
                 isOpen={!!deleteTarget}
                 onClose={() => setDeleteTarget(null)}
-                onConfirm={() => deleteBlog(deleteTarget?.id)}
+                onConfirm={() => deleteBlog(deleteTarget?._id || deleteTarget?.id)}
                 title="Delete Blog"
                 message={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
                 confirmLabel="Delete"

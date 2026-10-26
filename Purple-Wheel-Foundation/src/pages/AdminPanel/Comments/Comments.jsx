@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import {
     IoEyeOutline,
     IoTrashOutline,
@@ -12,7 +13,6 @@ import AdminPagination from "../../../components/AdminPanel/AdminPagination/Admi
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
 import AdminPageHeader from "../../../components/AdminPanel/AdminPageHeader/AdminPageHeader";
 import { AdminModal, AdminConfirmModal } from "../../../components/AdminPanel/AdminModal/AdminModal";
-import { adminComments } from "../../../utils/AdminPanel/adminMockData";
 
 import "../AdminPanel.css";
 import "./Comments.css";
@@ -20,27 +20,74 @@ import "./Comments.css";
 const PAGE_SIZE = 8;
 
 const Comments = () => {
-    const [comments, setComments] = useState(adminComments);
+    const [comments, setComments] = useState([]);
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [totalComments, setTotalComments] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
     const [viewComment, setViewComment] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    const filtered = useMemo(() => {
-        return comments.filter((c) => {
-            const q = search.toLowerCase();
-            const matchesSearch =
-                c.content.toLowerCase().includes(q) ||
-                c.author.toLowerCase().includes(q) ||
-                c.blogTitle.toLowerCase().includes(q);
-            const matchesStatus = statusFilter === "all" || c.status === statusFilter;
-            return matchesSearch && matchesStatus;
-        });
-    }, [comments, search, statusFilter]);
 
-    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-    const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+    const fetchComments = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError("");
+
+            const response = await axios.get(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/comments`,
+                {
+                    params: {
+                        search,
+                        status: statusFilter,
+                        page: currentPage,
+                        limit: PAGE_SIZE,
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            const data = response.data;
+
+            const formattedComments = data.comments.map((comment) => ({
+                id: comment._id,
+                content: comment.text,
+                author: comment.author?.username || "Unknown",
+                blogTitle: comment.blog?.title || "Unknown",
+                created: comment.createdAt
+                    ? new Date(comment.createdAt).toLocaleDateString()
+                    : "N/A",
+                status: comment.status,
+            }));
+
+            setComments(formattedComments);
+            setTotalComments(data.totalComments);
+            setTotalPages(data.totalPages);
+            setCurrentPage(data.currentPage);
+        } catch (err) {
+            console.error("Failed to fetch comments:", err);
+            setError(
+                err.response?.data?.message || "Failed to load comments."
+            );
+        } finally {
+            setLoading(false);
+        }
+    }, [search, statusFilter, currentPage]);
+
+
+    useEffect(() => {
+        fetchComments();
+    }, [fetchComments]);
+
+
+
+
 
     const handleFilterChange = (setter) => (val) => {
         setter(val);
@@ -131,7 +178,7 @@ const Comments = () => {
         <div className="admin-comments-page">
             <AdminPageHeader
                 title="Comments Management"
-                subtitle={`${filtered.length} comment${filtered.length !== 1 ? "s" : ""} found`}
+                subtitle={`${totalComments} comment${totalComments !== 1 ? "s" : ""} found`}
             />
 
             <div className="admin-section-card">
@@ -154,16 +201,33 @@ const Comments = () => {
                     </select>
                 </div>
 
-                <AdminTable
-                    columns={columns}
-                    data={paginated}
-                    emptyMessage="No comments match your search."
-                />
+                {error ? (
+                    <div className="admin-table-empty">
+                        {error}
+                        <button className="admin-btn" onClick={fetchComments}>
+                            Retry
+                        </button>
+                    </div>
+                ) : loading ? (
+                    <div className="admin-table-empty">
+                        Loading comments...
+                    </div>
+                ) : (
+                    <AdminTable
+                        columns={columns}
+                        data={comments}
+                        emptyMessage="No comments match your search."
+                    />
+                )}
 
                 <div className="admin-table-footer">
                     <span className="admin-table-count">
-                        Showing {Math.min((currentPage - 1) * PAGE_SIZE + 1, filtered.length)}–
-                        {Math.min(currentPage * PAGE_SIZE, filtered.length)} of {filtered.length}
+                        Showing{" "}
+                        {totalComments === 0
+                            ? 0
+                            : (currentPage - 1) * PAGE_SIZE + 1}
+                        –{Math.min(currentPage * PAGE_SIZE, totalComments)} of{" "}
+                        {totalComments}
                     </span>
                     <AdminPagination
                         currentPage={currentPage}

@@ -4,7 +4,7 @@ const commentSchema = new mongoose.Schema(
     {
         blog: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Blog",
+            ref: "blog",
             required: true
         },
 
@@ -30,6 +30,12 @@ const commentSchema = new mongoose.Schema(
         likeCount: {
             type: Number,
             default: 0
+        },
+
+        status: {
+            type: String,
+            enum: ["pending", "approved", "rejected"],
+            default: "pending"
         }
     },
     {

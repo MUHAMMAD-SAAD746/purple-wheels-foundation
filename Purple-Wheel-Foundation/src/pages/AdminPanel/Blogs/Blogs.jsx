@@ -12,6 +12,9 @@ import AdminSearch from "../../../components/AdminPanel/AdminSearch/AdminSearch"
 import AdminPagination from "../../../components/AdminPanel/AdminPagination/AdminPagination";
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
 import AdminPageHeader from "../../../components/AdminPanel/AdminPageHeader/AdminPageHeader";
+
+import { showToast } from "../../../utils/toast"
+
 import { AdminModal, AdminConfirmModal } from "../../../components/AdminPanel/AdminModal/AdminModal";
 
 
@@ -49,11 +52,40 @@ const Blogs = () => {
         setCurrentPage(1);
     };
 
-    const changeStatus = (id, newStatus) => {
-        setBlogs((prev) =>
-            prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
-        );
+
+
+
+
+
+    const changeStatus = async (id, newStatus) => {
+        try {
+            const response = await axios.patch(
+                `http://localhost:3000/api/admin/blogs/${id}/status`,
+                { status: newStatus },
+                { withCredentials: true }
+            );
+
+            const updatedBlog = response.data.blog;
+
+            setViewBlog((prev) =>
+                prev?.id === id
+                    ? { ...prev, status: updatedBlog.status }
+                    : prev
+            );
+
+            await fetchBlogs(false);
+
+            return true;
+        } catch (err) {
+            showToast(
+                err.response?.data?.message || "Failed to update blog status.",
+                "error"
+            );
+
+            return false;
+        }
     };
+
 
 
 
@@ -69,6 +101,8 @@ const Blogs = () => {
 
             setDeleteTarget(null);
 
+            showToast("Blog deleted successfully.", "success");
+
             // Handle deleting the last blog on the current page
             if (blogs.length === 1 && currentPage > 1) {
                 setCurrentPage((prev) => prev - 1);
@@ -76,10 +110,9 @@ const Blogs = () => {
                 fetchBlogs();
             }
         } catch (err) {
-            console.error("Failed to delete blog:", err);
-
-            setError(
-                err.response?.data?.message || "Failed to delete blog."
+            showToast(
+                err.response?.data?.message || "Failed to delete blog.",
+                "error"
             );
         }
     };
@@ -87,8 +120,10 @@ const Blogs = () => {
 
 
 
-    const fetchBlogs = useCallback(async () => {
-        setLoading(true);
+    const fetchBlogs = useCallback(async (showLoading = true) => {
+        if (showLoading) {
+            setLoading(true);
+        }
         setError("");
 
         try {
@@ -118,18 +153,18 @@ const Blogs = () => {
 
             setTotalPages(pagination.totalPages ?? 1);
         } catch (err) {
-            console.error("Failed to fetch blogs:", err);
-
-            setError(
-                err.response?.data?.message ||
-                "Failed to load blogs."
+            showToast(
+                err.response?.data?.message || "Failed to load blogs.",
+                "error"
             );
 
             setBlogs([]);
             setTotalBlogs(0);
             setTotalPages(1);
         } finally {
-            setLoading(false);
+            if (showLoading) {
+                setLoading(false);
+            }
         }
     }, [search, categoryFilter, statusFilter, currentPage]);
 
@@ -331,7 +366,13 @@ const Blogs = () => {
                             {viewBlog.status !== "approved" && (
                                 <button
                                     className="admin-btn admin-btn--success"
-                                    onClick={() => { changeStatus(viewBlog.id, "approved"); setViewBlog(null); }}
+                                    onClick={async () => {
+                                        const success = await changeStatus(viewBlog.id, "approved");
+
+                                        if (success) {
+                                            setViewBlog(null);
+                                        }
+                                    }}
                                 >
                                     <IoCheckmarkCircleOutline /> Approve
                                 </button>
@@ -339,7 +380,13 @@ const Blogs = () => {
                             {viewBlog.status !== "rejected" && (
                                 <button
                                     className="admin-btn admin-btn--danger"
-                                    onClick={() => { changeStatus(viewBlog.id, "rejected"); setViewBlog(null); }}
+                                    onClick={async () => {
+                                        const success = await changeStatus(viewBlog.id, "rejected");
+
+                                        if (success) {
+                                            setViewBlog(null);
+                                        }
+                                    }}
                                 >
                                     <IoCloseCircleOutline /> Reject
                                 </button>

@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import {
     IoEyeOutline,
     IoTrashOutline,
@@ -12,7 +13,7 @@ import AdminPagination from "../../../components/AdminPanel/AdminPagination/Admi
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
 import AdminPageHeader from "../../../components/AdminPanel/AdminPageHeader/AdminPageHeader";
 import { AdminModal, AdminConfirmModal } from "../../../components/AdminPanel/AdminModal/AdminModal";
-import { adminBlogs } from "../../../utils/AdminPanel/adminMockData";
+
 
 import "../AdminPanel.css";
 import "./Blogs.css";
@@ -20,7 +21,12 @@ import "./Blogs.css";
 const PAGE_SIZE = 8;
 
 const Blogs = () => {
-    const [blogs, setBlogs] = useState(adminBlogs);
+    const [blogs, setBlogs] = useState([]);
+    const [totalBlogs, setTotalBlogs] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
     const [search, setSearch] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [statusFilter, setStatusFilter] = useState("all");
@@ -28,22 +34,15 @@ const Blogs = () => {
     const [viewBlog, setViewBlog] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    const categories = [...new Set(adminBlogs.map((b) => b.category))];
+    const categories = [
+        "wellness",
+        "fashion",
+        "travel",
+        "motivation",
+        "food",
+    ];
 
-    const filtered = useMemo(() => {
-        return blogs.filter((b) => {
-            const q = search.toLowerCase();
-            const matchesSearch =
-                b.title.toLowerCase().includes(q) ||
-                b.author.toLowerCase().includes(q);
-            const matchesCategory = categoryFilter === "all" || b.category === categoryFilter;
-            const matchesStatus = statusFilter === "all" || b.status === statusFilter;
-            return matchesSearch && matchesCategory && matchesStatus;
-        });
-    }, [blogs, search, categoryFilter, statusFilter]);
 
-    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-    const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
     const handleFilterChange = (setter) => (val) => {
         setter(val);
@@ -59,6 +58,66 @@ const Blogs = () => {
     const deleteBlog = (id) => {
         setBlogs((prev) => prev.filter((b) => b.id !== id));
     };
+
+
+
+
+
+    const fetchBlogs = useCallback(async () => {
+        setLoading(true);
+        setError("");
+
+        try {
+            const response = await axios.get(
+                "http://localhost:3000/api/admin/blogs",
+                {
+                    params: {
+                        search: search.trim(),
+                        category: categoryFilter,
+                        status: statusFilter,
+                        page: currentPage,
+                        limit: PAGE_SIZE,
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            const data = response.data;
+
+            setBlogs(data.blogs || []);
+
+            const pagination = data.pagination || data;
+
+            setTotalBlogs(
+                pagination.totalBlogs ?? pagination.total ?? 0
+            );
+
+            setTotalPages(pagination.totalPages ?? 1);
+        } catch (err) {
+            console.error("Failed to fetch blogs:", err);
+
+            setError(
+                err.response?.data?.message ||
+                "Failed to load blogs."
+            );
+
+            setBlogs([]);
+            setTotalBlogs(0);
+            setTotalPages(1);
+        } finally {
+            setLoading(false);
+        }
+    }, [search, categoryFilter, statusFilter, currentPage]);
+
+
+
+    useEffect(() => {
+        fetchBlogs();
+    }, [fetchBlogs]);
+
+
+
+
 
     const columns = [
         {
@@ -141,7 +200,7 @@ const Blogs = () => {
         <div className="admin-blogs-page">
             <AdminPageHeader
                 title="Blogs Management"
-                subtitle={`${filtered.length} blog${filtered.length !== 1 ? "s" : ""} found`}
+                subtitle={`${totalBlogs} blog${totalBlogs !== 1 ? "s" : ""} found`}
             />
 
             <div className="admin-section-card">
@@ -175,16 +234,26 @@ const Blogs = () => {
                     </select>
                 </div>
 
-                <AdminTable
-                    columns={columns}
-                    data={paginated}
-                    emptyMessage="No blogs match your search."
-                />
+                {error && <p role="alert">{error}</p>}
+
+                {loading ? (
+                    <p>Loading blogs...</p>
+                ) : (
+                    <AdminTable
+                        columns={columns}
+                        data={blogs}
+                        emptyMessage="No blogs match your search."
+                    />
+                )}
 
                 <div className="admin-table-footer">
                     <span className="admin-table-count">
-                        Showing {Math.min((currentPage - 1) * PAGE_SIZE + 1, filtered.length)}–
-                        {Math.min(currentPage * PAGE_SIZE, filtered.length)} of {filtered.length}
+                        Showing{" "}
+                        {totalBlogs === 0
+                            ? 0
+                            : (currentPage - 1) * PAGE_SIZE + 1}
+                        –
+                        {Math.min(currentPage * PAGE_SIZE, totalBlogs)} of {totalBlogs}
                     </span>
                     <AdminPagination
                         currentPage={currentPage}

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const userModel = require("../model/user.model");
+const userModel = require("../../model/user.model");
 
 // GET /api/admin/users
 async function getUsers(req, res) {

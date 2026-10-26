@@ -54,7 +54,7 @@ async function getUsers(req, res) {
             conditions.push({ status });
         }
 
-        const   filter = conditions.length
+        const filter = conditions.length
             ? { $and: conditions }
             : {};
 
@@ -239,9 +239,97 @@ async function deleteUser(req, res) {
 
 
 
+
+
+// GET /api/admin/creators
+async function getCreators(req, res) {
+    try {
+        const {
+            search = "",
+            status = "all",
+            page = 1,
+            limit = 8
+        } = req.query;
+
+        const currentPage = Math.max(1, parseInt(page, 10) || 1);
+        const pageSize = Math.min(
+            100,
+            Math.max(1, parseInt(limit, 10) || 8)
+        );
+
+        if (!["all", "active", "inactive"].includes(status)) {
+            return res.status(400).json({
+                message: "Invalid status filter"
+            });
+        }
+
+        const filter = {
+            role: "user",
+            postCount: { $gt: 0 }
+        };
+
+        if (status !== "all") {
+            filter.status = status;
+        }
+
+        if (search.trim()) {
+            const escapedSearch = search.trim().replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+            );
+
+            filter.$or = [
+                { username: { $regex: escapedSearch, $options: "i" } },
+                { email: { $regex: escapedSearch, $options: "i" } }
+            ];
+        }
+
+        const [creators, totalCreators] = await Promise.all([
+            userModel.find(filter)
+                .select("-password")
+                .sort({ createdAt: -1 })
+                .skip((currentPage - 1) * pageSize)
+                .limit(pageSize)
+                .lean(),
+
+            userModel.countDocuments(filter)
+        ]);
+
+        const formattedCreators = creators.map((creator) => ({
+            ...creator,
+            id: creator._id.toString(),
+            avatar: creator.profileImage,
+            status: creator.status || "active",
+            joined: creator.createdAt,
+            posts: creator.postCount || 0
+        }));
+
+        return res.status(200).json({
+            message: "Creators fetched successfully",
+            creators: formattedCreators,
+            pagination: {
+                currentPage,
+                pageSize,
+                totalCreators,
+                totalPages: Math.ceil(totalCreators / pageSize)
+            }
+        });
+    } catch (error) {
+        console.error("Get creators error:", error);
+
+        return res.status(500).json({
+            message: "Failed to fetch creators"
+        });
+    }
+}
+
+
+
+
 module.exports = {
     getUsers,
     getUserById,
     updateUserStatus,
-    deleteUser
+    deleteUser,
+    getCreators
 };

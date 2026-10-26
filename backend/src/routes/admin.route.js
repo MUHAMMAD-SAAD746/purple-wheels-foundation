@@ -21,5 +21,8 @@ router.get("/blogs/:id", adminBlogController.getBlogById);
 router.patch("/blogs/:id/status", adminBlogController.updateBlogStatus);
 router.delete("/blogs/:id", adminBlogController.deleteBlog);
 
+// Fetch Creators
+router.get("/creators", adminUserController.getCreators);
+
 
 module.exports = router;

@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import {
     IoEyeOutline,
     IoTrashOutline,
@@ -12,53 +13,139 @@ import AdminPagination from "../../../components/AdminPanel/AdminPagination/Admi
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
 import AdminPageHeader from "../../../components/AdminPanel/AdminPageHeader/AdminPageHeader";
 import { AdminModal, AdminConfirmModal } from "../../../components/AdminPanel/AdminModal/AdminModal";
-import { adminCreators } from "../../../utils/AdminPanel/adminMockData";
+// import { adminCreators } from "../../../utils/AdminPanel/adminMockData";
 
 import "../AdminPanel.css";
 import "./Creators.css";
 
-const PAGE_SIZE = 8;
 
 const Creators = () => {
-    const [creators, setCreators] = useState(adminCreators);
+    const [creators, setCreators] = useState([]);
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalCreators, setTotalCreators] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
     const [viewCreator, setViewCreator] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    const filtered = useMemo(() => {
-        return creators.filter((c) => {
-            const q = search.toLowerCase();
-            const matchesSearch =
-                c.username.toLowerCase().includes(q) ||
-                c.email.toLowerCase().includes(q);
-            const matchesStatus = statusFilter === "all" || c.status === statusFilter;
-            return matchesSearch && matchesStatus;
-        });
-    }, [creators, search, statusFilter]);
+    const PAGE_SIZE = 8;
 
-    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-    const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    const fetchCreators = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError("");
 
-    const handleFilterChange = (setter) => (val) => {
-        setter(val);
+            const response = await axios.get(
+                "http://localhost:3000/api/admin/creators",
+                {
+                    params: {
+                        search,
+                        status: statusFilter,
+                        page: currentPage,
+                        limit: PAGE_SIZE,
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            setCreators(response.data.creators);
+            setTotalCreators(response.data.pagination.totalCreators);
+            setTotalPages(response.data.pagination.totalPages);
+        } catch (error) {
+            console.error("Fetch creators error:", error);
+
+            setError(
+                error.response?.data?.message ||
+                "Failed to fetch creators."
+            );
+        } finally {
+            setLoading(false);
+        }
+    }, [search, statusFilter, currentPage]);
+
+    useEffect(() => {
+        fetchCreators();
+    }, [fetchCreators]);
+
+    const handleFilterChange = (setter) => (value) => {
+        setter(value);
         setCurrentPage(1);
     };
 
-    const toggleStatus = (id) => {
-        setCreators((prev) =>
-            prev.map((c) =>
-                c.id === id
-                    ? { ...c, status: c.status === "active" ? "inactive" : "active" }
-                    : c
-            )
-        );
+
+
+
+
+    const toggleStatus = async (creator) => {
+        const newStatus =
+            creator.status === "active" ? "inactive" : "active";
+
+        try {
+            setError("");
+
+            await axios.patch(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/users/${creator.id}/status`,
+                { status: newStatus },
+                { withCredentials: true }
+            );
+
+            // Update the creator immediately without refetching
+            setCreators((prev) =>
+                statusFilter !== "all" && statusFilter !== newStatus
+                    ? prev.filter((c) => c.id !== creator.id)
+                    : prev.map((c) =>
+                        c.id === creator.id
+                            ? { ...c, status: newStatus }
+                            : c
+                    )
+            );
+
+            // Update the total when the creator no longer matches the filter
+            if (statusFilter !== "all" && statusFilter !== newStatus) {
+                setTotalCreators((prev) => Math.max(0, prev - 1));
+            }
+        } catch (error) {
+            console.error("Update creator status error:", error);
+
+            setError(
+                error.response?.data?.message ||
+                "Failed to update creator status."
+            );
+        }
     };
 
-    const deleteCreator = (id) => {
-        setCreators((prev) => prev.filter((c) => c.id !== id));
+
+
+
+    const deleteCreator = async (id) => {
+        if (!id) return;
+
+        try {
+            await axios.delete(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/users/${id}`,
+                { withCredentials: true }
+            );
+
+            setDeleteTarget(null);
+
+            // Fetch updated data from the backend
+            await fetchCreators();
+        } catch (error) {
+            console.error("Delete creator error:", error);
+
+            setError(
+                error.response?.data?.message ||
+                "Failed to delete creator."
+            );
+        }
     };
+
+
+
 
     const columns = [
         {
@@ -109,7 +196,7 @@ const Creators = () => {
                     <button
                         className={`admin-action-btn ${row.status === "active" ? "admin-action-btn--danger" : "admin-action-btn--success"}`}
                         title={row.status === "active" ? "Deactivate" : "Activate"}
-                        onClick={() => toggleStatus(row.id)}
+                        onClick={() => toggleStatus(row)}
                     >
                         {row.status === "active" ? <IoBanOutline /> : <IoCheckmarkCircleOutline />}
                     </button>
@@ -129,7 +216,7 @@ const Creators = () => {
         <div className="admin-creators-page">
             <AdminPageHeader
                 title="Creators Management"
-                subtitle={`${filtered.length} creator${filtered.length !== 1 ? "s" : ""} found`}
+                subtitle={`${totalCreators} creator${totalCreators !== 1 ? "s" : ""} found`}
             />
 
             <div className="admin-section-card">
@@ -151,17 +238,29 @@ const Creators = () => {
                     </select>
                 </div>
 
-                <AdminTable
-                    columns={columns}
-                    data={paginated}
-                    emptyMessage="No creators match your search."
-                />
+                {loading ? (
+                    <p className="admin-table-muted">Loading creators...</p>
+                ) : error ? (
+                    <p className="admin-table-muted">{error}</p>
+                ) : (
+                    <AdminTable
+                        columns={columns}
+                        data={creators}
+                        emptyMessage="No creators match your search."
+                    />
+                )}
 
                 <div className="admin-table-footer">
                     <span className="admin-table-count">
-                        Showing {Math.min((currentPage - 1) * PAGE_SIZE + 1, filtered.length)}–
-                        {Math.min(currentPage * PAGE_SIZE, filtered.length)} of {filtered.length}
+                        Showing{" "}
+                        {totalCreators === 0
+                            ? 0
+                            : (currentPage - 1) * PAGE_SIZE + 1}
+                        –
+                        {Math.min(currentPage * PAGE_SIZE, totalCreators)} of{" "}
+                        {totalCreators}
                     </span>
+
                     <AdminPagination
                         currentPage={currentPage}
                         totalPages={totalPages}

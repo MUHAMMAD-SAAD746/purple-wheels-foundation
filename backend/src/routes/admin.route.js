@@ -7,7 +7,8 @@ const adminMiddleware = require("../middleware/admin.middleware");
 const adminUserController = require("../controllers/admin/adminUser.controller");
 const adminBlogController = require("../controllers/admin/adminBlog.controller");
 const adminCommentsController = require("../controllers/admin/adminComments.controller");
-const adminSettingsController = require("../controllers/admin/adminSettings.controller")
+const adminSettingsController = require("../controllers/admin/adminSettings.controller");
+const adminCategoryController = require("../controllers/admin/adminCategory.controller");
 
 router.use(authMiddleware, adminMiddleware);
 
@@ -36,6 +37,15 @@ router.delete("/comments/:id", adminCommentsController.deleteComment);
 // Settings management
 router.patch("/settings/blog-approval-mode", adminSettingsController.updateBlogApprovalMode);
 router.get("/settings/blog-approval-mode", adminSettingsController.getBlogApprovalMode);
+
+// Category management
+router.get("/categories", authMiddleware, adminMiddleware, adminCategoryController.getAllCategories);
+router.post("/categories", adminCategoryController.createCategory);
+router.patch("/categories/:id", adminCategoryController.updateCategory);
+router.patch("/categories/:id/deactivate", adminCategoryController.deactivateCategory);
+router.patch("/categories/:id/activate", adminCategoryController.activateCategory);
+router.delete("/categories/:id", adminCategoryController.deleteCategory
+);
 
 
 module.exports = router;

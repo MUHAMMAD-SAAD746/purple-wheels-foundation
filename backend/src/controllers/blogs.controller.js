@@ -5,6 +5,7 @@ const blogViewModel = require("../model/blogView.model");
 const blogLikeModel = require("../model/blogLike.model");
 const commentsModel = require("../model/comments.model");
 const settingsModel = require("../model/settings.model");
+const CategoryModel = require("../model/category.model");
 const cloudinary = require("../services/cloudinary.service");
 
 
@@ -200,6 +201,18 @@ async function createBlog(req, res) {
     }
 
     try {
+        const categoryExists = await CategoryModel.findOne({
+            name: category.trim().toLowerCase(),
+            isActive: true
+        });
+
+        if (!categoryExists) {
+            return res.status(400).json({
+                message: "Invalid or inactive category."
+            });
+        }
+
+
         const setting = await settingsModel.findOne({
             key: "blogApprovalMode"
         });
@@ -306,7 +319,20 @@ async function updateBlog(req, res) {
         }
 
         if (category !== undefined) {
-            blog.category = category;
+            const categoryName = category.trim().toLowerCase();
+
+            const categoryExists = await Category.findOne({
+                name: categoryName,
+                isActive: true
+            });
+
+            if (!categoryExists) {
+                return res.status(400).json({
+                    message: "Invalid or inactive category."
+                });
+            }
+
+            blog.category = categoryName;
         }
 
         if (tags !== undefined) {

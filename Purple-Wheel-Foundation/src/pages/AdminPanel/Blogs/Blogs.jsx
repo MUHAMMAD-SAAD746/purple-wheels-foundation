@@ -12,6 +12,7 @@ import AdminSearch from "../../../components/AdminPanel/AdminSearch/AdminSearch"
 import AdminPagination from "../../../components/AdminPanel/AdminPagination/AdminPagination";
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
 import AdminPageHeader from "../../../components/AdminPanel/AdminPageHeader/AdminPageHeader";
+import CategoryManagement from "../../../components/AdminPanel/CategoryManagement/CategoryManagement";
 
 import { showToast } from "../../../utils/toast"
 
@@ -41,13 +42,7 @@ const Blogs = () => {
     const [updatingApprovalMode, setUpdatingApprovalMode] = useState(false);
     const [approvalModeLoaded, setApprovalModeLoaded] = useState(false);
 
-    const categories = [
-        "wellness",
-        "fashion",
-        "travel",
-        "motivation",
-        "food",
-    ];
+    const [categories, setCategories] = useState([]);
 
 
 
@@ -55,8 +50,6 @@ const Blogs = () => {
         setter(val);
         setCurrentPage(1);
     };
-
-
 
 
 
@@ -190,6 +183,8 @@ const Blogs = () => {
         }
     };
 
+
+
     const updateApprovalMode = async (value) => {
         try {
             setUpdatingApprovalMode(true);
@@ -212,6 +207,27 @@ const Blogs = () => {
             setUpdatingApprovalMode(false);
         }
     };
+
+
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_DOMAIN_NAME || "http://localhost:3000"}/api/categories`
+                );
+
+                setCategories(response.data.categories || []);
+            } catch (error) {
+                showToast(
+                    error.response?.data?.message || "Failed to load categories.",
+                    "error"
+                );
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
 
 
@@ -308,6 +324,8 @@ const Blogs = () => {
                 subtitle={`${totalBlogs} blog${totalBlogs !== 1 ? "s" : ""} found`}
             />
 
+            <CategoryManagement />
+
             <div className="admin-section-card">
                 <div className="admin-approval-settings">
                     <div className="admin-approval-settings-info">
@@ -339,6 +357,7 @@ const Blogs = () => {
                         onChange={handleFilterChange(setSearch)}
                         placeholder="Search by title or author..."
                     />
+
                     <select
                         className="admin-filter-select"
                         value={categoryFilter}
@@ -346,10 +365,17 @@ const Blogs = () => {
                         aria-label="Filter by category"
                     >
                         <option value="all">All Categories</option>
-                        {categories.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                        {categories.map((category) => (
+                            <option
+                                key={category._id}
+                                value={category.name.toLowerCase()}
+                            >
+                                {category.name.charAt(0).toUpperCase() +
+                                    category.name.slice(1)}
+                            </option>
                         ))}
                     </select>
+
                     <select
                         className="admin-filter-select"
                         value={statusFilter}
@@ -363,7 +389,6 @@ const Blogs = () => {
                     </select>
                 </div>
 
-                {error && <p role="alert">{error}</p>}
 
                 {loading ? (
                     <p>Loading blogs...</p>

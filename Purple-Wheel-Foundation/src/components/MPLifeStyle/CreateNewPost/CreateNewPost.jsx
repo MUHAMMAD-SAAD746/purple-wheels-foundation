@@ -20,6 +20,8 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
     const [title, setTitle] = useState("");
     const [subtitle, setSubtitle] = useState("");
     const [category, setCategory] = useState("");
+    const [categories, setCategories] = useState([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
     const [description, setDescription] = useState("");
     const [tags, setTags] = useState("");
 
@@ -42,6 +44,28 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
 
         setSelectedFile(null);
     }, [draft, blog]);
+
+
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/categories`
+                );
+
+                setCategories(response.data.categories);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+
+                showToast("Failed to load categories.", "error");
+            } finally {
+                setCategoriesLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
 
 
@@ -88,8 +112,19 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
     const handlePublish = async (e) => {
         e.preventDefault();
 
-        if (!title || !description || (!selectedFile && !blog?.image) || !category) {
-            showToast("Please fill all required fields.", "warning");
+        if (categoriesLoading) {
+            showToast("Please wait while categories are loading.", "warning");
+            return;
+        }
+
+        if (
+            !title.trim() ||
+            !description ||
+            (!selectedFile && !blog?.image) ||
+            !category ||
+            !categories.some((item) => item.name === category)
+        ) {
+            showToast("Please fill all required fields with a valid category.", "warning");
             return;
         }
 
@@ -318,23 +353,32 @@ const CreateNewPost = ({ onClose, draft, blog, onSave }) => {
                         />
                     </div>
 
+
                     <div className="create-post-field">
                         <label htmlFor="post-category">Category</label>
+
                         <select
                             id="post-category"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
+                            disabled={categoriesLoading || categories.length === 0}
                         >
                             <option value="" disabled>
-                                Select a category
+                                {categoriesLoading
+                                    ? "Loading categories..."
+                                    : categories.length === 0
+                                        ? "No categories available"
+                                        : "Select a category"}
                             </option>
-                            <option value="wellness">Wellness</option>
-                            <option value="fashion">Fashion</option>
-                            <option value="travel">Travel</option>
-                            <option value="motivation">Motivation</option>
-                            <option value="food">Food</option>
+
+                            {categories.map((item) => (
+                                <option key={item._id} value={item.name}>
+                                    {item.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
+
 
                     <div className="create-post-field">
                         <label htmlFor="post-content">About Post</label>

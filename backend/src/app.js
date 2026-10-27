@@ -4,6 +4,7 @@ const authRoute = require("./routes/auth.route")
 const blogsRoute = require("./routes/blogs.route")
 const commentRoute = require("./routes/comments.route")
 const followsRoute = require("./routes/follows.route")
+const categoryRoutes = require("./routes/category.route");
 const adminRoute = require("./routes/admin.route");
 const connectDb = require("./db/db");
 const cookieParser = require('cookie-parser')
@@ -37,6 +38,7 @@ app.use("/api/auth", authRoute)
 app.use("/api/blogs", blogsRoute)
 app.use("/api/blogs/comments", commentRoute)
 app.use("/api/follows", followsRoute)
+app.use("/api/categories", categoryRoutes);
 
 app.use("/api/admin", adminRoute);
 

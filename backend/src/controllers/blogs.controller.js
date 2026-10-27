@@ -4,6 +4,7 @@ const followModel = require("../model/follows.model");
 const blogViewModel = require("../model/blogView.model");
 const blogLikeModel = require("../model/blogLike.model");
 const commentsModel = require("../model/comments.model");
+const settingsModel = require("../model/settings.model");
 const cloudinary = require("../services/cloudinary.service");
 
 
@@ -22,7 +23,9 @@ async function getAllBlogs(req, res) {
     // const category = req.query.category
     const { category, tag } = req.query;
 
-    const filter = {};
+    const filter = {
+        status: "approved"
+    };
 
     if (category) {
         filter.category = category;
@@ -48,8 +51,14 @@ async function getBlogById(req, res) {
     const { id } = req.params;
 
     const blog = await blogsModel
-        .findById(id)
-        .populate("author")
+        .findOne({ _id: id, status: "approved" })
+        .populate("author");
+
+    if (!blog) {
+        return res.status(404).json({
+            message: "Blog not found"
+        });
+    }
 
     const existingLike = await blogLikeModel.findOne({
         blog: id,
@@ -57,7 +66,10 @@ async function getBlogById(req, res) {
     });
 
     const user = await userModel.findById(req.user.userId);
-    const isSaved = user.savedPosts.includes(id);
+
+    const isSaved = user?.savedPosts.some(
+        savedId => savedId.toString() === id
+    ) ?? false;
 
     res.status(200).json({
         message: "Blog fetched Sucessfully",
@@ -82,7 +94,9 @@ async function getTrendingBlogs(req, res) {
     try {
         const { category, tag } = req.query;
 
-        const filter = {};
+        const filter = {
+            status: "approved"
+        };
 
         if (category) filter.category = category;
         if (tag) filter.tags = tag;
@@ -186,6 +200,11 @@ async function createBlog(req, res) {
     }
 
     try {
+        const setting = await settingsModel.findOne({
+            key: "blogApprovalMode"
+        });
+
+        const blogStatus = setting?.value ?? "pending";
 
         const result = await new Promise((resolve, reject) => {
 
@@ -209,16 +228,17 @@ async function createBlog(req, res) {
         });
 
         const blog = await blogsModel.create({
+            author: req.user.userId,
             title,
             subtitle,
             description,
             image: result.secure_url,
             category,
             date,
+            status: blogStatus,
             tags: tags
                 ? tags.split(",").map(tag => tag.trim().toLowerCase()).filter(Boolean)
-                : [],
-            author: req.user.userId
+                : []
         });
 
         await userModel.findByIdAndUpdate(
@@ -302,6 +322,12 @@ async function updateBlog(req, res) {
             blog.image = req.file.path;
         }
 
+        const setting = await settingsModel.findOne({
+            key: "blogApprovalMode"
+        });
+
+        blog.status = setting?.value ?? "pending";
+
         await blog.save();
 
         return res.status(200).json({
@@ -359,7 +385,17 @@ async function deleteBlog(req, res) {
             });
         }
 
+        // Delete related views
+        await blogViewModel.deleteMany({ blog: id });
+
+        // Delete related likes
+        await blogLikeModel.deleteMany({ blog: id });
+
         await blogsModel.findByIdAndDelete(id);
+
+        await userModel.findByIdAndUpdate(userId, {
+            $inc: { postCount: -1 }
+        });
 
         return res.status(200).json({
             message: "Blog deleted successfully",
@@ -389,7 +425,10 @@ async function relatedBlogs(req, res) {
     const { id } = req.params;
 
     try {
-        const blog = await blogsModel.findById(id);
+        const blog = await blogsModel.findOne({
+            _id: id,
+            status: "approved"
+        });
 
         if (!blog) {
             return res.status(404).json({
@@ -398,7 +437,8 @@ async function relatedBlogs(req, res) {
         }
 
         const allBlogs = await blogsModel.find({
-            _id: { $ne: id }
+            _id: { $ne: id },
+            status: "approved"
         });
 
         const currentTags = (blog.tags || []).map(tag =>
@@ -450,7 +490,8 @@ async function relatedBlogs(req, res) {
                     _id: {
                         $ne: id,
                         $nin: existingIds
-                    }
+                    },
+                    status: "approved"
                 })
                 .sort({ createdAt: -1 })
                 .limit(6 - relatedBlogs.length);
@@ -481,6 +522,17 @@ const recordBlogView = async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.user.userId;
+
+        const blog = await blogsModel.findOne({
+            _id: id,
+            status: "approved"
+        });
+
+        if (!blog) {
+            return res.status(404).json({
+                message: "Blog not found"
+            });
+        }
 
         const existingView = await blogViewModel.findOne({
             blog: id,
@@ -667,8 +719,12 @@ async function getCreators(req, res) {
             follow => follow.following.toString()
         );
 
+        const approvedAuthors = await blogsModel.distinct("author", {
+            status: "approved"
+        });
+
         const creators = await userModel
-            .find({ postCount: { $gt: 0 } })
+            .find({ _id: { $in: approvedAuthors } })
             .select("username profileImage postCount followers following");
 
         const creatorsWithFollowStatus = creators.map(creator => ({
@@ -696,8 +752,14 @@ async function getCreators(req, res) {
 
 async function topCreators(req, res) {
     try {
+        const approvedAuthors = await blogsModel.distinct("author", {
+            status: "approved"
+        });
+
         const creators = await userModel
-            .find({ postCount: { $gt: 0 } })
+            .find({
+                _id: { $in: approvedAuthors }
+            })
             .select("username profileImage postCount followers following")
             .sort({ followers: -1, postCount: -1 })
             .limit(5);

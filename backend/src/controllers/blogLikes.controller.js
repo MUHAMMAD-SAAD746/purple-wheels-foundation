@@ -8,6 +8,17 @@ const likeBlog = async (req, res) => {
         const { blogId } = req.params;
         const userId = req.user.userId;
 
+        const blog = await blogsModel.findOne({
+            _id: blogId,
+            status: "approved"
+        });
+
+        if (!blog) {
+            return res.status(404).json({
+                message: "Blog not found"
+            });
+        }
+
         const existingLike = await blogLikeModel.findOne({
             blog: blogId,
             user: userId

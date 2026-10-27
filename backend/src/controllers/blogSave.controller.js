@@ -1,9 +1,21 @@
 const userModel = require("../model/user.model")
+const blogsModel = require("../model/blogs.model")
 
 async function saveBlog(req, res) {
     try {
         const { blogId } = req.params;
         const userId = req.user.userId;
+
+        const blog = await blogsModel.findOne({
+            _id: blogId,
+            status: "approved"
+        });
+
+        if (!blog) {
+            return res.status(404).json({
+                message: "Blog not found"
+            });
+        }
 
         await userModel.findByIdAndUpdate(
             userId,
@@ -68,6 +80,7 @@ async function getAllSavedBlogs(req, res) {
             .findById(userId)
             .populate({
                 path: "savedPosts",
+                match: { status: "approved" },
                 populate: {
                     path: "author",
                     select: "username profileImage"
@@ -75,7 +88,7 @@ async function getAllSavedBlogs(req, res) {
             });
 
         res.status(200).json({
-            savedPosts: user.savedPosts
+            savedPosts: user?.savedPosts || []
         });
 
     } catch (error) {

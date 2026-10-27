@@ -48,7 +48,7 @@ const Users = () => {
                 setError("");
 
                 const response = await axios.get(
-                    "http://localhost:3000/api/admin/users",
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/users`,
                     {
                         params: {
                             search,
@@ -107,7 +107,7 @@ const Users = () => {
             const newStatus = user.status === "active" ? "inactive" : "active";
 
             const response = await axios.patch(
-                `http://localhost:3000/api/admin/users/${id}/status`,
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/users/${id}/status`,
                 { status: newStatus },
                 { withCredentials: true }
             );
@@ -152,7 +152,7 @@ const Users = () => {
             setError("");
 
             await axios.delete(
-                `http://localhost:3000/api/admin/users/${id}`,
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/users/${id}`,
                 { withCredentials: true }
             );
 

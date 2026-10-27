@@ -13,7 +13,6 @@ import AdminPagination from "../../../components/AdminPanel/AdminPagination/Admi
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
 import AdminPageHeader from "../../../components/AdminPanel/AdminPageHeader/AdminPageHeader";
 import { AdminModal, AdminConfirmModal } from "../../../components/AdminPanel/AdminModal/AdminModal";
-// import { adminCreators } from "../../../utils/AdminPanel/adminMockData";
 
 import "../AdminPanel.css";
 import "./Creators.css";

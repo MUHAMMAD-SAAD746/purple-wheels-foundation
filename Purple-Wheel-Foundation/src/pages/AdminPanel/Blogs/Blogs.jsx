@@ -57,7 +57,7 @@ const Blogs = () => {
     const changeStatus = async (id, newStatus) => {
         try {
             const response = await axios.patch(
-                `http://localhost:3000/api/admin/blogs/${id}/status`,
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/blogs/${id}/status`,
                 { status: newStatus },
                 { withCredentials: true }
             );
@@ -90,7 +90,7 @@ const Blogs = () => {
     const deleteBlog = async (id) => {
         try {
             await axios.delete(
-                `http://localhost:3000/api/admin/blogs/${id}`,
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/blogs/${id}`,
                 {
                     withCredentials: true,
                 }
@@ -125,7 +125,7 @@ const Blogs = () => {
 
         try {
             const response = await axios.get(
-                "http://localhost:3000/api/admin/blogs",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/blogs`,
                 {
                     params: {
                         search: search.trim(),
@@ -171,7 +171,7 @@ const Blogs = () => {
     const fetchApprovalMode = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:3000/api/admin/settings/blog-approval-mode",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/settings/blog-approval-mode`,
                 { withCredentials: true }
             );
 
@@ -190,7 +190,7 @@ const Blogs = () => {
             setUpdatingApprovalMode(true);
 
             const response = await axios.patch(
-                "http://localhost:3000/api/admin/settings/blog-approval-mode",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/settings/blog-approval-mode`,
                 { value },
                 { withCredentials: true }
             );
@@ -214,7 +214,7 @@ const Blogs = () => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_DOMAIN_NAME || "http://localhost:3000"}/api/categories`
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/categories`
                 );
 
                 setCategories(response.data.categories || []);

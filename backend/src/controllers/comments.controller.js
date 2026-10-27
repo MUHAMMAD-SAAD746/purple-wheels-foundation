@@ -1,10 +1,17 @@
 const mongoose = require("mongoose");
 const commentsModel = require("../model/comments.model");
+const settingsModel = require("../model/settings.model");
 
 async function createComment(req, res) {
     try {
         const { blogId, text } = req.body;
         const userId = req.user.userId;
+
+        const setting = await settingsModel.findOne({
+            key: "commentApprovalMode"
+        });
+
+        const commentStatus = setting?.value ?? "approved";
 
         const comment = await commentsModel.create({
             blog: blogId,
@@ -32,7 +39,8 @@ async function getComments(req, res) {
         const { blogId } = req.params;
 
         const comments = await commentsModel.find({
-            blog: blogId
+            blog: blogId,
+            status: "approved"
         }).populate("author", "username profileImage");
 
         return res.status(200).json({
@@ -71,12 +79,18 @@ async function replyToComment(req, res) {
             });
         }
 
+        const setting = await settingsModel.findOne({
+            key: "commentApprovalMode"
+        });
+
+        const replyStatus = setting?.value ?? "approved";
 
         const reply = await commentsModel.create({
             blog: parentComment.blog,
             author: userId,
             text: text,
-            parentComment: commentId
+            parentComment: commentId,
+            status: replyStatus
         });
 
         return res.status(201).json({

@@ -37,6 +37,8 @@ router.delete("/comments/:id", adminCommentsController.deleteComment);
 // Settings management
 router.patch("/settings/blog-approval-mode", adminSettingsController.updateBlogApprovalMode);
 router.get("/settings/blog-approval-mode", adminSettingsController.getBlogApprovalMode);
+router.get("/settings/comment-approval-mode", adminSettingsController.getCommentApprovalMode);
+router.patch("/settings/comment-approval-mode", adminSettingsController.updateCommentApprovalMode);
 
 // Category management
 router.get("/categories", authMiddleware, adminMiddleware, adminCategoryController.getAllCategories);

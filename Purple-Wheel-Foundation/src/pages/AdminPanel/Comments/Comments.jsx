@@ -33,6 +33,10 @@ const Comments = () => {
     const [viewComment, setViewComment] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
+    const [approvalMode, setApprovalMode] = useState("approved");
+    const [updatingApprovalMode, setUpdatingApprovalMode] = useState(false);
+    const [approvalModeLoaded, setApprovalModeLoaded] = useState(false);
+
 
 
     const fetchComments = useCallback(async () => {
@@ -81,9 +85,60 @@ const Comments = () => {
     }, [search, statusFilter, currentPage]);
 
 
+
+
+    const fetchApprovalMode = useCallback(async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/settings/comment-approval-mode`,
+                { withCredentials: true }
+            );
+
+            setApprovalMode(response.data.value ?? "approved");
+        } catch (err) {
+            console.error("Failed to fetch comment approval mode:", err);
+            alert("Failed to load comment approval mode.");
+        } finally {
+            setApprovalModeLoaded(true);
+        }
+    }, []);
+
+
+
+
+    const updateApprovalMode = async (value) => {
+        try {
+            setUpdatingApprovalMode(true);
+
+            const response = await axios.patch(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/settings/comment-approval-mode`,
+                { value },
+                { withCredentials: true }
+            );
+
+            setApprovalMode(response.data.setting.value);
+        } catch (err) {
+            console.error("Failed to update comment approval mode:", err);
+
+            alert(
+                err.response?.data?.message ||
+                "Failed to update comment approval mode."
+            );
+        } finally {
+            setUpdatingApprovalMode(false);
+        }
+    };
+
+
+
+
     useEffect(() => {
         fetchComments();
     }, [fetchComments]);
+
+    useEffect(() => {
+        fetchApprovalMode();
+    }, [fetchApprovalMode]);
 
 
 
@@ -247,6 +302,31 @@ const Comments = () => {
             />
 
             <div className="admin-section-card">
+                <div className="admin-approval-settings">
+                    <div className="admin-approval-settings-info">
+                        <h3>Comment Approval Method</h3>
+                        <p>
+                            Choose whether new comments and replies are approved
+                            automatically or require admin approval.
+                        </p>
+                    </div>
+
+                    {approvalModeLoaded && (
+                        <select
+                            className="admin-filter-select"
+                            value={approvalMode}
+                            disabled={updatingApprovalMode}
+                            onChange={(e) => updateApprovalMode(e.target.value)}
+                            aria-label="Comment approval method"
+                        >
+                            <option value="approved">Automatic Approval</option>
+                            <option value="pending">Manual Approval</option>
+                        </select>
+                    )}
+                </div>
+
+
+
                 <div className="admin-filter-bar">
                     <AdminSearch
                         value={search}

@@ -40,7 +40,7 @@ const Creators = () => {
             setError("");
 
             const response = await axios.get(
-                "http://localhost:3000/api/admin/creators",
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/creators`,
                 {
                     params: {
                         search,

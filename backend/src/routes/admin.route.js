@@ -7,6 +7,7 @@ const adminMiddleware = require("../middleware/admin.middleware");
 const adminUserController = require("../controllers/admin/adminUser.controller");
 const adminBlogController = require("../controllers/admin/adminBlog.controller");
 const adminCommentsController = require("../controllers/admin/adminComments.controller");
+const adminSettingsController = require("../controllers/admin/adminSettings.controller")
 
 router.use(authMiddleware, adminMiddleware);
 
@@ -30,6 +31,10 @@ router.get("/creators", adminUserController.getCreators);
 router.get("/comments", adminCommentsController.getAllComments);
 router.patch("/comments/:id/status", adminCommentsController.updateCommentStatus);
 router.delete("/comments/:id", adminCommentsController.deleteComment);
+
+
+// Settings management
+router.patch("/settings/blog-approval-mode", adminSettingsController.updateBlogApprovalMode);
 
 
 module.exports = router;

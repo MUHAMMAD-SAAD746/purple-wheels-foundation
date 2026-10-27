@@ -35,6 +35,7 @@ router.delete("/comments/:id", adminCommentsController.deleteComment);
 
 // Settings management
 router.patch("/settings/blog-approval-mode", adminSettingsController.updateBlogApprovalMode);
+router.get("/settings/blog-approval-mode", adminSettingsController.getBlogApprovalMode);
 
 
 module.exports = router;

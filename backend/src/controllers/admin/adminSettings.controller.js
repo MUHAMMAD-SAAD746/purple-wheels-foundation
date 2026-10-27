@@ -36,6 +36,29 @@ async function updateBlogApprovalMode(req, res) {
     }
 }
 
+
+
+async function getBlogApprovalMode(req, res) {
+    try {
+        const setting = await Settings.findOne({
+            key: "blogApprovalMode"
+        });
+
+        return res.status(200).json({
+            success: true,
+            value: setting?.value || "approved"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch blog approval mode"
+        });
+    }
+}
+
+
+
 module.exports = {
-    updateBlogApprovalMode
+    updateBlogApprovalMode,
+    getBlogApprovalMode
 };

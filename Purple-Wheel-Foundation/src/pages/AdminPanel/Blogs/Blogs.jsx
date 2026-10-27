@@ -37,6 +37,10 @@ const Blogs = () => {
     const [viewBlog, setViewBlog] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
+    const [approvalMode, setApprovalMode] = useState("approved");
+    const [updatingApprovalMode, setUpdatingApprovalMode] = useState(false);
+    const [approvalModeLoaded, setApprovalModeLoaded] = useState(false);
+
     const categories = [
         "wellness",
         "fashion",
@@ -170,8 +174,50 @@ const Blogs = () => {
 
 
 
+
+    const fetchApprovalMode = async () => {
+        try {
+            const response = await axios.get(
+                "http://localhost:3000/api/admin/settings/blog-approval-mode",
+                { withCredentials: true }
+            );
+
+            setApprovalMode(response.data.value);
+        } catch (err) {
+            showToast("Failed to load blog approval mode.", "error");
+        } finally {
+            setApprovalModeLoaded(true);
+        }
+    };
+
+    const updateApprovalMode = async (value) => {
+        try {
+            setUpdatingApprovalMode(true);
+
+            const response = await axios.patch(
+                "http://localhost:3000/api/admin/settings/blog-approval-mode",
+                { value },
+                { withCredentials: true }
+            );
+
+            setApprovalMode(response.data.setting.value);
+
+            showToast("Blog approval mode updated successfully.", "success");
+        } catch (err) {
+            showToast(
+                err.response?.data?.message || "Failed to update blog approval mode.",
+                "error"
+            );
+        } finally {
+            setUpdatingApprovalMode(false);
+        }
+    };
+
+
+
     useEffect(() => {
         fetchBlogs();
+        fetchApprovalMode();
     }, [fetchBlogs]);
 
 
@@ -263,6 +309,30 @@ const Blogs = () => {
             />
 
             <div className="admin-section-card">
+                <div className="admin-approval-settings">
+                    <div className="admin-approval-settings-info">
+                        <h3>Blog Approval Method</h3>
+                        <p>
+                            Choose whether new blogs are published automatically
+                            or require admin approval.
+                        </p>
+                    </div>
+
+                    {approvalModeLoaded && (
+                        <select
+                            className="admin-filter-select"
+                            value={approvalMode}
+                            disabled={updatingApprovalMode}
+                            onChange={(e) => updateApprovalMode(e.target.value)}
+                            aria-label="Blog approval method"
+                        >
+                            <option value="approved">Automatic Approval</option>
+                            <option value="pending">Manual Approval</option>
+                        </select>
+                    )}
+                </div>
+
+
                 <div className="admin-filter-bar">
                     <AdminSearch
                         value={search}

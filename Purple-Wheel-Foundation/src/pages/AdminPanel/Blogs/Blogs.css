@@ -34,8 +34,6 @@
 
 /* Blog detail modal */
 
-.admin-blog-detail {}
-
 .admin-blog-detail-title {
     margin: 0 0 16px;
     font-size: 16px;
@@ -82,4 +80,40 @@
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+
+
+/* Blog Approval Settings */
+
+.admin-approval-settings {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+}
+
+.admin-approval-settings-info h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111111;
+}
+
+.admin-approval-settings-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #888888;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .admin-approval-settings {
+        align-items: stretch;
+        flex-direction: column;
+    }
 }

@@ -14,6 +14,7 @@ const BlogCard = ({
     likeCount,
     viewCount,
     commentCount = 0,
+    status,
     onClick,
     onEdit,
     onDelete,
@@ -38,6 +39,12 @@ const BlogCard = ({
                     alt={title}
                     referrerPolicy="no-referrer"
                 />
+
+                {status && (
+                    <span className={`blog-card-status blog-card-status-${status}`}>
+                        {status}
+                    </span>
+                )}
 
                 {!showAuthor && (
                     <button

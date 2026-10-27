@@ -308,6 +308,7 @@ const Analytics = () => {
                                         date={blog.createdAt}
                                         likeCount={blog.likeCount}
                                         viewCount={blog.viewCount}
+                                        status={blog.status}
                                         showAuthor={false}
                                         onDelete={() => openDeleteModal(blog)}
                                         onEdit={() => {

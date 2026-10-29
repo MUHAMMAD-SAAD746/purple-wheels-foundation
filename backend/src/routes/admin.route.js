@@ -9,6 +9,7 @@ const adminBlogController = require("../controllers/admin/adminBlog.controller")
 const adminCommentsController = require("../controllers/admin/adminComments.controller");
 const adminSettingsController = require("../controllers/admin/adminSettings.controller");
 const adminCategoryController = require("../controllers/admin/adminCategory.controller");
+const adminReportsController = require("../controllers/admin/adminReports.controller");
 
 router.use(authMiddleware, adminMiddleware);
 
@@ -41,13 +42,15 @@ router.get("/settings/comment-approval-mode", adminSettingsController.getComment
 router.patch("/settings/comment-approval-mode", adminSettingsController.updateCommentApprovalMode);
 
 // Category management
-router.get("/categories", authMiddleware, adminMiddleware, adminCategoryController.getAllCategories);
+router.get("/categories", adminCategoryController.getAllCategories);
 router.post("/categories", adminCategoryController.createCategory);
 router.patch("/categories/:id", adminCategoryController.updateCategory);
 router.patch("/categories/:id/deactivate", adminCategoryController.deactivateCategory);
 router.patch("/categories/:id/activate", adminCategoryController.activateCategory);
-router.delete("/categories/:id", adminCategoryController.deleteCategory
-);
+router.delete("/categories/:id", adminCategoryController.deleteCategory);
+
+// Reports
+router.get("/reports", adminReportsController.getReports);
 
 
 module.exports = router;

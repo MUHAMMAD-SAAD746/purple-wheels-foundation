@@ -1,6 +1,7 @@
 const UserModel = require("../../model/user.model");
 const blogsModel = require("../../model/blogs.model");
 const commentsModel = require("../../model/comments.model")
+const categoriesModel = require("../../model/category.model");
 
 async function getReports(req, res) {
     try {
@@ -299,6 +300,42 @@ async function getReports(req, res) {
             );
 
 
+
+        const [categoryCounts, allCategories] = await Promise.all([
+            blogsModel.aggregate([
+                {
+                    $group: {
+                        _id: "$category",
+                        count: { $sum: 1 }
+                    }
+                }
+            ]),
+            categoriesModel.find({}).select("name").lean()
+        ]);
+
+        const totalCategoryBlogs = categoryCounts.reduce(
+            (total, category) => total + category.count,
+            0
+        );
+
+        const categoryData = allCategories.map((category) => {
+            const categoryCount = categoryCounts.find(
+                (item) => item._id === category.name
+            );
+
+            const count = categoryCount?.count ?? 0;
+
+            return {
+                name: category.name,
+                count,
+                percentage: totalCategoryBlogs > 0
+                    ? Number(((count / totalCategoryBlogs) * 100).toFixed(1))
+                    : 0
+            };
+        });
+
+
+
         res.status(200).json({
             success: true,
             totalUsers,
@@ -320,6 +357,7 @@ async function getReports(req, res) {
             monthlyUsers,
             monthlyBlogs,
             monthlyComments,
+            categoryData
         });
     } catch (error) {
         console.error("Failed to fetch reports:", error);

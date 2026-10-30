@@ -33,7 +33,8 @@ const Reports = () => {
         creatorsGrowth: null,
         monthlyUsers: [],
         monthlyBlogs: [],
-        monthlyComments: []
+        monthlyComments: [],
+        categoryData: []
     });
 
 
@@ -59,7 +60,8 @@ const Reports = () => {
                     creatorsGrowth: response.data.creatorsGrowth,
                     monthlyUsers: response.data.monthlyUsers,
                     monthlyBlogs: response.data.monthlyBlogs,
-                    monthlyComments: response.data.monthlyComments
+                    monthlyComments: response.data.monthlyComments,
+                    categoryData: response.data.categoryData ?? []
                 });
             } catch (error) {
                 console.error("Failed to fetch reports:", error);
@@ -252,29 +254,46 @@ const Reports = () => {
                         })()}
                     </div>
                 </div>
-
             </div>
+
+
+
 
             {/* Content Distribution */}
             <div className="admin-section-card admin-reports-categories">
                 <h3 className="admin-reports-chart-title">Content by Category</h3>
-                <p className="admin-reports-chart-subtitle">Distribution of blog posts across categories</p>
+
+                <p className="admin-reports-chart-subtitle">
+                    Distribution of blog posts across categories
+                </p>
+
                 <div className="admin-reports-category-list">
-                    {adminCategoryData.map((cat) => (
+                    {reportData.categoryData.map((cat) => (
                         <div key={cat.name} className="admin-reports-category-row">
-                            <span className="admin-reports-category-name">{cat.name}</span>
+                            <span className="admin-reports-category-name">
+                                {cat.name}
+                            </span>
+
                             <div className="admin-reports-category-bar-wrap">
                                 <div
                                     className="admin-reports-category-bar"
-                                    style={{ width: `${Math.round((cat.count / MAX_CATEGORY) * 100)}%` }}
+                                    style={{ width: `${cat.percentage}%` }}
                                 />
                             </div>
-                            <span className="admin-reports-category-count">{cat.count}</span>
-                            <span className="admin-reports-category-pct">{cat.percentage}%</span>
+
+                            <span className="admin-reports-category-count">
+                                {cat.count}
+                            </span>
+
+                            <span className="admin-reports-category-pct">
+                                {cat.percentage}%
+                            </span>
                         </div>
                     ))}
                 </div>
             </div>
+
+
 
             {/* Monthly Data Table */}
             <div className="admin-section-card">
@@ -287,7 +306,7 @@ const Reports = () => {
                                 <th>New Users</th>
                                 <th>Blog Posts</th>
                                 <th>Comments</th>
-                                <th>Engagement Rate</th>
+                                <th>Blog Creation Rate</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -298,9 +317,9 @@ const Reports = () => {
                                 const blogs = blogData?.blogs ?? 0;
                                 const comments = commentData?.comments ?? 0;
 
-                                const engagementRate = blogs > 0
-                                    ? ((comments / blogs) * 100).toFixed(1)
-                                    : "0.0";
+                                const blogCreationRate = userData.users > 0
+                                    ? ((blogs / userData.users) * 100).toFixed(1)
+                                    : null;
 
                                 return (
                                     <tr key={`${userData.year}-${userData.month}`}>
@@ -315,13 +334,10 @@ const Reports = () => {
                                                 <div
                                                     className="admin-reports-engagement-bar"
                                                     style={{
-                                                        width: `${Math.min(
-                                                            Number(engagementRate),
-                                                            100
-                                                        )}%`
+                                                        width: `${Math.min(Number(blogCreationRate), 100)}%`
                                                     }}
                                                 />
-                                                <span>{engagementRate}%</span>
+                                                <span>{blogCreationRate === null ? "N/A" : `${blogCreationRate}%`}</span>
                                             </div>
                                         </td>
                                     </tr>

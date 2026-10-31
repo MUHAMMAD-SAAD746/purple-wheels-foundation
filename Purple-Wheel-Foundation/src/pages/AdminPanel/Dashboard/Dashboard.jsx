@@ -20,10 +20,6 @@ import "./Dashboard.css";
 const MAX_MONTHLY = Math.max(...adminMonthlyData.map((d) => d.users));
 
 const Dashboard = () => {
-    const recentUsers = adminUsers.slice(0, 5);
-    const recentBlogs = adminBlogs.slice(0, 5);
-
-
     const [dashboardStats, setDashboardStats] = useState({
         totalUsers: 0,
         userGrowth: null,
@@ -33,7 +29,13 @@ const Dashboard = () => {
         commentsGrowth: null,
         totalCreators: 0,
         creatorsGrowth: null,
+        recentUsers: [],
+        recentBlogs: [],
     });
+
+
+    const recentUsers = dashboardStats.recentUsers;
+    const recentBlogs = dashboardStats.recentBlogs;
 
     useEffect(() => {
         const fetchDashboardStats = async () => {
@@ -163,22 +165,34 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentUsers.map((u) => (
-                                    <tr key={u.id}>
-                                        <td>
-                                            <div className="admin-user-cell">
-                                                <img src={u.avatar} alt={u.username} className="admin-user-avatar" />
-                                                <div className="admin-user-info">
-                                                    <p className="admin-user-name">{u.username}</p>
-                                                    <p className="admin-user-email">{u.email}</p>
+                                {recentUsers.length > 0 ? (
+                                    recentUsers.map((u) => (
+                                        <tr key={u._id}>
+                                            <td>
+                                                <div className="admin-user-cell">
+                                                    <img
+                                                        src={u.profileImage || "/default-avatar.png"}
+                                                        alt={u.username}
+                                                        className="admin-user-avatar"
+                                                    />
+                                                    <div className="admin-user-info">
+                                                        <p className="admin-user-name">{u.username}</p>
+                                                        <p className="admin-user-email">{u.email}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td><AdminStatusBadge status={u.role} /></td>
-                                        <td><AdminStatusBadge status={u.status} /></td>
-                                        <td className="admin-dashboard-date">{u.joined}</td>
+                                            </td>
+                                            <td><AdminStatusBadge status={u.role} /></td>
+                                            <td><AdminStatusBadge status={u.status} /></td>
+                                            <td className="admin-dashboard-date">
+                                                {new Date(u.createdAt).toLocaleDateString()}
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="4">No users found.</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -198,14 +212,29 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentBlogs.map((b) => (
-                                    <tr key={b.id}>
-                                        <td className="admin-dashboard-blog-title">{b.title}</td>
-                                        <td className="admin-dashboard-author">{b.author}</td>
-                                        <td>{b.category}</td>
-                                        <td><AdminStatusBadge status={b.status} /></td>
+                                {recentBlogs.length > 0 ? (
+                                    recentBlogs.map((b) => (
+                                        <tr key={b._id}>
+                                            <td className="admin-dashboard-blog-title">
+                                                {b.title}
+                                            </td>
+
+                                            <td className="admin-dashboard-author">
+                                                {b.author?.username || "Unknown"}
+                                            </td>
+
+                                            <td>{b.category}</td>
+
+                                            <td>
+                                                <AdminStatusBadge status={b.status} />
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="4">No blogs found.</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>

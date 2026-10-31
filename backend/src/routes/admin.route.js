@@ -10,6 +10,7 @@ const adminCommentsController = require("../controllers/admin/adminComments.cont
 const adminSettingsController = require("../controllers/admin/adminSettings.controller");
 const adminCategoryController = require("../controllers/admin/adminCategory.controller");
 const adminReportsController = require("../controllers/admin/adminReports.controller");
+const { getDashboard } = require("../controllers/admin/adminDashboard.controller");
 
 router.use(authMiddleware, adminMiddleware);
 
@@ -51,6 +52,9 @@ router.delete("/categories/:id", adminCategoryController.deleteCategory);
 
 // Reports
 router.get("/reports", adminReportsController.getReports);
+
+// Dashboard
+router.get("/dashboard", getDashboard);
 
 
 module.exports = router;

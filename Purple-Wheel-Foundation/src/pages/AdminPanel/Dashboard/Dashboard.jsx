@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import {
     IoPeopleOutline,
     IoDocumentTextOutline,
@@ -9,7 +10,6 @@ import {
 import AdminDashboardCard from "../../../components/AdminPanel/AdminDashboardCard/AdminDashboardCard";
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
 import {
-    adminStats,
     adminUsers,
     adminBlogs,
     adminMonthlyData,
@@ -23,6 +23,39 @@ const Dashboard = () => {
     const recentUsers = adminUsers.slice(0, 5);
     const recentBlogs = adminBlogs.slice(0, 5);
 
+
+    const [dashboardStats, setDashboardStats] = useState({
+        totalUsers: 0,
+        userGrowth: null,
+        totalBlogs: 0,
+        blogsGrowth: null,
+        totalComments: 0,
+        commentsGrowth: null,
+        totalCreators: 0,
+        creatorsGrowth: null,
+    });
+
+    useEffect(() => {
+        const fetchDashboardStats = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/dashboard`,
+                    { withCredentials: true }
+                );
+
+                if (response.data.success) {
+                    setDashboardStats(response.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch dashboard stats:", error);
+            }
+        };
+
+        fetchDashboardStats();
+    }, []);
+
+
+
     return (
         <div className="admin-dashboard">
 
@@ -30,30 +63,30 @@ const Dashboard = () => {
             <div className="admin-dashboard-cards">
                 <AdminDashboardCard
                     title="Total Users"
-                    value={adminStats.totalUsers}
+                    value={dashboardStats.totalUsers}
                     icon={IoPeopleOutline}
-                    trend={adminStats.userGrowth}
+                    trend={dashboardStats.userGrowth}
                     color="blue"
                 />
                 <AdminDashboardCard
                     title="Total Blogs"
-                    value={adminStats.totalBlogs}
+                    value={dashboardStats.totalBlogs}
                     icon={IoDocumentTextOutline}
-                    trend={adminStats.blogGrowth}
+                    trend={dashboardStats.blogsGrowth}
                     color="green"
                 />
                 <AdminDashboardCard
                     title="Total Comments"
-                    value={adminStats.totalComments}
+                    value={dashboardStats.totalComments}
                     icon={IoChatbubblesOutline}
-                    trend={adminStats.commentGrowth}
+                    trend={dashboardStats.commentsGrowth}
                     color="orange"
                 />
                 <AdminDashboardCard
                     title="Total Creators"
-                    value={adminStats.totalCreators}
+                    value={dashboardStats.totalCreators}
                     icon={IoStarOutline}
-                    trend={adminStats.creatorGrowth}
+                    trend={dashboardStats.creatorsGrowth}
                     color="purple"
                 />
             </div>

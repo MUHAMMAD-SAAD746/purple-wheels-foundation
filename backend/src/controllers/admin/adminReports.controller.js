@@ -3,25 +3,17 @@ const blogsModel = require("../../model/blogs.model");
 const commentsModel = require("../../model/comments.model")
 const categoriesModel = require("../../model/category.model");
 
+const { getAdminStats } = require("../../services/admin/adminStats.service");
+
 async function getReports(req, res) {
     try {
-        const now = new Date();
+        const stats = await getAdminStats();
 
-        const startOfThisMonth = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            1
-        );
+        const now = new Date();
 
         const startOfNextMonth = new Date(
             now.getFullYear(),
             now.getMonth() + 1,
-            1
-        );
-
-        const startOfLastMonth = new Date(
-            now.getFullYear(),
-            now.getMonth() - 1,
             1
         );
 
@@ -31,153 +23,72 @@ async function getReports(req, res) {
             1
         );
 
-        const approvedBlogAuthors = await blogsModel.distinct("author", {
-            status: "approved"
-        });
-
-        const creatorFilter = {
-            role: "user",
-            _id: { $in: approvedBlogAuthors }
-        };
 
         const [
-            totalUsers,
-            usersThisMonth,
-            usersLastMonth,
-            totalBlogs,
-            blogsThisMonth,
-            blogsLastMonth,
-            totalComments,
-            commentsThisMonth,
-            commentsLastMonth,
-            totalCreators,
-            creatorsThisMonth,
-            creatorsLastMonth,
+            monthlyUserCounts,
+            monthlyBlogCounts,
+            monthlyCommentCounts
         ] = await Promise.all([
-            UserModel.countDocuments(),
-            UserModel.countDocuments({
-                createdAt: {
-                    $gte: startOfThisMonth,
-                    $lt: startOfNextMonth
-                }
-            }),
-            UserModel.countDocuments({
-                createdAt: {
-                    $gte: startOfLastMonth,
-                    $lt: startOfThisMonth
-                }
-            }),
-
-
-            blogsModel.countDocuments(),
-            blogsModel.countDocuments({
-                createdAt: {
-                    $gte: startOfThisMonth,
-                    $lt: startOfNextMonth
-                }
-            }),
-            blogsModel.countDocuments({
-                createdAt: {
-                    $gte: startOfLastMonth,
-                    $lt: startOfThisMonth
-                }
-            }),
-
-
-            commentsModel.countDocuments(),
-            commentsModel.countDocuments({
-                createdAt: {
-                    $gte: startOfThisMonth,
-                    $lt: startOfNextMonth
-                }
-            }),
-            commentsModel.countDocuments({
-                createdAt: {
-                    $gte: startOfLastMonth,
-                    $lt: startOfThisMonth
-                }
-            }),
-
-
-            UserModel.countDocuments(creatorFilter),
-            UserModel.countDocuments({
-                ...creatorFilter,
-                createdAt: {
-                    $gte: startOfThisMonth,
-                    $lt: startOfNextMonth
-                }
-            }),
-            UserModel.countDocuments({
-                ...creatorFilter,
-                createdAt: {
-                    $gte: startOfLastMonth,
-                    $lt: startOfThisMonth
-                }
-            }),
-        ]);
-
-
-        const monthlyUserCounts = await UserModel.aggregate([
-            {
-                $match: {
-                    createdAt: {
-                        $gte: startOfSevenMonthsAgo,
-                        $lt: startOfNextMonth
+            UserModel.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: startOfSevenMonthsAgo,
+                            $lt: startOfNextMonth
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            year: { $year: "$createdAt" },
+                            month: { $month: "$createdAt" }
+                        },
+                        users: { $sum: 1 }
                     }
                 }
-            },
-            {
-                $group: {
-                    _id: {
-                        year: { $year: "$createdAt" },
-                        month: { $month: "$createdAt" }
-                    },
-                    users: { $sum: 1 }
-                }
-            }
-        ]);
+            ]),
 
-
-        const monthlyBlogCounts = await blogsModel.aggregate([
-            {
-                $match: {
-                    createdAt: {
-                        $gte: startOfSevenMonthsAgo,
-                        $lt: startOfNextMonth
+            blogsModel.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: startOfSevenMonthsAgo,
+                            $lt: startOfNextMonth
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            year: { $year: "$createdAt" },
+                            month: { $month: "$createdAt" }
+                        },
+                        blogs: { $sum: 1 }
                     }
                 }
-            },
-            {
-                $group: {
-                    _id: {
-                        year: { $year: "$createdAt" },
-                        month: { $month: "$createdAt" }
-                    },
-                    blogs: { $sum: 1 }
-                }
-            }
-        ]);
+            ]),
 
-
-        const monthlyCommentCounts = await commentsModel.aggregate([
-            {
-                $match: {
-                    createdAt: {
-                        $gte: startOfSevenMonthsAgo,
-                        $lt: startOfNextMonth
+            commentsModel.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: startOfSevenMonthsAgo,
+                            $lt: startOfNextMonth
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            year: { $year: "$createdAt" },
+                            month: { $month: "$createdAt" }
+                        },
+                        comments: { $sum: 1 }
                     }
                 }
-            },
-            {
-                $group: {
-                    _id: {
-                        year: { $year: "$createdAt" },
-                        month: { $month: "$createdAt" }
-                    },
-                    comments: { $sum: 1 }
-                }
-            }
-        ]);
+            ])
+        ])
 
 
         const monthlyUsers = [];
@@ -264,42 +175,6 @@ async function getReports(req, res) {
         }
 
 
-        const userGrowth = usersLastMonth === 0
-            ? null
-            : Number(
-                (
-                    ((usersThisMonth - usersLastMonth) / usersLastMonth) * 100
-                ).toFixed(1)
-            );
-
-
-        const blogsGrowth = blogsLastMonth === 0
-            ? null
-            : Number(
-                (
-                    ((blogsThisMonth - blogsLastMonth) / blogsLastMonth) * 100
-                ).toFixed(1)
-            );
-
-
-        const commentsGrowth = commentsLastMonth === 0
-            ? null
-            : Number(
-                (
-                    ((commentsThisMonth - commentsLastMonth) / commentsLastMonth) * 100
-                ).toFixed(1)
-            );
-
-
-        const creatorsGrowth = creatorsLastMonth === 0
-            ? null
-            : Number(
-                (
-                    ((creatorsThisMonth - creatorsLastMonth) / creatorsLastMonth) * 100
-                ).toFixed(1)
-            );
-
-
 
         const [categoryCounts, allCategories] = await Promise.all([
             blogsModel.aggregate([
@@ -335,30 +210,17 @@ async function getReports(req, res) {
         });
 
 
-
         res.status(200).json({
             success: true,
-            totalUsers,
-            userGrowth,
-            usersThisMonth,
-            usersLastMonth,
-            totalBlogs,
-            blogsGrowth,
-            blogsThisMonth,
-            blogsLastMonth,
-            totalComments,
-            commentsGrowth,
-            commentsThisMonth,
-            commentsLastMonth,
-            totalCreators,
-            creatorsGrowth,
-            creatorsThisMonth,
-            creatorsLastMonth,
+
+            ...stats,
+
             monthlyUsers,
             monthlyBlogs,
             monthlyComments,
             categoryData
         });
+
     } catch (error) {
         console.error("Failed to fetch reports:", error);
 

@@ -14,7 +14,7 @@ const AdminDashboardCard = ({ title, value, icon: Icon, trend, trendLabel, color
                     <Icon className="admin-dash-card-icon" />
                 </div>
             </div>
-            {trend !== undefined && (
+            {trend !== null && trend !== undefined && (
                 <div className="admin-dash-card-trend">
                     <span className={`admin-dash-card-trend-badge ${isPositive ? "admin-dash-card-trend-badge--up" : "admin-dash-card-trend-badge--down"}`}>
                         {isPositive ? "↑" : "↓"} {Math.abs(trend)}%

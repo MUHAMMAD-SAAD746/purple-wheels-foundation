@@ -89,17 +89,9 @@ function Login() {
             }
 
         } catch (error) {
-            if (error.response?.status === 403) {
-                setError(
-                    isAdminLogin
-                        ? "Access denied. Admin account required."
-                        : "Please use the admin login page."
-                );
-            } else {
-                setError(
-                    error.response?.data?.message || "Something went wrong"
-                );
-            }
+            setError(
+                error.response?.data?.message || "Something went wrong"
+            );
         } finally {
             setLoading(false);
         }

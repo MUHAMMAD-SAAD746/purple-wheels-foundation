@@ -42,6 +42,9 @@ const Users = () => {
     const [updatingUserId, setUpdatingUserId] = useState(null);
     const [deletingUserId, setDeletingUserId] = useState(null);
 
+    const [selectedRole, setSelectedRole] = useState("");
+    const [savingRole, setSavingRole] = useState(false);
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -94,8 +97,6 @@ const Users = () => {
 
 
 
-
-
     const toggleStatus = async (id) => {
         const user = users.find((user) => user.id === id);
 
@@ -142,9 +143,6 @@ const Users = () => {
 
 
 
-
-
-
     const deleteUser = async (id) => {
         if (!id) return;
 
@@ -178,6 +176,64 @@ const Users = () => {
     };
 
 
+
+    const openViewUser = (user) => {
+        setViewUser(user);
+        setSelectedRole(user.role);
+    };
+
+
+
+
+    const handleRoleUpdate = async () => {
+        if (!viewUser || selectedRole === viewUser.role) return;
+
+        try {
+            setSavingRole(true);
+
+            const response = await axios.patch(
+                `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/users/${viewUser.id}/role`,
+                { role: selectedRole },
+                { withCredentials: true }
+            );
+
+            const updatedUser = response.data.user;
+
+            // Update table data
+            setUsers((prev) =>
+                prev.map((user) =>
+                    user.id === viewUser.id
+                        ? { ...user, role: updatedUser.role }
+                        : user
+                )
+            );
+
+            // Update modal data
+            setViewUser((prev) => ({
+                ...prev,
+                role: updatedUser.role,
+            }));
+
+            // Keep selected role synchronized
+            setSelectedRole(updatedUser.role);
+
+            setViewUser(null);
+
+            showToast(
+                response.data.message || "User role updated successfully.",
+                "success"
+            );
+
+        } catch (error) {
+            showToast(
+                error.response?.data?.message ||
+                "Failed to update user role.",
+                "error"
+            );
+        } finally {
+            setSavingRole(false);
+        }
+    };
 
 
 
@@ -224,7 +280,7 @@ const Users = () => {
                     <button
                         className="admin-action-btn"
                         title="View details"
-                        onClick={() => setViewUser(row)}
+                        onClick={() => openViewUser(row)}
                     >
                         <IoEyeOutline />
                     </button>
@@ -336,11 +392,47 @@ const Users = () => {
                             <img src={viewUser.avatar} alt={viewUser.username} />
                         </div>
                         <div className="admin-user-detail-info">
-                            <p><strong>Username:</strong> {viewUser.username}</p>
-                            <p><strong>Email:</strong> {viewUser.email}</p>
-                            <p><strong>Role:</strong> <AdminStatusBadge status={viewUser.role} /></p>
-                            <p><strong>Status:</strong> <AdminStatusBadge status={viewUser.status} /></p>
-                            <p><strong>Joined:</strong> {viewUser.joined}</p>
+                            <p>
+                                <strong>Username:</strong> {viewUser.username}
+                            </p>
+
+                            <p>
+                                <strong>Email:</strong> {viewUser.email}
+                            </p>
+
+                            <div className="admin-user-role-row">
+                                <strong>Role:</strong>
+
+                                <div className="admin-user-role-control">
+                                    <AdminStatusBadge status={selectedRole} />
+
+                                    <select
+                                        value={selectedRole}
+                                        onChange={(e) => setSelectedRole(e.target.value)}
+                                        aria-label="Change user role"
+                                    >
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <p>
+                                <strong>Status:</strong>
+                                <AdminStatusBadge status={viewUser.status} />
+                            </p>
+
+                            <p>
+                                <strong>Joined:</strong> {viewUser.joined}
+                            </p>
+
+                            <button
+                                className="admin-user-role-save"
+                                onClick={handleRoleUpdate}
+                                disabled={savingRole || selectedRole === viewUser.role}
+                            >
+                                {savingRole ? "Saving..." : "Save Changes"}
+                            </button>
                         </div>
                     </div>
                 )}

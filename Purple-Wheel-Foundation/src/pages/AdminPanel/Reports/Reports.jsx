@@ -94,6 +94,12 @@ const Reports = () => {
                 subtitle="Live overview of platform activity and performance"
             />
 
+            {error && (
+                <div className="admin-reports-error">
+                    Failed to load reports. Please try again later.
+                </div>
+            )}
+
             {/* Summary Stats */}
             <div className="admin-reports-summary">
                 <div className="admin-reports-stat-card admin-reports-stat-card--blue">
@@ -199,11 +205,9 @@ const Reports = () => {
 
 
                     {loading ? (
-                        <p>Loading chart data...</p>
-                    ) : error ? (
-                        <p>Failed to load report data.</p>
+                        <p className="admin-reports-empty">Loading chart data...</p>
                     ) : reportData.monthlyUsers.length === 0 ? (
-                        <p>No user growth data available.</p>
+                        <p className="admin-reports-empty">No user growth data available.</p>
                     ) : (
                         <div className="admin-reports-bar-chart">
                             {reportData.monthlyUsers.map((d) => (
@@ -245,11 +249,9 @@ const Reports = () => {
                     </p>
 
                     {loading ? (
-                        <p>Loading chart data...</p>
-                    ) : error ? (
-                        <p>Failed to load report data.</p>
+                        <p className="admin-reports-empty">Loading chart data...</p>
                     ) : reportData.monthlyBlogs.length === 0 ? (
-                        <p>No blog activity data available.</p>
+                        <p className="admin-reports-empty">No blog activity data available.</p>
                     ) : (
                         <div className="admin-reports-bar-chart">
                             {(() => {
@@ -299,11 +301,9 @@ const Reports = () => {
                 </p>
 
                 {loading ? (
-                    <p>Loading category data...</p>
-                ) : error ? (
-                    <p>Failed to load report data.</p>
+                    <p className="admin-reports-empty">Loading category data...</p>
                 ) : reportData.categoryData.length === 0 ? (
-                    <p>No category data available.</p>
+                    <p className="admin-reports-empty">No category data available.</p>
                 ) : (
                     <div className="admin-reports-category-list">
                         {reportData.categoryData.map((cat) => (
@@ -351,15 +351,15 @@ const Reports = () => {
                         <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan="5">Loading monthly data...</td>
-                                </tr>
-                            ) : error ? (
-                                <tr>
-                                    <td colSpan="5">Failed to load report data.</td>
+                                    <td colSpan="5" className="admin-reports-empty">
+                                        Loading monthly data...
+                                    </td>
                                 </tr>
                             ) : reportData.monthlyUsers.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5">No monthly data available.</td>
+                                    <td colSpan="5" className="admin-reports-empty">
+                                        No monthly data available.
+                                    </td>
                                 </tr>
                             ) : (
                                 reportData.monthlyUsers.map((userData) => {

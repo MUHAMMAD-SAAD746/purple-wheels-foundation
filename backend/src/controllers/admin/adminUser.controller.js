@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const userModel = require("../../model/user.model");
 
-// GET /api/admin/users
+/**
+ * - GET /api/admin/users
+ */
 async function getUsers(req, res) {
     try {
         const {
@@ -100,7 +102,9 @@ async function getUsers(req, res) {
 
 
 
-// GET /api/admin/users/:id
+/**
+ * - GET /api/admin/users/:id
+ */
 async function getUserById(req, res) {
     try {
         if (!mongoose.isValidObjectId(req.params.id)) {
@@ -142,7 +146,9 @@ async function getUserById(req, res) {
 
 
 
-// PATCH /api/admin/users/:id/status
+/**
+ * - PATCH /api/admin/users/:id/status
+ */
 async function updateUserStatus(req, res) {
     try {
         const { status } = req.body;
@@ -199,8 +205,72 @@ async function updateUserStatus(req, res) {
 
 
 
+/**
+ * - PATCH /api/admin/users/:id/role
+ */
+async function updateUserRole(req, res) {
+    try {
+        const { id } = req.params;
+        const { role } = req.body;
 
-// DELETE /api/admin/users/:id
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({
+                message: "Invalid user ID"
+            });
+        }
+
+        if (!["user", "admin"].includes(role)) {
+            return res.status(400).json({
+                message: "Role must be user or admin"
+            });
+        }
+
+        // Prevent changing your own admin role
+        if (id === req.user.userId) {
+            return res.status(400).json({
+                message: "You cannot change your own role"
+            });
+        }
+
+        const user = await userModel.findByIdAndUpdate(
+            id,
+            { $set: { role } },
+            { new: true, runValidators: true }
+        ).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "User role updated successfully",
+            user: {
+                ...user.toObject(),
+                id: user._id.toString(),
+                avatar: user.profileImage,
+                status: user.status || "active",
+                joined: user.createdAt
+            }
+        });
+
+    } catch (error) {
+        console.error("Update user role error:", error);
+
+        return res.status(500).json({
+            message: "Failed to update user role"
+        });
+    }
+}
+
+
+
+
+
+/**
+ * - DELETE /api/admin/users/:id
+ */
 async function deleteUser(req, res) {
     try {
         const { id } = req.params;
@@ -241,7 +311,9 @@ async function deleteUser(req, res) {
 
 
 
-// GET /api/admin/creators
+/**
+ * - GET /api/admin/creators
+ */
 async function getCreators(req, res) {
     try {
         const {
@@ -330,6 +402,7 @@ module.exports = {
     getUsers,
     getUserById,
     updateUserStatus,
+    updateUserRole,
     deleteUser,
     getCreators
 };

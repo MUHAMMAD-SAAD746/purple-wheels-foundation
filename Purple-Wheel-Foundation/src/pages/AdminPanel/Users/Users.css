@@ -50,3 +50,66 @@
     color: #111111;
     min-width: 80px;
 }
+
+
+
+
+
+
+
+
+
+/* User role management */
+
+.admin-user-role-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-user-role-row>strong {
+    color: #111111;
+    min-width: 80px;
+    font-size: 13px;
+}
+
+.admin-user-role-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-user-role-control select {
+    padding: 4px 6px;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #555555;
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+}
+
+.admin-user-role-save {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.admin-user-role-save:hover {
+    opacity: 0.85;
+}
+
+.admin-user-role-save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

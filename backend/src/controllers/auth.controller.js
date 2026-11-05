@@ -42,12 +42,6 @@ async function registerUser(req, res) {
         { expiresIn: "1d" }
     )
 
-    // res.cookie("token", token, {
-    //     httpOnly: true,
-    //     sameSite: "lax",
-    //     secure: false
-    // })
-
     res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -93,6 +87,12 @@ async function loginUser(req, res) {
         return res.status(401).json({ message: "Invalid Credentials" })
     }
 
+    if (user.status === "inactive") {
+        return res.status(403).json({
+            message: "Your account has been restricted by the admin. Please contact support for assistance."
+        });
+    }
+
     if (user.role !== role) {
         return res.status(403).json({
             message: "Invalid login"
@@ -105,11 +105,6 @@ async function loginUser(req, res) {
         { expiresIn: "1d" }
     )
 
-    // res.cookie("token", token, {
-    //     httpOnly: true,
-    //     sameSite: "lax",
-    //     secure: false
-    // })
 
     res.cookie("token", token, {
         httpOnly: true,

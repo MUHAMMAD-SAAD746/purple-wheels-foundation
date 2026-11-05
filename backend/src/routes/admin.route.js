@@ -14,9 +14,11 @@ const { getDashboard } = require("../controllers/admin/adminDashboard.controller
 
 router.use(authMiddleware, adminMiddleware);
 
+// User management
 router.get("/users", adminUserController.getUsers);
 router.get("/users/:id", adminUserController.getUserById);
 router.patch("/users/:id/status", adminUserController.updateUserStatus);
+router.patch("/users/:id/role", adminUserController.updateUserRole);
 router.delete("/users/:id", adminUserController.deleteUser);
 
 

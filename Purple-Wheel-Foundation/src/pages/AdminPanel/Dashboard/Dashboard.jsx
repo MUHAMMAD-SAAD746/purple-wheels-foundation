@@ -31,6 +31,9 @@ const Dashboard = () => {
         monthlyComments: [],
     });
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
 
     const recentUsers = dashboardStats.recentUsers;
     const recentBlogs = dashboardStats.recentBlogs;
@@ -42,10 +45,6 @@ const Dashboard = () => {
     );
 
     const monthlyBlogs = dashboardStats.monthlyBlogs;
-    const MAX_MONTHLY_BLOGS = Math.max(
-        ...monthlyBlogs.map((item) => item.blogs),
-        0
-    );
 
 
 
@@ -75,6 +74,10 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchDashboardStats = async () => {
             try {
+                setLoading(true);
+                setError("");
+
+
                 const response = await axios.get(
                     `${import.meta.env.VITE_DOMAIN_NAME}/api/admin/dashboard`,
                     { withCredentials: true }
@@ -85,6 +88,9 @@ const Dashboard = () => {
                 }
             } catch (error) {
                 console.error("Failed to fetch dashboard stats:", error);
+                setError("Unable to load dashboard data.");
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -95,33 +101,38 @@ const Dashboard = () => {
 
     return (
         <div className="admin-dashboard">
+            {error && (
+                <div className="admin-dashboard-error">
+                    {error}
+                </div>
+            )}
 
             {/* Stats cards */}
             <div className="admin-dashboard-cards">
                 <AdminDashboardCard
                     title="Total Users"
-                    value={dashboardStats.totalUsers}
+                    value={loading ? "..." : dashboardStats.totalUsers}
                     icon={IoPeopleOutline}
                     trend={dashboardStats.userGrowth}
                     color="blue"
                 />
                 <AdminDashboardCard
                     title="Total Blogs"
-                    value={dashboardStats.totalBlogs}
+                    value={loading ? "..." : dashboardStats.totalBlogs}
                     icon={IoDocumentTextOutline}
                     trend={dashboardStats.blogsGrowth}
                     color="green"
                 />
                 <AdminDashboardCard
                     title="Total Comments"
-                    value={dashboardStats.totalComments}
+                    value={loading ? "..." : dashboardStats.totalComments}
                     icon={IoChatbubblesOutline}
                     trend={dashboardStats.commentsGrowth}
                     color="orange"
                 />
                 <AdminDashboardCard
                     title="Total Creators"
-                    value={dashboardStats.totalCreators}
+                    value={loading ? "..." : dashboardStats.totalCreators}
                     icon={IoStarOutline}
                     trend={dashboardStats.creatorsGrowth}
                     color="purple"
@@ -134,61 +145,82 @@ const Dashboard = () => {
                 {/* CSS Bar Chart */}
                 <div className="admin-section-card admin-dashboard-chart-card">
                     <h3 className="admin-dashboard-section-title">User Growth (Monthly)</h3>
-                    <div className="admin-bar-chart">
-                        {monthlyUser.map((d) => (
-                            <div
-                                key={`${d.month}-${d.year}`}
-                                className="admin-bar-chart-col"
-                            >
-                                <div className="admin-bar-chart-bar-wrap">
-                                    <div
-                                        className="admin-bar-chart-bar"
-                                        style={{
-                                            height: MAX_MONTHLY > 0
-                                                ? `${(d.users / MAX_MONTHLY) * 100}%`
-                                                : "0%",
-                                        }}
-                                        title={`${d.users} users`}
-                                    />
-                                </div>
+                    {loading ? (
+                        <p className="admin-dashboard-empty">
+                            Loading monthly activity...
+                        </p>
+                    ) : monthlyUser.length > 0 ? (
+                        <div className="admin-bar-chart">
+                            {monthlyUser.map((d) => (
+                                <div
+                                    key={`${d.month}-${d.year}`}
+                                    className="admin-bar-chart-col"
+                                >
+                                    <div className="admin-bar-chart-bar-wrap">
+                                        <div
+                                            className="admin-bar-chart-bar"
+                                            style={{
+                                                height: MAX_MONTHLY > 0
+                                                    ? `${(d.users / MAX_MONTHLY) * 100}%`
+                                                    : "0%",
+                                            }}
+                                            title={`${d.users} users`}
+                                        />
+                                    </div>
 
-                                <span className="admin-bar-chart-label">
-                                    {d.month}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
+                                    <span className="admin-bar-chart-label">
+                                        {d.month}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="admin-dashboard-empty">
+                            No monthly activity available.
+                        </p>
+                    )}
                 </div>
+
 
                 {/* Activity summary */}
                 <div className="admin-section-card admin-dashboard-activity-card">
                     <h3 className="admin-dashboard-section-title">Monthly Activity</h3>
 
                     <div className="admin-activity-list">
-                        {monthlyActivity.slice(-3).reverse().map((d) => (
-                            <div
-                                key={`${d.month}-${d.year}`}
-                                className="admin-activity-row"
-                            >
-                                <span className="admin-activity-month">
-                                    {d.month}
-                                </span>
-
-                                <div className="admin-activity-stats">
-                                    <span className="admin-activity-chip admin-activity-chip--blue">
-                                        {d.users} users
+                        {loading ? (
+                            <p className="admin-dashboard-empty">
+                                Loading activity...
+                            </p>
+                        ) : monthlyActivity.length > 0 ? (
+                            monthlyActivity.slice(-3).reverse().map((d) => (
+                                <div
+                                    key={`${d.month}-${d.year}`}
+                                    className="admin-activity-row"
+                                >
+                                    <span className="admin-activity-month">
+                                        {d.month}
                                     </span>
 
-                                    <span className="admin-activity-chip admin-activity-chip--green">
-                                        {d.blogs} blogs
-                                    </span>
+                                    <div className="admin-activity-stats">
+                                        <span className="admin-activity-chip admin-activity-chip--blue">
+                                            {d.users} users
+                                        </span>
 
-                                    <span className="admin-activity-chip admin-activity-chip--orange">
-                                        {d.comments} cmts
-                                    </span>
+                                        <span className="admin-activity-chip admin-activity-chip--green">
+                                            {d.blogs} blogs
+                                        </span>
+
+                                        <span className="admin-activity-chip admin-activity-chip--orange">
+                                            {d.comments} cmts
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p className="admin-dashboard-empty">
+                                No activity available.
+                            </p>
+                        )}
                     </div>
 
                     <div className="admin-dashboard-divider" />
@@ -200,7 +232,7 @@ const Dashboard = () => {
                             </span>
 
                             <strong className="admin-dashboard-total-value">
-                                {monthlyActivity.at(-1)?.users || 0} new users
+                                {loading ? "..." : monthlyActivity.at(-1)?.users ?? 0} new users
                             </strong>
                         </div>
 
@@ -210,7 +242,7 @@ const Dashboard = () => {
                             </span>
 
                             <strong className="admin-dashboard-total-value">
-                                {monthlyActivity.at(-1)?.blogs || 0}
+                                {loading ? "..." : monthlyActivity.at(-1)?.blogs ?? 0}
                             </strong>
                         </div>
                     </div>
@@ -234,34 +266,39 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentUsers.length > 0 ? (
-                                    recentUsers.map((u) => (
-                                        <tr key={u._id}>
-                                            <td>
-                                                <div className="admin-user-cell">
-                                                    <img
-                                                        src={u.profileImage || generateAvatarUrl(u.username)}
-                                                        alt={u.username}
-                                                        className="admin-user-avatar"
-                                                    />
-                                                    <div className="admin-user-info">
-                                                        <p className="admin-user-name">{u.username}</p>
-                                                        <p className="admin-user-email">{u.email}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><AdminStatusBadge status={u.role} /></td>
-                                            <td><AdminStatusBadge status={u.status} /></td>
-                                            <td className="admin-dashboard-date">
-                                                {new Date(u.createdAt).toLocaleDateString()}
-                                            </td>
+                                {
+                                    loading ? (
+                                        <tr>
+                                            <td colSpan="4">Loading users...</td>
                                         </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="4">No users found.</td>
-                                    </tr>
-                                )}
+                                    ) : recentUsers.length > 0 ? (
+                                        recentUsers.map((u) => (
+                                            <tr key={u._id}>
+                                                <td>
+                                                    <div className="admin-user-cell">
+                                                        <img
+                                                            src={u.profileImage || generateAvatarUrl(u.username)}
+                                                            alt={u.username}
+                                                            className="admin-user-avatar"
+                                                        />
+                                                        <div className="admin-user-info">
+                                                            <p className="admin-user-name">{u.username}</p>
+                                                            <p className="admin-user-email">{u.email}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><AdminStatusBadge status={u.role} /></td>
+                                                <td><AdminStatusBadge status={u.status} /></td>
+                                                <td className="admin-dashboard-date">
+                                                    {new Date(u.createdAt).toLocaleDateString()}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="4">No users found.</td>
+                                        </tr>
+                                    )}
                             </tbody>
                         </table>
                     </div>
@@ -281,7 +318,11 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentBlogs.length > 0 ? (
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="4">Loading blogs...</td>
+                                    </tr>
+                                ) : recentBlogs.length > 0 ? (
                                     recentBlogs.map((b) => (
                                         <tr key={b._id}>
                                             <td className="admin-dashboard-blog-title">
@@ -311,7 +352,7 @@ const Dashboard = () => {
 
             </div>
 
-        </div>
+        </div >
     );
 };
 

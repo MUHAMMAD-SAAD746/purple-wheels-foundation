@@ -15,6 +15,7 @@ import AdminPageHeader from "../../../components/AdminPanel/AdminPageHeader/Admi
 import { AdminModal, AdminConfirmModal } from "../../../components/AdminPanel/AdminModal/AdminModal";
 
 import { showToast } from "../../../utils/toast";
+import generateAvatarUrl from "../../../utils/generateAvatarUrl";
 
 import "../AdminPanel.css";
 import "./Users.css";
@@ -188,10 +189,7 @@ const Users = () => {
                 <div className="admin-user-cell">
                     <img
                         src={
-                            row.avatar ||
-                            `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                                row.username
-                            )}&background=e8f1ff&color=1e90ff`
+                            row.avatar || generateAvatarUrl(row.username)
                         }
                         alt={row.username}
                         className="admin-user-avatar"

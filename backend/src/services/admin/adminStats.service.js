@@ -132,4 +132,92 @@ async function getAdminStats() {
     };
 }
 
-module.exports = { getAdminStats };
+
+
+
+async function getMonthlyStats(model, fieldName, months = 7) {
+    const now = new Date();
+
+    const startOfNextMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        1
+    );
+
+    const startOfMonthsAgo = new Date(
+        now.getFullYear(),
+        now.getMonth() - months + 1,
+        1
+    );
+
+    const monthlyCounts = await model.aggregate([
+        {
+            $match: {
+                createdAt: {
+                    $gte: startOfMonthsAgo,
+                    $lt: startOfNextMonth
+                }
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    year: { $year: "$createdAt" },
+                    month: { $month: "$createdAt" }
+                },
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+
+    const result = [];
+
+    for (let i = 0; i < months; i++) {
+        const date = new Date(
+            now.getFullYear(),
+            now.getMonth() - months + 1 + i,
+            1
+        );
+
+        const year = date.getFullYear();
+        const monthNumber = date.getMonth() + 1;
+
+        const monthData = monthlyCounts.find(
+            (item) =>
+                item._id.year === year &&
+                item._id.month === monthNumber
+        );
+
+        result.push({
+            month: date.toLocaleString("en-US", {
+                month: "short"
+            }),
+            year,
+            [fieldName]: monthData?.count ?? 0
+        });
+    }
+
+    return result;
+}
+
+async function getMonthlyUserStats() {
+    return getMonthlyStats(UserModel, "users");
+}
+
+async function getMonthlyBlogStats(months = 7) {
+    return getMonthlyStats(blogsModel, "blogs", months);
+}
+
+async function getMonthlyCommentStats(months = 7) {
+    return getMonthlyStats(commentsModel, "comments", months);
+}
+
+
+
+
+module.exports = {
+    getAdminStats,
+    getMonthlyUserStats,
+    getMonthlyBlogStats,
+    getMonthlyCommentStats
+};

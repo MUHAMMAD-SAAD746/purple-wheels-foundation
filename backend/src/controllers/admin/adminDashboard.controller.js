@@ -1,10 +1,23 @@
 const UserModel = require("../../model/user.model");
 const blogsModel = require("../../model/blogs.model");
-const { getAdminStats } = require("../../services/admin/adminStats.service");
+const { 
+    getAdminStats, 
+    getMonthlyUserStats,
+    getMonthlyBlogStats,
+    getMonthlyCommentStats 
+} = require("../../services/admin/adminStats.service");
 
 async function getDashboard(req, res) {
     try {
-        const [stats, recentUsers, recentBlogs] = await Promise.all([
+        const [
+            stats, 
+            recentUsers, 
+            recentBlogs, 
+            monthlyUser,
+            monthlyBlogs,
+            monthlyComments
+        ] = await Promise.all([
+
             getAdminStats(),
 
             UserModel.find()
@@ -18,14 +31,21 @@ async function getDashboard(req, res) {
                 .limit(5)
                 .select("title author category status createdAt")
                 .populate("author", "username")
-                .lean()
+                .lean(),
+
+            getMonthlyUserStats(),
+            getMonthlyBlogStats(3),
+            getMonthlyCommentStats(3)
         ]);
 
         res.status(200).json({
             success: true,
             ...stats,
             recentUsers,
-            recentBlogs
+            recentBlogs,
+            monthlyUser,
+            monthlyBlogs,
+            monthlyComments
         });
 
     } catch (error) {

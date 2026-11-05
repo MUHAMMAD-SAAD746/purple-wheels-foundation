@@ -9,15 +9,10 @@ import {
 
 import AdminDashboardCard from "../../../components/AdminPanel/AdminDashboardCard/AdminDashboardCard";
 import AdminStatusBadge from "../../../components/AdminPanel/AdminStatusBadge/AdminStatusBadge";
-import {
-    adminUsers,
-    adminBlogs,
-    adminMonthlyData,
-} from "../../../utils/AdminPanel/adminMockData";
+import generateAvatarUrl from "../../../utils/generateAvatarUrl";
 
 import "./Dashboard.css";
 
-const MAX_MONTHLY = Math.max(...adminMonthlyData.map((d) => d.users));
 
 const Dashboard = () => {
     const [dashboardStats, setDashboardStats] = useState({
@@ -31,11 +26,51 @@ const Dashboard = () => {
         creatorsGrowth: null,
         recentUsers: [],
         recentBlogs: [],
+        monthlyUser: [],
+        monthlyBlogs: [],
+        monthlyComments: [],
     });
 
 
     const recentUsers = dashboardStats.recentUsers;
     const recentBlogs = dashboardStats.recentBlogs;
+
+    const monthlyUser = dashboardStats.monthlyUser;
+    const MAX_MONTHLY = Math.max(
+        ...monthlyUser.map((d) => d.users),
+        0
+    );
+
+    const monthlyBlogs = dashboardStats.monthlyBlogs;
+    const MAX_MONTHLY_BLOGS = Math.max(
+        ...monthlyBlogs.map((item) => item.blogs),
+        0
+    );
+
+
+
+    const monthlyComments = dashboardStats.monthlyComments;
+
+    const monthlyActivity = monthlyUser.map((user) => {
+        const blogs = monthlyBlogs.find(
+            (blog) => blog.month === user.month && blog.year === user.year
+        );
+
+        const comments = monthlyComments.find(
+            (comment) => comment.month === user.month && comment.year === user.year
+        );
+
+        return {
+            month: user.month,
+            year: user.year,
+            users: user.users,
+            blogs: blogs?.blogs || 0,
+            comments: comments?.comments || 0,
+        };
+    });
+
+
+
 
     useEffect(() => {
         const fetchDashboardStats = async () => {
@@ -100,16 +135,26 @@ const Dashboard = () => {
                 <div className="admin-section-card admin-dashboard-chart-card">
                     <h3 className="admin-dashboard-section-title">User Growth (Monthly)</h3>
                     <div className="admin-bar-chart">
-                        {adminMonthlyData.map((d) => (
-                            <div key={d.month} className="admin-bar-chart-col">
+                        {monthlyUser.map((d) => (
+                            <div
+                                key={`${d.month}-${d.year}`}
+                                className="admin-bar-chart-col"
+                            >
                                 <div className="admin-bar-chart-bar-wrap">
                                     <div
                                         className="admin-bar-chart-bar"
-                                        style={{ height: `${Math.round((d.users / MAX_MONTHLY) * 100)}%` }}
+                                        style={{
+                                            height: MAX_MONTHLY > 0
+                                                ? `${(d.users / MAX_MONTHLY) * 100}%`
+                                                : "0%",
+                                        }}
                                         title={`${d.users} users`}
                                     />
                                 </div>
-                                <span className="admin-bar-chart-label">{d.month}</span>
+
+                                <span className="admin-bar-chart-label">
+                                    {d.month}
+                                </span>
                             </div>
                         ))}
                     </div>
@@ -118,30 +163,54 @@ const Dashboard = () => {
                 {/* Activity summary */}
                 <div className="admin-section-card admin-dashboard-activity-card">
                     <h3 className="admin-dashboard-section-title">Monthly Activity</h3>
+
                     <div className="admin-activity-list">
-                        {adminMonthlyData.slice(-3).reverse().map((d) => (
-                            <div key={d.month} className="admin-activity-row">
-                                <span className="admin-activity-month">{d.month}</span>
+                        {monthlyActivity.slice(-3).reverse().map((d) => (
+                            <div
+                                key={`${d.month}-${d.year}`}
+                                className="admin-activity-row"
+                            >
+                                <span className="admin-activity-month">
+                                    {d.month}
+                                </span>
+
                                 <div className="admin-activity-stats">
-                                    <span className="admin-activity-chip admin-activity-chip--blue">{d.users} users</span>
-                                    <span className="admin-activity-chip admin-activity-chip--green">{d.blogs} blogs</span>
-                                    <span className="admin-activity-chip admin-activity-chip--orange">{d.comments} cmts</span>
+                                    <span className="admin-activity-chip admin-activity-chip--blue">
+                                        {d.users} users
+                                    </span>
+
+                                    <span className="admin-activity-chip admin-activity-chip--green">
+                                        {d.blogs} blogs
+                                    </span>
+
+                                    <span className="admin-activity-chip admin-activity-chip--orange">
+                                        {d.comments} cmts
+                                    </span>
                                 </div>
                             </div>
                         ))}
                     </div>
+
                     <div className="admin-dashboard-divider" />
+
                     <div className="admin-dashboard-totals">
                         <div className="admin-dashboard-total-item">
-                            <span className="admin-dashboard-total-label">This Month</span>
+                            <span className="admin-dashboard-total-label">
+                                This Month
+                            </span>
+
                             <strong className="admin-dashboard-total-value">
-                                {adminMonthlyData[adminMonthlyData.length - 1].users} new users
+                                {monthlyActivity.at(-1)?.users || 0} new users
                             </strong>
                         </div>
+
                         <div className="admin-dashboard-total-item">
-                            <span className="admin-dashboard-total-label">New Blogs</span>
+                            <span className="admin-dashboard-total-label">
+                                New Blogs
+                            </span>
+
                             <strong className="admin-dashboard-total-value">
-                                {adminMonthlyData[adminMonthlyData.length - 1].blogs}
+                                {monthlyActivity.at(-1)?.blogs || 0}
                             </strong>
                         </div>
                     </div>
@@ -171,7 +240,7 @@ const Dashboard = () => {
                                             <td>
                                                 <div className="admin-user-cell">
                                                     <img
-                                                        src={u.profileImage || "/default-avatar.png"}
+                                                        src={u.profileImage || generateAvatarUrl(u.username)}
                                                         alt={u.username}
                                                         className="admin-user-avatar"
                                                     />
